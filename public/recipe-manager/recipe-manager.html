@@ -1,0 +1,43 @@
+
+<div style="height: 100%">
+    <div>
+        <recipe-detail-view recipe="selectedRecipes.length == 1 ? selectedRecipes[0] : null"
+                            on-save-click="onSaveClick(recipe)"></recipe-detail-view>
+    </div>
+
+    <div>
+        <fieldset>
+            <legend>Control</legend>
+        <span>
+            <label>Search:</label><br>
+            <input type="text" ng-model="searchCriteria">
+        </span>
+        <span>
+            <button ng-click="deleteSelected()">Delete</button>
+        </span>
+        <span>
+            <button ng-click="selectAll()">Select All</button><br>
+            <button ng-click="clearSelection()">Deselect All</button>
+        </span>
+        </fieldset>
+    </div>
+
+    <div>
+        <recipe-list-view items="recipes"
+                          selected-items="selectedRecipes"
+                          on-select="addToSelected(recipe)"
+                          on-deselect="removeFromSelected(recipe)"
+                          on-delete-key="deleteSelected()"
+                          search-criteria="searchCriteria"
+                          columns="[
+
+                        { header: 'Name',           property: 'name' },
+                        { header: 'Calories',       function: 'totalCalories', filter: 'energy', align: 'right' },
+                        { header: 'Carbohydrates',  function: 'totalCarbs', filter: 'mass', align: 'right' },
+                        { header: 'Fats',           function: 'totalFats', filter: 'mass', align: 'right'},
+                        { header: 'Protein',        function: 'totalProtein', filter: 'mass', align: 'right' },
+                        { header: 'Created',        property: 'created_at', filter: 'date'}
+
+                      ]"></recipe-list-view>
+    </div>
+</div>

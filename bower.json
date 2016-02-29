@@ -1,0 +1,22 @@
+{
+  "name": "NutriApp",
+  "description": "Završni rad.",
+  "main": "",
+  "authors": [
+    "Gordan Graberec <g.graberec@hotmail.com>"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "sprintf": "^1.0.3"
+  }
+}

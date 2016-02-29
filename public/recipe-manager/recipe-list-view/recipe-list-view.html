@@ -1,0 +1,49 @@
+
+<style>
+    .selected{
+        outline: solid;
+        outline-color: chocolate;
+    }
+    tr{
+        cursor: default;
+    }
+    td{
+        padding: 5px;
+    }
+    fieldset span{
+        float: left;
+    }
+    fieldset span *{
+        margin: 5px;
+        width: 90%;
+    }
+    table{
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+
+<fieldset style="outline: none" tabindex="0" ng-keydown="handleKeyDown($event)">
+    <legend>Choose</legend>
+    <div style="height: 100%; overflow-y: auto; overflow-x: hidden">
+        <table>
+            <thead>
+            <tr>
+                <th ng-repeat="c in $ctrl.columns" ng-click="handleHeaderClick(c)">{{c.header}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="i in items()"
+                ng-mouseup="$parent.handleRowClick(i, $index, $event)"
+                ng-class="$parent.selected[$index] ? 'selected' : ''">
+                <td ng-style="{'text-align': c.align || 'left' }" ng-repeat="c in $ctrl.columns">{{displayItem(i, c)}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</fieldset>

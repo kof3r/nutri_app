@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="NutriApp">
+<head>
+    <meta charset="UTF-8">
+    <title>NutriApp</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
+    <script src="components/sprintf/dist/sprintf.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+</head>
+<body ng-controller="Controller">
+
+
+    <div id="wrapper">
+        <header>Header</header>
+        <nav>
+            Navbar:
+            <ul>
+                <li>One</li>
+                <li>Two</li>
+            </ul>
+        </nav>
+        <div id="content">
+            <recipe-manager></recipe-manager>
+        </div>
+        <footer>
+            <status-log></status-log>
+        </footer>
+    </div>
+
+
+
+    <script src="script.js"></script>
+    <script src="recipe-manager/recipe-manager.js"></script>
+    <script src="recipe-manager/recipe-list-view/recipe-list-view.js"></script>
+    <script src="recipe-manager/recipe-detail-view/recipe-detail-view.js"></script>
+    <script src="server/server.js"></script>
+    <script src="settings/settings.js"></script>
+    <script src="converter/conversion-tables.js"></script>
+    <script src="model/models.js"></script>
+    <script src="converter/converter.js"></script>
+    <script src="nutrition/nutrition.js"></script>
+    <script src="mapper/mapper.js"></script>
+    <script src="nutrition/ingredient.js"></script>
+    <script src="nutrition/recipe.js"></script>
+    <script src="util/util.js"></script>
+    <script src="util/message-queue.js"></script>
+    <script src="util/status-log/status-log.js"></script>
+</body>
+</html>
