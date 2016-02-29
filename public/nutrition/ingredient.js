@@ -6,11 +6,7 @@ angular.module('nutrition')
 
     //TODO: Odgovornost mapiranja bi trebalo maknut iz modela
     .factory('Ingredient', ['mapProperties', 'modelBase', 'calorieConstant', function(mapProperties, Base, calConst){
-        function Ingredient(ingredient){
-
-            mapProperties.call(this, ingredient);
-
-        }
+        function Ingredient(ingredient){  }
 
         Ingredient.prototype = new Base();
 

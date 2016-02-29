@@ -10,16 +10,6 @@ angular.module('nutrition', ['converter', 'models', 'settings'])
         perProtein: 4
     })
 
-    .factory('mapProperties', function(){
-        return function MapProperties(dto){
-
-            for(var property in dto){
-                this[property] = dto[property];
-            }
-
-        }
-    })
-
     .filter('energy', ['settingsUnitsEnergy', function(setting) {
         return function(value){
             return value.toFixed(0) + ' ' + setting.value();

@@ -36,26 +36,28 @@ angular.module('server', ['mapper', 'util'])
             get: function(id){
                 if(arguments.length === 0){
                     return $http.get('api/recipe').then(function(res){
-                        var messages = null;
                         if(res.data.response){
-                            messages = res.data.response.map(function(recipe){
-                                return sprintf('Loaded \"%s\".', recipe.name);
-                            })
+                            var message;
+                            if(res.data.response.constructor === Array){
+                                message = 'Recipes successfully loaded.'
+                            } else {
+                                message = sprintf('Recipe %s successfully loaded.', res.data.response.name);
+                            }
                         }
-                        return handleResponse(res, mapper.map, messages);
+                        return handleResponse(res, mapper.mapRecipe, message);
                     })
                 }
             },
 
             put: function(recipe){
                 return $http.put('api/recipe', recipe).then(function(res){
-                    return handleResponse(res, mapper.map, res.data.response ? sprintf('Recipe \"%s\" successfully created.', res.data.response.name) : null);
+                    return handleResponse(res, mapper.mapRecipe, res.data.response ? sprintf('Recipe \"%s\" successfully created.', res.data.response.name) : null);
                 })
             },
 
             post: function(recipe){
                 return $http.post('api/recipe', recipe).then(function(res){
-                    return handleResponse(res, mapper.map, sprintf('Successfully updated \"%s\".', recipe.name))
+                    return handleResponse(res, mapper.mapRecipe, sprintf('Successfully updated \"%s\".', recipe.name))
                 });
             },
 

@@ -6,20 +6,7 @@ angular.module('nutrition')
 
     .factory('Recipe', ['mapProperties', 'modelBase', 'Ingredient', function(mapProperties, Base, Ingredient){
 
-        function Recipe(recipe){
-
-            mapProperties.call(this, recipe);
-
-            if(this.ingredients !== undefined){
-                var ingredientDtos = this.ingredients;
-                this.ingredients = ingredientDtos.map(function(dto){
-                    return new Ingredient(dto);
-                })
-            } else {
-                this.ingredients = [];
-            }
-
-        }
+        function Recipe(recipe){ }
 
         Recipe.prototype = new Base();
 
