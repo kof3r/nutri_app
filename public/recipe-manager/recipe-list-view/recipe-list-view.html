@@ -1,49 +1,49 @@
+<div class="container-fluid">
 
-<style>
-    .selected{
-        outline: solid;
-        outline-color: chocolate;
-    }
-    tr{
-        cursor: default;
-    }
-    td{
-        padding: 5px;
-    }
-    fieldset span{
-        float: left;
-    }
-    fieldset span *{
-        margin: 5px;
-        width: 90%;
-    }
-    table{
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-</style>
+    <div class="row top-buffer">
+        <fieldset>
+            <legend>Control</legend>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="btn-group-vertical">
+                                <button class="btn btn-primary" ng-click="handleDeleteClick()">Delete</button>
+                                <button class="btn btn-primary" ng-click="handleSelectAllClick()">Select All</button>
+                                <button class="btn btn-primary" ng-click="handleDeselectAllClick()">Deselect All</button>
+                            </div>
+                        </div>
 
-<fieldset style="outline: none" tabindex="0" ng-keydown="handleKeyDown($event)">
-    <legend>Choose</legend>
-    <div style="height: 100%; overflow-y: auto; overflow-x: hidden">
-        <table>
-            <thead>
-            <tr>
-                <th ng-repeat="c in $ctrl.columns" ng-click="handleHeaderClick(c)">{{c.header}}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="i in items()"
-                ng-mouseup="$parent.handleRowClick(i, $index, $event)"
-                ng-class="$parent.selected[$index] ? 'selected' : ''">
-                <td ng-style="{'text-align': c.align || 'left' }" ng-repeat="c in $ctrl.columns">{{displayItem(i, c)}}</td>
-            </tr>
-            </tbody>
-        </table>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="search">Search:</label>
+                                <input id="search" type="text" ng-model="searchCriteria">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </fieldset>
     </div>
 
-</fieldset>
+    <div class="row top-buffer">
+        <fieldset tabindex="0" style="outline: none" ng-keydown="handleKeyDown($event)">
+            <legend>Choose</legend>
+            <div style="height: 100%; overflow-y: auto; overflow-x: hidden">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th ng-repeat="c in $ctrl.columns" ng-click="handleHeaderClick(c)">{{c.header}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="i in items()"
+                        ng-mouseup="$parent.handleRowClick(i, $index, $event)"
+                        ng-class="$parent.selected[$index] ? 'selected' : ''">
+                        <td ng-style="{'text-align': c.align || 'left' }" ng-repeat="c in $ctrl.columns">{{displayItem(i, c)}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+
+</div>

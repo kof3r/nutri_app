@@ -1,0 +1,20 @@
+
+.form{
+    display: grid;
+    grid-template-columns: auto auto minmax(min-content, 1fr);
+}
+
+.label{
+    grid-column:1;
+    background-color: beige;
+}
+
+.input{
+    grid-column:2;
+    background-color: beige;
+}
+
+.error{
+    grid-column:3;
+    background-color: beige;
+}

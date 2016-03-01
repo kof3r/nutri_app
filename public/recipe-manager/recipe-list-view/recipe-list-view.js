@@ -13,7 +13,7 @@ angular.module('recipeManager')
             onSelect:'&',
             onDeselect:'&',
             onDeleteKey:'&',
-            searchCriteria: '<'
+            onDeleteClick:'&'
         },
         controller: ['$scope', 'orderByFilter', 'filterFilter', 'filters', controller]
     });
@@ -27,7 +27,7 @@ function controller($scope, orderBy, filter, filters){
         defineTable();
 
         $scope.items = function(){
-            return orderBy(filter(ctrl.items, ctrl.searchCriteria), $scope.orderCriteria);
+            return orderBy(filter(ctrl.items, $scope.searchCriteria), $scope.orderCriteria);
         }
 
         $scope.displayItem = function(item, column){
@@ -41,6 +41,18 @@ function controller($scope, orderBy, filter, filters){
         $scope.$watchCollection(function() { return $scope.items()}, refreshView);
 
         $scope.$watch(function() { return ctrl.searchCriteria; }, deselectAll);
+
+        $scope.handleDeleteClick = function(){
+            ctrl.onDeleteClick();
+        }
+
+        $scope.handleSelectAllClick = function(){
+            selectAll();
+        }
+
+        $scope.handleDeselectAllClick = function(){
+            deselectAll();
+        }
 
         $scope.handleRowClick = function(item, index, $event){
             var isSelected = selected[index];
@@ -60,10 +72,6 @@ function controller($scope, orderBy, filter, filters){
 
         $scope.handleKeyDown = function($event){
             switch ($event.which){
-                case 27:{   //ESC
-                    deselectAll();
-                    break;
-                }
                 case 46:{   //DELETE
                     ctrl.onDeleteKey();
                     break;
@@ -109,10 +117,17 @@ function controller($scope, orderBy, filter, filters){
         }
 
         function deselectAll(){
-            var items = $scope.items();
-            for(var index in selected){
-                deselect(items[index]);
-            }
+            var items = ctrl.selectedItems.slice(0);
+            angular.forEach(items, function(item){
+                deselect(item);
+            })
+        }
+
+        function selectAll(){
+            var items = ctrl.items.slice(0);
+            angular.forEach(items, function(item){
+                select(item);
+            })
         }
 
     }

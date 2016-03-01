@@ -6,26 +6,34 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
     <script src="components/sprintf/dist/sprintf.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="stylesheet.css">
-</head>
-<body ng-controller="Controller">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+
+</head>
+<body ng-controller="Controller" ng-keydown="handleKeyDown($event)">
+
+    <div id="header" class="navbar navbar-default navbar-fixed-top"></div>
 
     <div id="wrapper">
-        <header>Header</header>
-        <nav>
-            Navbar:
-            <ul>
-                <li>One</li>
-                <li>Two</li>
-            </ul>
-        </nav>
-        <div id="content">
-            <recipe-manager></recipe-manager>
+        <div id="sidebar-wrapper" class="col-md-1">
+            <div id="sidebar">
+                <ul class="nav list-group">
+
+                </ul>
+            </div>
         </div>
-        <footer>
+
+        <div id="main-wrapper" class="col-md-11 pull-right">
+            <div id="main">
+                <recipe-manager deselect-all-on="esc key down"></recipe-manager>
+            </div>
+        </div>
+
+        <div class="col-md-12 footer" style="overflow-y: auto">
             <status-log></status-log>
-        </footer>
+        </div>
+
     </div>
 
 
@@ -46,5 +54,7 @@
     <script src="util/util.js"></script>
     <script src="util/message-queue.js"></script>
     <script src="util/status-log/status-log.js"></script>
+    <script src="recipe-manager/detail-view/detail-view.js"></script>
+    <script src="recipe-manager/recipe-fields/recipe-fields.js"></script>
 </body>
 </html>

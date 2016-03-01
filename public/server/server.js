@@ -8,7 +8,7 @@ angular.module('server', ['mapper', 'util'])
         return function(res){
             if(res.data.error){
                 messageQueue.addMessages(res.data.error);
-                throw new Error();
+                return Promise.reject(new Error('Rejection'));
             }
             var handler, messages;
             if(arguments.length === 3){
@@ -52,7 +52,7 @@ angular.module('server', ['mapper', 'util'])
             put: function(recipe){
                 return $http.put('api/recipe', recipe).then(function(res){
                     return handleResponse(res, mapper.mapRecipe, res.data.response ? sprintf('Recipe \"%s\" successfully created.', res.data.response.name) : null);
-                })
+                });
             },
 
             post: function(recipe){

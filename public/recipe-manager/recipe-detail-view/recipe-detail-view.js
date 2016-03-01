@@ -9,9 +9,9 @@ function controller($scope){
 
         var inputEnabled = false;
 
-        $scope.$watch(function() {return ctrl.recipe;}, function(){
-            $scope.recipe = angular.copy(ctrl.recipe);
-        });
+        $scope.$on(ctrl.exitInputModeOn, disableInput);
+
+        $scope.$watch(function() {return ctrl.recipe;}, copy);
 
         $scope.handleNewClick = function(){
             enableInput();
@@ -24,10 +24,15 @@ function controller($scope){
 
         $scope.handleCancelClick = function () {
             disableInput();
+            copy();
         }
 
         $scope.inputEnabled = function(){
             return inputEnabled;
+        }
+
+        function copy(){
+            $scope.recipe = angular.copy(ctrl.recipe);
         }
 
         function enableInput(){
@@ -48,7 +53,8 @@ angular.module('recipeManager')
         templateUrl:'recipe-manager/recipe-detail-view/recipe-detail-view.html',
         bindings:{
             recipe:'<',
-            onSaveClick:'&'
+            onSaveClick:'&',
+            exitInputModeOn:'@'
         },
         controller: ['$scope', controller]
 

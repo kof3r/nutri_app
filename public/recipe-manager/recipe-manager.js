@@ -4,10 +4,14 @@
 
 function controller($scope, recipeSvc, util){
 
+    var ctrl = this;
+
     this.$onInit = function(){
 
         var recipes = $scope.recipes = [];
         var selected = $scope.selectedRecipes = [];
+
+        wireEvents();
 
         recipeSvc.get().then(function(recipes){
             angular.forEach(recipes, function(recipe){
@@ -23,7 +27,7 @@ function controller($scope, recipeSvc, util){
             deselectRecipe(recipe);
         }
 
-        $scope.clearSelection = function(){
+        $scope.deselectAll = function(){
             clearSelection();
         }
 
@@ -40,17 +44,10 @@ function controller($scope, recipeSvc, util){
             }))
         }
 
-        $scope.onNewClick = function(){
-            if(selected.length > 1){
-                clearSelection();
-            }
-            $scope.inputEnabled = true;
-        }
-
-        $scope.onSaveClick = function(recipe){
-            if(recipe.id){
+        $scope.saveRecipe = function(item){
+            if(item.id){
                 var old = selected[0];
-                recipeSvc.post(recipe).then(function(recipe){
+                recipeSvc.post(item).then(function(recipe){
                     removeRecipe(old);
                     addRecipe(recipe);
                     selectRecipe(recipe);
@@ -58,14 +55,11 @@ function controller($scope, recipeSvc, util){
 
                 })
             } else {
-                recipeSvc.put(recipe).then(function(recipe){
-                    $scope.recipes.push(recipe);
+                recipeSvc.put(item).then(function(recipe){
+                    addRecipe(recipe);
+                    selectRecipe(recipe);
                 });
             }
-        }
-
-        $scope.onCancelClick = function(){
-            $scope.inputEnabled = false;
         }
 
         function removeRecipe(recipe){
@@ -79,6 +73,7 @@ function controller($scope, recipeSvc, util){
 
         function selectRecipe(recipe){
             selected.push(recipe);
+            $scope.$broadcast('recipe selected');
         }
 
         function deselectRecipe(recipe){
@@ -88,6 +83,12 @@ function controller($scope, recipeSvc, util){
         function clearSelection(){
             $scope.selectedRecipes.splice(0, $scope.selectedRecipes.length);
         }
+
+        function wireEvents(){
+            if(ctrl.deselectAllOn){
+                $scope.$on(ctrl.deselectAllOn, clearSelection);
+            }
+        }
     }
 
 }
@@ -95,5 +96,8 @@ function controller($scope, recipeSvc, util){
 angular.module('recipeManager', ['server', 'util'])
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
-        controller: ['$scope', 'serverRecipeService', 'util', controller]
+        controller: ['$scope', 'serverRecipeService', 'util', controller],
+        bindings:{
+            deselectAllOn:'@'
+        }
     })

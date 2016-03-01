@@ -1,0 +1,41 @@
+
+
+<fieldset class="top-buffer">
+    <legend>Create/Edit</legend>
+
+    <form class="form-horizontal" name="form">
+
+        <div ng-repeat="(p, f) in fields">
+            <div class="form-group">
+                <label for="{{p}}" class="col-sm-{{firstColumnWidth()}} control-label">{{f.field}}</label>
+                <div class="col-sm-{{secondColumnWidth()}}">
+                    <div style="position: relative; top: 7px; left: 13px" ng-show="whenShowLabel(p)" ng-bind="displayValue(p)">{{displayValue(p)}}</div>
+                    <input id="{{p}}" name="{{p}}" class="form-control" ng-show="whenShowInput(p)" ng-if="doesInputRender(p)" type="f.type || 'text'" ng-model="item[p]">
+                    <select class="form-control" ng-show="whenShowSelect(p)" ng-if="doesSelectRender(p)" ng-model="item[p]">
+                        <option ng-repeat="o in f.type">{{o}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" ng-show="whenShowErrors(p)">
+                <label class="col-sm-{{firstColumnWidth()}} control-label"></label>
+                <div class="col-sm-{{secondColumnWidth()}}">
+                    <label>
+                        Errors.
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-{{firstColumnWidth()}} col-sm-{{secondColumnWidth()}}">
+                <div class="btn-group" ng-show="inputMode">
+                    <button class="btn btn-primary" ng-click="handleSaveClick()">Save</button>
+                    <button class="btn btn-primary" ng-click="handleCancelClick()">Cancel</button>
+                </div>
+                <div class="btn-group" ng-hide="inputMode">
+                    <button class="btn btn-primary" type="submit" ng-click="handleNewClick()">{{ item.id ? 'Edit' : 'New' }}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</fieldset>
