@@ -10,6 +10,16 @@ angular.module('util', [])
             if(i != -1){
                 array.splice(i, 1);
             }
+        },
+
+        wireEvents: function(scope, events, handler){
+            if(events.constructor === Array){
+                events.forEach(function(event){
+                    scope.$on(event, handler);
+                })
+            } else{
+                scope.$on(events, handler);
+            }
         }
 
     });

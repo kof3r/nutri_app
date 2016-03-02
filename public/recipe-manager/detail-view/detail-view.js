@@ -2,7 +2,7 @@
  * Created by ggrab on 29.2.2016..
  */
 
-function controller($scope, formFields){
+function controller($scope, formFields, util){
 
     var ctrl = this;
 
@@ -11,9 +11,16 @@ function controller($scope, formFields){
         var fields = $scope.fields = formFields[ctrl.fields];
         disableInput();
 
+        util.wireEvents($scope, ctrl.cancelInputOn, cancelInput);
+
         $scope.$watch(function() { return ctrl.item; }, copy);
 
         $scope.handleNewClick = function(){
+            $scope.$emit('addingNew');
+            enableInput();
+        }
+
+        $scope.handleEditClick = function(){
             enableInput();
         }
 
@@ -109,9 +116,9 @@ angular.module('recipeManager')
             fields:'@',
             item:'<',
             onSaveClick:'&',
-            cancelInputOn:'@'
+            cancelInputOn:'<'
 
         },
-        controller:['$scope', 'formFields', controller]
+        controller:['$scope', 'formFields', 'util', controller]
 
     });

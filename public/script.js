@@ -10,7 +10,7 @@ angular.module('NutriApp', ['recipeManager', 'util'])
             $scope.handleKeyDown = function($event){
                 switch($event.which){
                     case 27:{
-                        $rootScope.$broadcast('esc key down');
+                        $rootScope.$broadcast('escKeyDown');
                         break;
                     }
                 }

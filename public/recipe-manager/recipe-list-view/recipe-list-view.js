@@ -12,8 +12,8 @@ angular.module('recipeManager')
             selectedItems:'<',
             onSelect:'&',
             onDeselect:'&',
-            onDeleteKey:'&',
-            onDeleteClick:'&'
+            onDeleteSelected:'&',
+            deselectAllOn:'@'
         },
         controller: ['$scope', 'orderByFilter', 'filterFilter', 'filters', controller]
     });
@@ -25,6 +25,10 @@ function controller($scope, orderBy, filter, filters){
         var selected = $scope.selected = Object.create(null);
 
         defineTable();
+
+        wireEvents();
+
+        $scope.$on(ctrl.deselectAllOn, deselectAll);
 
         $scope.items = function(){
             return orderBy(filter(ctrl.items, $scope.searchCriteria), $scope.orderCriteria);
@@ -40,10 +44,10 @@ function controller($scope, orderBy, filter, filters){
 
         $scope.$watchCollection(function() { return $scope.items()}, refreshView);
 
-        $scope.$watch(function() { return ctrl.searchCriteria; }, deselectAll);
+        $scope.$watch(function() { return $scope.searchCriteria; }, deselectAll);
 
         $scope.handleDeleteClick = function(){
-            ctrl.onDeleteClick();
+            ctrl.onDeleteSelected();
         }
 
         $scope.handleSelectAllClick = function(){
@@ -73,10 +77,18 @@ function controller($scope, orderBy, filter, filters){
         $scope.handleKeyDown = function($event){
             switch ($event.which){
                 case 46:{   //DELETE
-                    ctrl.onDeleteKey();
+                    ctrl.onDeleteSelected();
                     break;
                 }
             }
+        }
+
+        function wireEvents(){
+
+        }
+
+        function wireEvent(event, handler){
+
         }
 
         function defineTable(){

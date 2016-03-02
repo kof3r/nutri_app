@@ -11,7 +11,7 @@ function controller($scope, recipeSvc, util){
         var recipes = $scope.recipes = [];
         var selected = $scope.selectedRecipes = [];
 
-        wireEvents();
+        util.wireEvents($scope, ctrl.deselectAllOn, clearSelection);
 
         recipeSvc.get().then(function(recipes){
             angular.forEach(recipes, function(recipe){
@@ -73,21 +73,17 @@ function controller($scope, recipeSvc, util){
 
         function selectRecipe(recipe){
             selected.push(recipe);
-            $scope.$broadcast('recipe selected');
+            $scope.$broadcast('recipeSelected');
         }
 
         function deselectRecipe(recipe){
             util.removeFromArray(selected, recipe);
+            $scope.$broadcast('recipeDeselected');
         }
 
         function clearSelection(){
             $scope.selectedRecipes.splice(0, $scope.selectedRecipes.length);
-        }
-
-        function wireEvents(){
-            if(ctrl.deselectAllOn){
-                $scope.$on(ctrl.deselectAllOn, clearSelection);
-            }
+            $scope.$broadcast('recipeDeselected');
         }
     }
 
@@ -98,6 +94,6 @@ angular.module('recipeManager', ['server', 'util'])
         templateUrl: 'recipe-manager/recipe-manager.html',
         controller: ['$scope', 'serverRecipeService', 'util', controller],
         bindings:{
-            deselectAllOn:'@'
+            deselectAllOn:'<'
         }
     })
