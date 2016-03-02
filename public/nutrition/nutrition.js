@@ -19,11 +19,4 @@ angular.module('nutrition', ['converter', 'models', 'settings'])
         return function(value){
             return value.toFixed(0) + ' ' + setting.value();
         }
-    }])
-    .factory('filters', ['dateFilter', 'energyFilter', 'massFilter', function(date, energy, mass){
-        return {
-            date: date,
-            energy: energy,
-            mass: mass
-        };
     }]);

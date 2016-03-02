@@ -2,12 +2,7 @@
  * Created by ggrab on 1.3.2016..
  */
 
-angular.module('recipeManager')
-    .factory('formFields', ['recipeFormFields', function(recipe){
-        return{
-            recipe: recipe
-        }
-    }])
+angular.module('data')
 
     .factory('recipeFormFields', ['filters', function(filters){
         return {
@@ -35,4 +30,4 @@ angular.module('recipeManager')
                 filter: filters.date
             }
         }
-    }]);
+    }])

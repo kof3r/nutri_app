@@ -89,7 +89,8 @@ function controller($scope, recipeSvc, util){
 
 }
 
-angular.module('recipeManager', ['server', 'util'])
+angular.module('recipeManager', ['server', 'util', 'data'])
+
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
         controller: ['$scope', 'serverRecipeService', 'util', controller],
@@ -97,3 +98,9 @@ angular.module('recipeManager', ['server', 'util'])
             deselectAllOn:'<'
         }
     })
+
+    .factory('formFields', ['recipeFormFields', function(recipe){
+        return{
+            recipe: recipe
+        }
+    }])

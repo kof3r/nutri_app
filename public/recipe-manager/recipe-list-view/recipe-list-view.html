@@ -28,14 +28,14 @@
                     <table class="table" ng-ghost>
                         <thead>
                         <tr>
-                            <th ng-repeat="c in $ctrl.columns" ng-click="handleHeaderClick(c)">{{c.header}}</th>
+                            <th ng-repeat="(p, c) in columns" ng-click="handleHeaderClick(p)">{{c.header}}</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="i in items()"
                             ng-mouseup="$parent.handleRowClick(i, $index, $event)"
                             ng-class="$parent.selected[$index] ? 'selected' : ''">
-                            <td ng-style="{'text-align': c.align || 'left' }" ng-repeat="c in $ctrl.columns">{{displayItem(i, c)}}</td>
+                            <td ng-style="{'text-align': c.align || 'left' }" ng-repeat="(p, c) in columns">{{displayItem(i, p)}}</td>
                         </tr>
                         </tbody>
                     </table>
