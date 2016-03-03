@@ -1,0 +1,17 @@
+
+.btn{
+    cursor: default;
+}
+
+.nutri-btn{
+    color: white;
+    border-color: saddlebrown;
+    border-radius: 0;
+    background-color: chocolate;
+}
+
+.nutri-btn:hover, .nutri-btn:focus, .nutri-btn:active{
+    border-color: black;
+    outline: thin black;
+    background-color: saddlebrown;
+}

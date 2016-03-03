@@ -59,8 +59,8 @@ function controller($scope, formFields, util){
 
         $scope.displayValue = function(p){
             var item = $scope.item;
-            if(!item[p]) return null;
-            var value = fields[p].function ? item[p]() : item[p];
+            if(!ctrl.item) return null;
+            var value = fields[p].reflect ? fields[p].reflect(item) : item[p].constructor === Function ? item[p]() : item[p];
             var filter = fields[p].filter;
             value = filter ? filter(value) : value;
             return value;
@@ -75,7 +75,8 @@ function controller($scope, formFields, util){
         }
 
         function isReadOnly(p){
-            return fields[p].function || (typeof fields[p].type === 'undefined');
+            var item = ctrl.item;
+            return (item && item[p] && item[p].constructor === Function) || fields[p].reflect || (typeof fields[p].type === 'undefined');
         }
 
         function isEnum(p){
@@ -102,7 +103,7 @@ function controller($scope, formFields, util){
             disableInput();
             copy();
         }
-    }
+    };
 
 }
 

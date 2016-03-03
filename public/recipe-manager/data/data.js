@@ -10,4 +10,16 @@ angular.module('data', ['nutrition'])
             energy: energy,
             mass: mass
         };
+    }])
+
+    .factory('formFieldConstructor', ['filters', function(filters){
+
+        function FormField(field, type, filter){
+            this.field = field;
+            this.type = type;
+            this.filter = filters[filter];
+        }
+
+        return FormField;
+
     }]);

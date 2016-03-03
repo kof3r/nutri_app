@@ -8,16 +8,6 @@ angular.module('data')
             name:{
                 header:'Name'
             },
-            totalCalories:{
-                header:'Calories',
-                'function': true,
-                filter: filters.energy
-            },
-            totalFats:{
-                header: 'Fats',
-                'function': true,
-                filter: filters.mass
-            },
             created_at:{
                 header: 'Date created',
                 filter: filters.date

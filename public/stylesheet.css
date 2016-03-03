@@ -102,21 +102,6 @@ table{
     user-select: none;
 }
 
-.btn{
-    cursor: default;
-}
-
-.nutri-btn{
-    border-color: saddlebrown;
-    background-color: chocolate;
-}
-
-.nutri-btn:hover, .nutri-btn:focus, .nutri-btn:active{
-    border-color: black;
-    outline: thin black;
-    background-color: saddlebrown;
-}
-
 .nutri-frm{
     border: solid saddlebrown;
     border-radius: 10px;
@@ -124,4 +109,8 @@ table{
 
 .top-buffer{
     margin-top: 20px;
+}
+
+.left-buffer{
+    margin-left: 20px;
 }

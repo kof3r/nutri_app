@@ -7,6 +7,9 @@ angular.module('recipeManager')
     .component('recipeListView', {
         templateUrl:'recipe-manager/recipe-list-view/recipe-list-view.html',
         bindings:{
+            title:'@',
+            class:'@',
+            data:'@',
             items:'<',
             selectedItems:'<',
             onSelect:'&',
@@ -14,18 +17,18 @@ angular.module('recipeManager')
             onDeleteSelected:'&',
             deselectAllOn:'@'
         },
-        controller: ['$scope', 'orderByFilter', 'filterFilter', 'recipeListColumns', controller]
+        controller: ['$scope', 'orderByFilter', 'filterFilter', 'tableColumns', controller]
     });
 
-function controller($scope, orderBy, filter, columns){
+function controller($scope, orderBy, filter, tableColumns){
     var ctrl = this;
 
     this.$onInit = function(){
         var selected = $scope.selected = Object.create(null);
 
-        $scope.columns = columns;
+        var columns = $scope.columns = tableColumns[ctrl.data];
 
-        $scope.$on(ctrl.deselectAllOn, deselectAll);
+        $scope.$on(ctrl.deselectAllOn, deselectAllRecipes);
 
         $scope.items = function(){
             return orderBy(filter(ctrl.items, $scope.searchCriteria), $scope.orderCriteria);
@@ -41,7 +44,7 @@ function controller($scope, orderBy, filter, columns){
 
         $scope.$watchCollection(function() { return $scope.items()}, refreshView);
 
-        $scope.$watch(function() { return $scope.searchCriteria; }, deselectAll);
+        $scope.$watch(function() { return $scope.searchCriteria; }, deselectAllRecipes);
 
         $scope.handleDeleteClick = function(){
             ctrl.onDeleteSelected();
@@ -52,13 +55,13 @@ function controller($scope, orderBy, filter, columns){
         }
 
         $scope.handleDeselectAllClick = function(){
-            deselectAll();
+            deselectAllRecipes();
         }
 
         $scope.handleRowClick = function(item, index, $event){
             var isSelected = selected[index];
             if(!$event.ctrlKey){
-                deselectAll();
+                deselectAllRecipes();
             }
             if(isSelected){
                 deselect(item);
@@ -98,14 +101,14 @@ function controller($scope, orderBy, filter, columns){
         };
 
         function select(item){
-            ctrl.onSelect({recipe: item});
+            ctrl.onSelect({item: item});
         }
 
         function deselect(item){
-            ctrl.onDeselect({recipe: item});
+            ctrl.onDeselect({item: item});
         }
 
-        function deselectAll(){
+        function deselectAllRecipes(){
             var items = ctrl.selectedItems.slice(0);
             angular.forEach(items, function(item){
                 deselect(item);

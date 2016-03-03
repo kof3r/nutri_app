@@ -1,6 +1,6 @@
 
 
-<fieldset class="top-buffer">
+<fieldset>
     <legend>Create/Edit</legend>
 
 
@@ -23,14 +23,14 @@
                 <div class="form-group">
                     <label for="{{p}}" class="col-sm-{{firstColumnWidth()}} control-label">{{f.field}}</label>
                     <div class="col-sm-{{secondColumnWidth()}}">
-                        <div style="position: relative; top: 7px; left: 13px" ng-show="whenShowLabel(p)" ng-bind="displayValue(p)">{{displayValue(p)}}</div>
+                        <div style="position: relative; top: 7px; left: 13px" ng-show="whenShowLabel(p)" ng-bind="displayValue(p)"></div>
                         <input id="{{p}}" name="{{p}}" class="form-control" ng-show="whenShowInput(p)" ng-if="doesInputRender(p)" type="f.type || 'text'" ng-model="item[p]">
                         <select class="form-control" ng-show="whenShowSelect(p)" ng-if="doesSelectRender(p)" ng-model="item[p]">
                             <option ng-repeat="o in f.type">{{o}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group" ng-show="whenShowErrors(p)">
+                <div class="form-group" ng-if="whenShowErrors(p)">
                     <label class="col-sm-{{firstColumnWidth()}} control-label"></label>
                     <div class="col-sm-{{secondColumnWidth()}}">
                         <label>

@@ -2,88 +2,103 @@
  * Created by ggrab on 24.2.2016..
  */
 
-function controller($scope, recipeSvc, util){
+function controller($scope, recipeSvc, SelectionManager, util){
 
     var ctrl = this;
 
     this.$onInit = function(){
 
-        var recipes = $scope.recipes = [];
-        var selected = $scope.selectedRecipes = [];
+        $scope.recipes = [];
+        $scope.selectedRecipes = [];
+        $scope.ingredients = [];
+        $scope.selectedIngredients = [];
 
-        util.wireEvents($scope, ctrl.deselectAllOn, clearSelection);
+        var recipeManager = new SelectionManager($scope, 'recipes', 'selectedRecipes');
+        var ingredientManager = new SelectionManager($scope, 'ingredients', 'selectedIngredients');
+
+        util.wireEvents($scope, ctrl.deselectAllOn, recipeManager.deselectAll.bind(recipeManager));
 
         recipeSvc.get().then(function(recipes){
             angular.forEach(recipes, function(recipe){
-                addRecipe(recipe);
+                console.log(recipe.ingredients);
+                recipeManager.add(recipe);
             })
         });
 
-        $scope.addToSelected = function(recipe){
-            selectRecipe(recipe);
+        $scope.$watchCollection(function(){ return $scope.selectedRecipes; }, handleSelectedRecipesChange);
+
+        $scope.whenRenderRecipeForm = function(){
+            return !$scope.whenRenderIngredientForm();
         }
 
-        $scope.removeFromSelected = function(recipe){
-            deselectRecipe(recipe);
+        $scope.whenRenderIngredientForm = function(){
+            return $scope.selectedIngredients.length === 1;
         }
 
-        $scope.deselectAll = function(){
-            clearSelection();
+        $scope.selectRecipe = function(recipe){
+            recipeManager.select(recipe);
+            $scope.$broadcast('disruptInput');
         }
 
-        $scope.selectAll = function(){
-            $scope.selectedRecipes = $scope.recipes.slice(0, $scope.recipes.length);
+        $scope.deselectRecipe = function(recipe){
+            recipeManager.deselect(recipe);
+            $scope.$broadcast('disruptInput');
         }
 
-        $scope.deleteSelected = function(){
+        $scope.deselectAllRecipes = function(){
+            recipeManager.deselectAll();
+            $scope.$broadcast('disruptInput');
+        }
 
-            Promise.all(selected.map(function(recipe){
+        $scope.selectAllRecipes = function(){
+            recipeManager.selectAll();
+        }
+
+        $scope.deleteSelectedRecipes = function(){
+
+            Promise.all($scope.selectedRecipes.map(function(recipe){
                 return recipeSvc.delete(recipe.id).then(function(){
-                    removeRecipe(recipe);
+                    recipeManager.remove(recipe);
                 }).catch();
             }))
         }
 
         $scope.saveRecipe = function(item){
             if(item.id){
-                var old = selected[0];
+                var old = $scope.selectedRecipes[0];
                 recipeSvc.post(item).then(function(recipe){
-                    removeRecipe(old);
-                    addRecipe(recipe);
-                    selectRecipe(recipe);
+                    recipeManager.remove(old);
+                    recipeManager.add(recipe);
+                    recipeManager.select(recipe);
                 }).catch(function(){
 
                 })
             } else {
                 recipeSvc.put(item).then(function(recipe){
-                    addRecipe(recipe);
-                    selectRecipe(recipe);
+                    recipeManager.add(recipe);
+                    recipeManager.select(recipe);
                 });
             }
         }
 
-        function removeRecipe(recipe){
-            util.removeFromArray(recipes, recipe);
-            util.removeFromArray(selected, recipe);
+        $scope.selectIngredient = function(ingredient){
+            ingredientManager.select(ingredient);
         }
 
-        function addRecipe(recipe){
-            recipes.push(recipe);
+        $scope.deselectIngredient = function(ingredient){
+            ingredientManager.deselect(ingredient);
         }
 
-        function selectRecipe(recipe){
-            selected.push(recipe);
-            $scope.$broadcast('recipeSelected');
+        function handleSelectedRecipesChange(){
+            ingredientManager.removeAll();
+            if($scope.selectedRecipes.length === 1){
+                addSelectedRecipeIngredients();
+            }
         }
 
-        function deselectRecipe(recipe){
-            util.removeFromArray(selected, recipe);
-            $scope.$broadcast('recipeDeselected');
-        }
-
-        function clearSelection(){
-            $scope.selectedRecipes.splice(0, $scope.selectedRecipes.length);
-            $scope.$broadcast('recipeDeselected');
+        function addSelectedRecipeIngredients(){
+            $scope.ingredients = $scope.selectedRecipes[0].ingredients.slice();
+            $scope.selectedIngredients = [];
         }
     }
 
@@ -93,14 +108,22 @@ angular.module('recipeManager', ['server', 'util', 'data'])
 
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
-        controller: ['$scope', 'serverRecipeService', 'util', controller],
+        controller: ['$scope', 'serverRecipeService', 'selectionManager', 'util', controller],
         bindings:{
             deselectAllOn:'<'
         }
     })
 
-    .factory('formFields', ['recipeFormFields', function(recipe){
+    .factory('formFields', ['recipeFormFields', 'ingredientFormFields', function(recipe, ingredient){
         return{
-            recipe: recipe
+            recipe: recipe,
+            ingredient: ingredient
+        }
+    }])
+
+    .factory('tableColumns', ['recipeListColumns', 'ingredientListColumns', function(recipes, ingredients){
+        return{
+            recipes: recipes,
+            ingredients: ingredients
         }
     }])

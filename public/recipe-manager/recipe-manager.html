@@ -2,30 +2,45 @@
 <div class="container-fluid">
 
     <div class="row">
+
         <div class="col-md-3">
-            <detail-view item="selectedRecipes.length == 1 ? selectedRecipes[0] : null"
+            <detail-view ng-if="whenRenderRecipeForm()"
+                         item="selectedRecipes.length === 1 ? selectedRecipes[0] : null"
                          fields="recipe"
                          on-save-click="saveRecipe(item)"
-                         cancel-input-on="['recipeDeselected', 'recipeSelected']">
+                         cancel-input-on="['disruptInput']">
+            </detail-view>
+            <detail-view ng-if="whenRenderIngredientForm()"
+                         item="selectedIngredients.length === 1 ? selectedIngredients[0] : null"
+                         fields="ingredient"
+                         cancel-input-on="['disruptInput']">
             </detail-view>
         </div>
 
-        <div class="col-md-9">
-            <recipe-list-view items="recipes"
+        <div class="col-md-3">
+            <recipe-list-view title="Recipes"
+                              class="container-fluid left-buffer"
+                              data="recipes"
+                              items="recipes"
                               selected-items="selectedRecipes"
-                              on-select="addToSelected(recipe)"
-                              on-deselect="removeFromSelected(recipe)"
-                              on-delete-selected="deleteSelected()"
-                              columns="[
-                                { header: 'Name',           property: 'name' },
-                                { header: 'Calories',       function: 'totalCalories', filter: 'energy', align: 'right' },
-                                { header: 'Carbohydrates',  function: 'totalCarbs', filter: 'mass', align: 'right' },
-                                { header: 'Fats',           function: 'totalFats', filter: 'mass', align: 'right'},
-                                { header: 'Protein',        function: 'totalProtein', filter: 'mass', align: 'right' },
-                                { header: 'Created',        property: 'created_at', filter: 'date'}
-                              ]">
+                              on-select="selectRecipe(item)"
+                              on-deselect="deselectRecipe(item)"
+                              on-delete-selected="deleteSelectedRecipes()">
             </recipe-list-view>
         </div>
+
+        <div class="col-md-6">
+            <recipe-list-view title="Ingredients"
+                              class="container-fluid left-buffer"
+                              data="ingredients"
+                              items="ingredients"
+                              selected-items="selectedIngredients"
+                              on-select="selectIngredient(item)"
+                              on-deselect="deselectIngredient(item)"
+                              on-delete-selected="">
+            </recipe-list-view>
+        </div>
+
     </div>
 
 </div>

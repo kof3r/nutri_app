@@ -4,30 +4,13 @@
 
 angular.module('data')
 
-    .factory('recipeFormFields', ['filters', function(filters){
+    .factory('recipeFormFields', ['formFieldConstructor', 'filters', function(FormField, filters){
         return {
-            name:{
-                field: 'Name',
-                type: 'text'
-            },
-            totalCalories:{
-                field: 'Calories',
-                function: true,
-                filter: filters.energy
-            },
-            totalCarbs:{
-                field: 'Carbohydrates',
-                function: true,
-                filter: filters.mass
-            },
-            totalFats:{
-                field: 'Fats',
-                function: true,
-                filter: filters.mass
-            },
-            created_at:{
-                field: 'Date created',
-                filter: filters.date
-            }
+            name: new FormField('Name', 'text'),
+            totalCalories: new FormField('Calories', undefined, 'energy'),
+            totalCarbs: new FormField('Carbs', undefined, 'mass'),
+            totalFats: new FormField('Fats', undefined, 'mass'),
+            totalProtein: new FormField('Protein', undefined, 'mass'),
+            created_at: new FormField('Created', undefined, 'date')
         }
     }])
