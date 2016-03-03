@@ -60,8 +60,9 @@ function controller($scope, formFields, util){
         $scope.displayValue = function(p){
             var item = $scope.item;
             if(!ctrl.item) return null;
-            var value = fields[p].reflect ? fields[p].reflect(item) : item[p].constructor === Function ? item[p]() : item[p];
+            var value = item[p].constructor === Function ? item[p]() : item[p];
             var filter = fields[p].filter;
+            value = fields[p].type === 'number' ? parseFloat(value) : value;
             value = filter ? filter(value) : value;
             return value;
         }

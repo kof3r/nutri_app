@@ -2,6 +2,8 @@
  * Created by ggrab on 23.2.2016..
  */
 
+var Promise = require('bluebird');
+
 var orm = require('../orm');
 
 var Recipe = orm.model('recipe');
@@ -36,19 +38,18 @@ router.post('/', function(req, res){
 
     Recipe.findById(body.id).then(function(recipe){
         if(recipe){
-            console.log(recipe);
-            return recipe.update(body);
-        } else {
-            return body;
+            return Promise.all([
+                Recipe.upsert(body),
+                Promise.all(body.ingredients.map(function(ingredient){
+                    return Ingredient.upsert(ingredient);
+                }))]
+            );
         }
-    }).then(function(recipe){
-        if(recipe === body){
-            res.json(new Response(body, 'Failed to update recipe.'));
-        } else {
-            res.json(new Response(recipe));
-        }
+        throw new Error('Update of ' + body.name + ' failed.');
+    }).then(function(results){
+        res.json(new Response(body));
     }).catch(function(err){
-        res.json(new Response());
+        res.json(new Response(null, err.message));
     })
 })
 

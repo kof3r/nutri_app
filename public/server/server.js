@@ -57,6 +57,7 @@ angular.module('server', ['mapper', 'util'])
 
             post: function(recipe){
                 return $http.post('api/recipe', recipe).then(function(res){
+                    console.log(res.data.response);
                     return handleResponse(res, mapper.mapRecipe, sprintf('Successfully updated \"%s\".', recipe.name))
                 });
             },

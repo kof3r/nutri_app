@@ -20,7 +20,6 @@ function controller($scope, recipeSvc, SelectionManager, util){
 
         recipeSvc.get().then(function(recipes){
             angular.forEach(recipes, function(recipe){
-                console.log(recipe.ingredients);
                 recipeManager.add(recipe);
             })
         });
@@ -67,6 +66,7 @@ function controller($scope, recipeSvc, SelectionManager, util){
             if(item.id){
                 var old = $scope.selectedRecipes[0];
                 recipeSvc.post(item).then(function(recipe){
+                    console.log(recipe);
                     recipeManager.remove(old);
                     recipeManager.add(recipe);
                     recipeManager.select(recipe);
@@ -81,6 +81,17 @@ function controller($scope, recipeSvc, SelectionManager, util){
             }
         }
 
+        $scope.saveIngredient = function(item){
+            if(item.id){
+                var index = $scope.selectedRecipes[0].ingredients.indexOf($scope.selectedIngredients[0]);
+                if(index != -1){
+                    $scope.ingredients[index] = item;
+                }
+            } else {
+                ingredientManager.add(item);
+            }
+        }
+
         $scope.selectIngredient = function(ingredient){
             ingredientManager.select(ingredient);
         }
@@ -90,15 +101,15 @@ function controller($scope, recipeSvc, SelectionManager, util){
         }
 
         function handleSelectedRecipesChange(){
-            ingredientManager.removeAll();
+            $scope.ingredients = [];
+            $scope.selectedIngredients = [];
             if($scope.selectedRecipes.length === 1){
                 addSelectedRecipeIngredients();
             }
         }
 
         function addSelectedRecipeIngredients(){
-            $scope.ingredients = $scope.selectedRecipes[0].ingredients.slice();
-            $scope.selectedIngredients = [];
+            $scope.ingredients = $scope.selectedRecipes[0].ingredients;
         }
     }
 
