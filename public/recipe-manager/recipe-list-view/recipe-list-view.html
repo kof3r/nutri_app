@@ -1,45 +1,30 @@
 
-<div class="container-fluid left-buffer">
+
+<fieldset tabindex="0" style="outline: none" ng-keydown="handleKeyDown($event)">
+    <legend>{{$ctrl.title}}</legend>
+
     <div class="row">
-        <fieldset tabindex="0" style="outline: none" ng-keydown="handleKeyDown($event)">
-            <legend>{{$ctrl.title}}</legend>
-
-            <div class="row">
-                <div class="btn-group">
-                    <button class="btn btn-primary nutri-btn" ng-click="handleDeleteClick()">Delete</button>
-                    <button class="btn btn-primary nutri-btn" ng-click="handleSelectAllClick()">Select All</button>
-                    <button class="btn btn-primary nutri-btn" ng-click="handleDeselectAllClick()">Deselect All</button>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label" for="search">Search:</label>
-                        <input class="form-control nutri-glow" id="search" type="text" ng-model="searchCriteria">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th ng-repeat="(p, c) in columns" ng-click="handleHeaderClick(p)">{{c.header}}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="i in items()"
-                            ng-mouseup="$parent.handleRowClick(i, $index, $event)"
-                            ng-class="$parent.selected[$index] ? 'selected' : ''">
-                            <td ng-style="{'text-align': c.align || 'left' }" ng-repeat="(p, c) in columns">{{displayItem(i, p)}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </fieldset>
+        <div class="btn-group">
+            <button class="btn-small nutri-btn" ng-click="handleNewClick()">New</button>
+            <button ng-if="$ctrl.selectedItems.length === 1" class="btn-small nutri-btn" ng-click="handleEditClick()">Edit</button>
+        </div>
     </div>
-</div>
+
+    <div class="row top-buffer">
+        <table class="table">
+            <thead>
+            <tr>
+                <th ng-repeat="(p, c) in columns" ng-click="handleHeaderClick(p)">{{c.header}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="i in items()"
+                ng-mouseup="$parent.handleRowClick(i, $index, $event)"
+                ng-class="resolveRowClass($index)">
+                <td ng-style="{'text-align': c.align || 'left' }" ng-repeat="(p, c) in columns">{{displayItem(i, p)}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</fieldset>

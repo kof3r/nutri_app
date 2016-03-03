@@ -48,6 +48,8 @@ angular.module('mapper', ['nutrition'])
                     })
                 }
                 return mapRecipe(data);
-            }
+            },
+
+            mapIngredient: mapIngredient
         }
     }])

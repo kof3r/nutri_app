@@ -89,6 +89,14 @@ tr:hover{
     background-color: saddlebrown;
 }
 
+.new{
+    color: forestgreen;
+}
+
+.new:hover{
+    color: darkgreen;
+}
+
 tr{
     cursor: default;
 }

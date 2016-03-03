@@ -3,6 +3,10 @@
     cursor: default;
 }
 
+.btn-small{
+    cursor: default;
+}
+
 .nutri-btn{
     color: white;
     border-color: saddlebrown;

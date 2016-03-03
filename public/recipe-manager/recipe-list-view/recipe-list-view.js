@@ -8,13 +8,14 @@ angular.module('recipeManager')
         templateUrl:'recipe-manager/recipe-list-view/recipe-list-view.html',
         bindings:{
             title:'@',
-            class:'@',
             data:'@',
             items:'<',
             selectedItems:'<',
             onSelect:'&',
             onDeselect:'&',
             onDeleteSelected:'&',
+            onNewClick:'&',
+            onEditClick:'&',
             deselectAllOn:'@'
         },
         controller: ['$scope', 'orderByFilter', 'filterFilter', 'tableColumns', controller]
@@ -27,15 +28,29 @@ function controller($scope, orderBy, filter, tableColumns){
         var selected = $scope.selected = Object.create(null);
 
         var columns = $scope.columns = tableColumns[ctrl.data];
+        var itemsCache = {
+            valid: false
+        };
+
+        $scope.$watch(function() { return $scope.orderCriteria;}, invalidate)
+
+        $scope.$watch(function() { return $scope.searchCriteria;}, invalidate)
+
+        $scope.$watchCollection(function() { return ctrl.items;}, invalidate)
 
         $scope.$on(ctrl.deselectAllOn, deselectAllRecipes);
 
         $scope.items = function(){
-            return orderBy(filter(ctrl.items, $scope.searchCriteria), $scope.orderCriteria);
+            if(!itemsCache.valid){
+                itemsCache.items = orderBy(filter(ctrl.items, $scope.searchCriteria), $scope.orderCriteria);
+                itemsCache.valid = true;
+            }
+            return itemsCache.items;
         }
 
         $scope.displayItem = function(item, p){
-            var value = columns[p].function ? item[p]() : item[p];
+            if(!item[p]) return null;
+            var value = item[p].constructor === Function ? item[p]() : item[p];
             value = columns[p].filter ? columns[p].filter(value) : value;
             return value;
         }
@@ -80,6 +95,32 @@ function controller($scope, orderBy, filter, tableColumns){
                     ctrl.onDeleteSelected();
                     break;
                 }
+            }
+        }
+
+        $scope.whenRenderEditButton = function(){
+            ctrl.selectedItems.length === 1;
+        }
+
+        $scope.handleNewClick = function(){
+            ctrl.onNewClick();
+        }
+
+        $scope.handleEditClick = function(){
+            ctrl.onEditClick();
+        }
+
+        $scope.resolveRowClass = function(index){
+            var cls = selected[index] ? 'selected ' : '';
+            cls += $scope.items()[index].id ? '' : 'new';
+            return cls;
+        }
+
+        function invalidate(newValue, oldValue){
+            console.log(oldValue)
+            console.log(newValue)
+            if(newValue !== oldValue){
+                itemsCache.valid = false;
             }
         }
 

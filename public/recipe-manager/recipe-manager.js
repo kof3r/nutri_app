@@ -2,7 +2,7 @@
  * Created by ggrab on 24.2.2016..
  */
 
-function controller($scope, recipeSvc, SelectionManager, util){
+function controller($scope, recipeSvc, SelectionManager, util, mapper){
 
     var ctrl = this;
 
@@ -27,11 +27,11 @@ function controller($scope, recipeSvc, SelectionManager, util){
         $scope.$watchCollection(function(){ return $scope.selectedRecipes; }, handleSelectedRecipesChange);
 
         $scope.whenRenderRecipeForm = function(){
-            return !$scope.whenRenderIngredientForm();
+            return !$scope.whenShowIngredientForm();
         }
 
-        $scope.whenRenderIngredientForm = function(){
-            return $scope.selectedIngredients.length === 1;
+        $scope.whenShowIngredientForm = function(){
+            return $scope.selectedRecipes.length === 1 && ($scope.selectedIngredients.length === 1 || $scope.ingredientInputEnabled);
         }
 
         $scope.selectRecipe = function(recipe){
@@ -65,6 +65,7 @@ function controller($scope, recipeSvc, SelectionManager, util){
         $scope.saveRecipe = function(item){
             if(item.id){
                 var old = $scope.selectedRecipes[0];
+                console.log(item.recipes);
                 recipeSvc.post(item).then(function(recipe){
                     console.log(recipe);
                     recipeManager.remove(old);
@@ -88,7 +89,7 @@ function controller($scope, recipeSvc, SelectionManager, util){
                     $scope.ingredients[index] = item;
                 }
             } else {
-                ingredientManager.add(item);
+                ingredientManager.add(mapper.mapIngredient(item));
             }
         }
 
@@ -98,6 +99,11 @@ function controller($scope, recipeSvc, SelectionManager, util){
 
         $scope.deselectIngredient = function(ingredient){
             ingredientManager.deselect(ingredient);
+        }
+
+        $scope.enableNewIngredientInput = function(){
+            ingredientManager.deselectAll();
+            $scope.ingredientInputEnabled = true;
         }
 
         function handleSelectedRecipesChange(){
@@ -115,11 +121,11 @@ function controller($scope, recipeSvc, SelectionManager, util){
 
 }
 
-angular.module('recipeManager', ['server', 'util', 'data'])
+angular.module('recipeManager', ['server', 'util', 'data', 'mapper'])
 
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
-        controller: ['$scope', 'serverRecipeService', 'selectionManager', 'util', controller],
+        controller: ['$scope', 'serverRecipeService', 'selectionManager', 'util', 'mapper', controller],
         bindings:{
             deselectAllOn:'<'
         }

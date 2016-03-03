@@ -9,36 +9,36 @@ function controller($scope, formFields, util){
     this.$onInit = function(){
 
         var fields = $scope.fields = formFields[ctrl.fields];
-        disableInput();
-
-        util.wireEvents($scope, ctrl.cancelInputOn, cancelInput);
 
         $scope.$watch(function() { return ctrl.item; }, copy);
 
+        $scope.isInputEnabled = function(){
+            return isInputEnabled();
+        }
+
         $scope.handleNewClick = function(){
-            $scope.$emit('addingNew');
-            enableInput();
+            ctrl.onNewClick();
         }
 
         $scope.handleEditClick = function(){
-            enableInput();
+            ctrl.onEditClick();
         }
 
         $scope.handleCancelClick = function () {
-            cancelInput();
+            copy();
+            ctrl.onCancelClick();
         }
 
         $scope.handleSaveClick = function(){
-            disableInput();
             ctrl.onSaveClick({ item: $scope.item });
         }
 
         $scope.whenShowLabel = function(p){
-            return !isInputMode() || isReadOnly(p);
+            return !isInputEnabled() || isReadOnly(p);
         }
 
         $scope.whenShowInput = function(p){
-            return isInputMode();
+            return isInputEnabled();
         }
 
         $scope.doesInputRender = function(p){
@@ -46,7 +46,7 @@ function controller($scope, formFields, util){
         }
 
         $scope.whenShowSelect = function(p){
-            return isInputMode();
+            return isInputEnabled();
         }
 
         $scope.doesSelectRender = function(p){
@@ -59,7 +59,7 @@ function controller($scope, formFields, util){
 
         $scope.displayValue = function(p){
             var item = $scope.item;
-            if(!ctrl.item) return null;
+            if(!ctrl.item || !ctrl.item[p]) return null;
             var value = item[p].constructor === Function ? item[p]() : item[p];
             var filter = fields[p].filter;
             value = fields[p].type === 'number' ? parseFloat(value) : value;
@@ -88,21 +88,16 @@ function controller($scope, formFields, util){
             $scope.item = angular.copy(ctrl.item ? ctrl.item : {});
         }
 
-        function isInputMode(){
-            return $scope.inputMode;
+        function isInputEnabled(){
+            return ctrl.inputEnabled;
         }
 
         function enableInput(){
-            $scope.inputMode = true;
+            ctrl.inputEnabled = true;
         }
 
         function disableInput(){
-            $scope.inputMode = false;
-        }
-
-        function cancelInput(){
-            disableInput();
-            copy();
+            ctrl.inputEnabled = false;
         }
     };
 
@@ -116,8 +111,12 @@ angular.module('recipeManager')
         bindings:{
 
             fields:'@',
+            inputEnabled:'<',
             item:'<',
+            onNewClick:'&',
+            onEditClick:'&',
             onSaveClick:'&',
+            onCancelClick:'&',
             cancelInputOn:'<'
 
         },

@@ -1,45 +1,80 @@
 
-<div class="container-fluid">
+<div class="container-fluid top-buffer">
 
     <div class="row">
 
         <div class="col-md-3">
             <detail-view ng-if="whenRenderRecipeForm()"
+                         input-enabled="recipeInputEnabled"
                          item="selectedRecipes.length === 1 ? selectedRecipes[0] : null"
                          fields="recipe"
+                         on-new-click="recipeInputEnabled = true"
+                         on-edit-click="recipeInputEnabled = true"
                          on-save-click="saveRecipe(item)"
-                         cancel-input-on="['disruptInput']">
+                         on-cancel-click="recipeInputEnabled = false">
             </detail-view>
-            <detail-view ng-if="whenRenderIngredientForm()"
+            <detail-view ng-show="whenShowIngredientForm()"
+                         input-enabled="ingredientInputEnabled"
                          item="selectedIngredients.length === 1 ? selectedIngredients[0] : null"
                          fields="ingredient"
+                         on-new-click="ingredientInputEnabled = true"
+                         on-edit-click="ingredientInputEnabled = true"
                          on-save-click="saveIngredient(item)"
-                         cancel-input-on="['disruptInput']">
+                         on-cancel-click="ingredientInputEnabled = false">
             </detail-view>
         </div>
 
-        <div class="col-md-3">
-            <recipe-list-view title="Recipes"
-                              class="container-fluid left-buffer"
-                              data="recipes"
-                              items="recipes"
-                              selected-items="selectedRecipes"
-                              on-select="selectRecipe(item)"
-                              on-deselect="deselectRecipe(item)"
-                              on-delete-selected="deleteSelectedRecipes()">
-            </recipe-list-view>
-        </div>
+        <div class="col-md-9">
+            <div class="container-fluid">
+                <div class="row">
 
-        <div class="col-md-6">
-            <recipe-list-view title="Ingredients"
-                              class="container-fluid left-buffer"
-                              data="ingredients"
-                              items="ingredients"
-                              selected-items="selectedIngredients"
-                              on-select="selectIngredient(item)"
-                              on-deselect="deselectIngredient(item)"
-                              on-delete-selected="">
-            </recipe-list-view>
+                    <control-panel>
+
+                        <div class="col-md-3">
+
+                            <div class="btn-group-vertical">
+                                <button class="btn btn-primary nutri-btn" ng-click="handleDeleteClick()">Delete</button>
+                                <button class="btn btn-primary nutri-btn" ng-click="handleSelectAllClick()">Select All</button>
+                                <button class="btn btn-primary nutri-btn" ng-click="handleDeselectAllClick()">Deselect All</button>
+                            </div>
+
+                        </div>
+
+                    </control-panel>
+
+                </div>
+
+                <div class="row top-buffer">
+
+                    <div class="col-md-4">
+                        <recipe-list-view title="Recipes"
+                                          data="recipes"
+                                          items="recipes"
+                                          selected-items="selectedRecipes"
+                                          on-select="selectRecipe(item)"
+                                          on-deselect="deselectRecipe(item)"
+                                          on-delete-selected="deleteSelectedRecipes()">
+                        </recipe-list-view>
+                    </div>
+
+                    <div class="col-md-8">
+                        <recipe-list-view ng-show="selectedRecipes.length === 1" title="Ingredients"
+                                          data="ingredients"
+                                          items="ingredients"
+                                          selected-items="selectedIngredients"
+                                          on-select="selectIngredient(item)"
+                                          on-deselect="deselectIngredient(item)"
+                                          on-new-click="enableNewIngredientInput()"
+                                          on-delete-selected="">
+                        </recipe-list-view>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
         </div>
 
     </div>

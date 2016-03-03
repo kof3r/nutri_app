@@ -20,7 +20,7 @@ angular.module('nutrition')
 
         function sumIngredientsNutritionalAspect(nutritionalAspect){
             return this.ingredients.reduce(function (prev, curr) {
-                return prev + curr[nutritionalAspect]();
+                return prev + (curr[nutritionalAspect] ? curr[nutritionalAspect]() : 0);
             }, 0);
         };
 

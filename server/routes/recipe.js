@@ -41,13 +41,18 @@ router.post('/', function(req, res){
             return Promise.all([
                 Recipe.upsert(body),
                 Promise.all(body.ingredients.map(function(ingredient){
+                    if(!ingredient.recipe_id){
+                        ingredient.recipe_id = body.id;
+                    }
                     return Ingredient.upsert(ingredient);
                 }))]
             );
         }
         throw new Error('Update of ' + body.name + ' failed.');
-    }).then(function(results){
-        res.json(new Response(body));
+    }).then(function(){
+        return Recipe.findById(body.id, {include: [Ingredient]})
+    }).then(function(recipe){
+        res.json(new Response(recipe));
     }).catch(function(err){
         res.json(new Response(null, err.message));
     })
