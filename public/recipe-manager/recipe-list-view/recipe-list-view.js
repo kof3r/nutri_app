@@ -13,6 +13,7 @@ angular.module('recipeManager')
             selectedItems:'<',
             onSelect:'&',
             onDeselect:'&',
+            onRowDoubleClick:'&',
             onNewClick:'&',
             onEditClick:'&'
         },
@@ -55,18 +56,24 @@ function controller($scope, orderBy, filter, tableColumns){
 
         $scope.$watchCollection(function() { return $scope.items()}, refreshView);
 
-        $scope.$watch(function() { return $scope.searchCriteria; }, deselectAllRecipes);
+        $scope.$watch(function() { return $scope.searchCriteria; }, deselectAll);
 
         $scope.handleRowClick = function(item, index, $event){
             var isSelected = selected[index];
             if(!$event.ctrlKey){
-                deselectAllRecipes();
+                deselectAll();
             }
             if(isSelected){
                 deselect(item);
             } else{
                 select(item);
             }
+        }
+
+        $scope.handleRowDoubleClick = function(item){
+            deselectAll();
+            select(item);
+            ctrl.onRowDoubleClick();
         }
 
         $scope.handleHeaderClick = function(p){
@@ -122,7 +129,7 @@ function controller($scope, orderBy, filter, tableColumns){
             ctrl.onDeselect({item: item});
         }
 
-        function deselectAllRecipes(){
+        function deselectAll(){
             var items = ctrl.selectedItems.slice(0);
             angular.forEach(items, function(item){
                 deselect(item);

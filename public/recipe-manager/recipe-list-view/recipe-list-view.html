@@ -5,7 +5,7 @@
 
     <div class="row">
         <div class="btn-group">
-            <button class="btn-small nutri-btn" ng-click="handleNewClick()">New</button>
+            <button ng-if="$ctrl.selectedItems.length === 0" class="btn-small nutri-btn" ng-click="handleNewClick()">New</button>
             <button ng-if="$ctrl.selectedItems.length === 1" class="btn-small nutri-btn" ng-click="handleEditClick()">Edit</button>
         </div>
     </div>
@@ -20,6 +20,7 @@
             <tbody>
             <tr ng-repeat="i in items()"
                 ng-mouseup="$parent.handleRowClick(i, $index, $event)"
+                ng-dblclick="$parent.handleRowDoubleClick(i)"
                 ng-class="resolveRowClass($index)">
                 <td ng-style="{'text-align': c.align || 'left' }" ng-repeat="(p, c) in columns">{{displayItem(i, p)}}</td>
             </tr>

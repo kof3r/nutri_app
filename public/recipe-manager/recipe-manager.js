@@ -86,21 +86,42 @@ function controller($scope, recipeSvc, SelectionManager, util, mapper, $window){
                     $scope.ingredients[index] = item;
                 }
             } else {
-                ingredientManager.add(mapper.mapIngredient(item));
+                ingredientManager.add(item);
             }
         }
 
         $scope.selectIngredient = function(ingredient){
             ingredientManager.select(ingredient);
+            $scope.$broadcast('disruptInput');
         }
 
         $scope.deselectIngredient = function(ingredient){
             ingredientManager.deselect(ingredient);
+            $scope.$broadcast('disruptInput');
         }
 
-        $scope.enableNewIngredientInput = function(){
-            ingredientManager.deselectAll();
+        $scope.enableRecipeInput = function(){
+            $scope.recipeInputEnabled = true;
+        }
+
+        $scope.disableRecipeInput = function(){
+            $scope.recipeInputEnabled = false;
+        }
+
+        $scope.enableIngredientInput = function(){
             $scope.ingredientInputEnabled = true;
+        }
+
+        $scope.disableIngredientInput = function(){
+            $scope.ingredientInputEnabled = false;
+        }
+
+        $scope.handleRecipeDoubleClick = function(){
+            $scope.enableRecipeInput();
+        }
+
+        $scope.handleIngredientDoubleClick = function(){
+            $scope.enableIngredientInput();
         }
 
         function handleEscKeyDown(){
@@ -178,4 +199,13 @@ angular.module('recipeManager', ['server', 'util', 'data', 'mapper'])
             recipes: recipes,
             ingredients: ingredients
         }
+    }])
+
+    .factory('models', ['Recipe', 'Ingredient', function(Recipe, Ingredient){
+
+        return {
+            recipe: Recipe,
+            ingredient: Ingredient
+        }
+
     }])

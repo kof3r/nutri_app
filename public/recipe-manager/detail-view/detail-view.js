@@ -2,17 +2,18 @@
  * Created by ggrab on 29.2.2016..
  */
 
-function controller($scope, formFields, util){
+function controller($scope, $document, formFields, util, models){
 
     var ctrl = this;
 
     this.$onInit = function(){
 
         var fields = $scope.fields = formFields[ctrl.fields];
+        var Model = models[ctrl.fields];
 
         util.wireEvents($scope, ctrl.cancelInputOn, cancelInput)
 
-        $scope.$watch(function() { return ctrl.item; }, copy);
+        $scope.$watch(function() { return ctrl.item; }, handleItemChange);
 
         $scope.isInputEnabled = function(){
             return isInputEnabled();
@@ -60,7 +61,7 @@ function controller($scope, formFields, util){
 
         $scope.displayValue = function(p){
             var item = $scope.item;
-            if(!ctrl.item) return null;
+            if(!ctrl.item || !item[p]) return null;
             var value = item[p].constructor === Function ? item[p]() : item[p];
             var filter = fields[p].filter;
             value = filter ? filter(value) : value;
@@ -73,6 +74,10 @@ function controller($scope, formFields, util){
 
         $scope.secondColumnWidth = function(){
             return 12 - $scope.firstColumnWidth();
+        }
+
+        function handleItemChange(){
+            copy();
         }
 
         function cancelInput(){
@@ -90,7 +95,11 @@ function controller($scope, formFields, util){
         }
 
         function copy(){
-            $scope.item = angular.copy(ctrl.item ? ctrl.item : {});
+            if(ctrl.item){
+                $scope.item = angular.copy(ctrl.item);
+            } else {
+                $scope.item = new Model();
+            }
         }
 
         function isInputEnabled(){
@@ -117,6 +126,6 @@ angular.module('recipeManager')
             cancelInputOn:'<'
 
         },
-        controller:['$scope', 'formFields', 'util', controller]
+        controller:['$scope', '$document', 'formFields', 'util', 'models', controller]
 
     });

@@ -8,20 +8,20 @@
                          input-enabled="recipeInputEnabled"
                          item="selectedRecipes.length === 1 ? selectedRecipes[0] : null"
                          fields="recipe"
-                         on-new-click="recipeInputEnabled = true"
-                         on-edit-click="recipeInputEnabled = true"
+                         on-new-click="enableRecipeInput()"
+                         on-edit-click="enableRecipeInput()"
                          on-save-click="saveRecipe(item)"
-                         on-cancel-click="recipeInputEnabled = false"
+                         on-cancel-click="disableRecipeInput()"
                          cancel-input-on="['disruptInput']">
             </detail-view>
             <detail-view ng-if="whenRenderIngredientForm()"
                          input-enabled="ingredientInputEnabled"
                          item="selectedIngredients.length === 1 ? selectedIngredients[0] : null"
                          fields="ingredient"
-                         on-new-click="ingredientInputEnabled = true"
-                         on-edit-click="ingredientInputEnabled = true"
+                         on-new-click="enableIngredientInput()"
+                         on-edit-click="enableIngredientInput()"
                          on-save-click="saveIngredient(item)"
-                         on-cancel-click="ingredientInputEnabled = false"
+                         on-cancel-click="disableIngredientInput()"
                          cancel-input-on="['disruptInput']">
             </detail-view>
         </div>
@@ -54,7 +54,10 @@
                                           items="recipes"
                                           selected-items="selectedRecipes"
                                           on-select="selectRecipe(item)"
-                                          on-deselect="deselectRecipe(item)">
+                                          on-deselect="deselectRecipe(item)"
+                                          on-row-double-click="handleRecipeDoubleClick()"
+                                          on-new-click="enableRecipeInput()"
+                                          on-edit-click="enableRecipeInput()">
                         </recipe-list-view>
                     </div>
 
@@ -65,7 +68,9 @@
                                           selected-items="selectedIngredients"
                                           on-select="selectIngredient(item)"
                                           on-deselect="deselectIngredient(item)"
-                                          on-new-click="enableNewIngredientInput()">
+                                          on-row-double-click="handleIngredientDoubleClick()"
+                                          on-new-click="enableIngredientInput()"
+                                          on-edit-click="enableIngredientInput()">
                         </recipe-list-view>
                     </div>
 

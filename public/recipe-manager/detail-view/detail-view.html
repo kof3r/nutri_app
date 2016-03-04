@@ -9,12 +9,12 @@
             <div class="form-group">
                 <div class="col-sm-offset-{{firstColumnWidth()}} col-sm-{{secondColumnWidth()}}">
                     <div class="btn-group" ng-show="isInputEnabled()">
-                        <button class="btn btn-primary nutri-btn" ng-click="handleSaveClick()">Save</button>
+                        <button class="btn btn-primary nutri-btn" ng-click="handleSaveClick()" type="submit">Save</button>
                         <button class="btn btn-primary nutri-btn" ng-click="handleCancelClick()">Cancel</button>
                     </div>
                     <div class="btn-group" ng-hide="isInputEnabled()">
-                        <button class="btn btn-primary nutri-btn" ng-if="!item.id" type="submit" ng-click="handleNewClick()">New</button>
-                        <button class="btn btn-primary nutri-btn" ng-if="item.id" type="submit" ng-click="handleEditClick()">Edit</button>
+                        <button class="btn btn-primary nutri-btn" ng-if="item.isNew()" ng-click="handleNewClick()">New</button>
+                        <button class="btn btn-primary nutri-btn" ng-if="!item.isNew()" ng-click="handleEditClick()">Edit</button>
                     </div>
                 </div>
             </div>
