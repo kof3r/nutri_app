@@ -2,7 +2,7 @@
  * Created by ggrab on 24.2.2016..
  */
 
-function controller($scope, recipeSvc, SelectionManager, util, mapper){
+function controller($scope, recipeSvc, SelectionManager, util, mapper, $window){
 
     var ctrl = this;
 
@@ -16,7 +16,9 @@ function controller($scope, recipeSvc, SelectionManager, util, mapper){
         var recipeManager = new SelectionManager($scope, 'recipes', 'selectedRecipes');
         var ingredientManager = new SelectionManager($scope, 'ingredients', 'selectedIngredients');
 
-        util.wireEvents($scope, ctrl.deselectAllOn, recipeManager.deselectAll.bind(recipeManager));
+        util.wireEvents($scope, 'escKeyDown', handleEscKeyDown);
+
+        util.wireEvents($scope, 'delKeyDown', handleDelKeyDown);
 
         recipeSvc.get().then(function(recipes){
             angular.forEach(recipes, function(recipe){
@@ -24,13 +26,13 @@ function controller($scope, recipeSvc, SelectionManager, util, mapper){
             })
         });
 
-        $scope.$watchCollection(function(){ return $scope.selectedRecipes; }, handleSelectedRecipesChange);
+        $scope.$watchCollection('selectedRecipes', handleSelectedRecipesChange);
 
         $scope.whenRenderRecipeForm = function(){
-            return !$scope.whenShowIngredientForm();
+            return !$scope.whenRenderIngredientForm();
         }
 
-        $scope.whenShowIngredientForm = function(){
+        $scope.whenRenderIngredientForm = function(){
             return $scope.selectedRecipes.length === 1 && ($scope.selectedIngredients.length === 1 || $scope.ingredientInputEnabled);
         }
 
@@ -54,12 +56,7 @@ function controller($scope, recipeSvc, SelectionManager, util, mapper){
         }
 
         $scope.deleteSelectedRecipes = function(){
-
-            Promise.all($scope.selectedRecipes.map(function(recipe){
-                return recipeSvc.delete(recipe.id).then(function(){
-                    recipeManager.remove(recipe);
-                }).catch();
-            }))
+            deleteSelectedRecipes();
         }
 
         $scope.saveRecipe = function(item){
@@ -106,6 +103,44 @@ function controller($scope, recipeSvc, SelectionManager, util, mapper){
             $scope.ingredientInputEnabled = true;
         }
 
+        function handleEscKeyDown(){
+            if($scope.selectedIngredients.length != 0){
+                ingredientManager.deselectAll();
+            } else {
+                recipeManager.deselectAll();
+            }
+        }
+
+        function handleDelKeyDown(){
+            if($scope.selectedIngredients.length > 0){
+
+            } else if($scope.selectedRecipes.length > 0){
+                deleteSelectedRecipes();
+            }
+        }
+
+        function deleteSelectedRecipes(){
+
+            var many = $scope.selectedRecipes.length;
+            var message = many > 1 ?
+                sprintf('Are you sure you wish to delete these %d recipes?', many) :
+                sprintf('Are you sure you wish to delete %s?', $scope.selectedRecipes[0].name);
+
+            if($window.confirm(message)){
+                _delete();
+            }
+
+            function _delete(){
+
+                Promise.all($scope.selectedRecipes.map(function(recipe){
+                    return recipeSvc.delete(recipe.id).then(function(){
+                        recipeManager.remove(recipe);
+                    }).catch();
+                }))
+            }
+
+        }
+
         function handleSelectedRecipesChange(){
             $scope.ingredients = [];
             $scope.selectedIngredients = [];
@@ -125,7 +160,7 @@ angular.module('recipeManager', ['server', 'util', 'data', 'mapper'])
 
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
-        controller: ['$scope', 'serverRecipeService', 'selectionManager', 'util', 'mapper', controller],
+        controller: ['$scope', 'serverRecipeService', 'selectionManager', 'util', 'mapper', '$window', controller],
         bindings:{
             deselectAllOn:'<'
         }

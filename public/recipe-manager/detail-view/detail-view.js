@@ -10,6 +10,8 @@ function controller($scope, formFields, util){
 
         var fields = $scope.fields = formFields[ctrl.fields];
 
+        util.wireEvents($scope, ctrl.cancelInputOn, cancelInput)
+
         $scope.$watch(function() { return ctrl.item; }, copy);
 
         $scope.isInputEnabled = function(){
@@ -25,8 +27,7 @@ function controller($scope, formFields, util){
         }
 
         $scope.handleCancelClick = function () {
-            copy();
-            ctrl.onCancelClick();
+            cancelInput();
         }
 
         $scope.handleSaveClick = function(){
@@ -59,10 +60,9 @@ function controller($scope, formFields, util){
 
         $scope.displayValue = function(p){
             var item = $scope.item;
-            if(!ctrl.item || !ctrl.item[p]) return null;
+            if(!ctrl.item) return null;
             var value = item[p].constructor === Function ? item[p]() : item[p];
             var filter = fields[p].filter;
-            value = fields[p].type === 'number' ? parseFloat(value) : value;
             value = filter ? filter(value) : value;
             return value;
         }
@@ -73,6 +73,11 @@ function controller($scope, formFields, util){
 
         $scope.secondColumnWidth = function(){
             return 12 - $scope.firstColumnWidth();
+        }
+
+        function cancelInput(){
+            copy();
+            ctrl.onCancelInput();
         }
 
         function isReadOnly(p){
@@ -91,14 +96,6 @@ function controller($scope, formFields, util){
         function isInputEnabled(){
             return ctrl.inputEnabled;
         }
-
-        function enableInput(){
-            ctrl.inputEnabled = true;
-        }
-
-        function disableInput(){
-            ctrl.inputEnabled = false;
-        }
     };
 
 }
@@ -116,7 +113,7 @@ angular.module('recipeManager')
             onNewClick:'&',
             onEditClick:'&',
             onSaveClick:'&',
-            onCancelClick:'&',
+            onCancelInput:'&onCancelClick',
             cancelInputOn:'<'
 
         },

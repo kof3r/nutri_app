@@ -11,7 +11,6 @@ function controller($scope, queue){
         queue.subscribe(addNewMessages);
 
         function addNewMessages(messages){
-            console.log(messages[0])
             messages.forEach(function(message){
                 $scope.messages.unshift(message);
             })

@@ -13,6 +13,9 @@ angular.module('NutriApp', ['recipeManager', 'util'])
                         $rootScope.$broadcast('escKeyDown');
                         break;
                     }
+                    case 46:{
+                        $rootScope.$broadcast('delKeyDown');
+                    }
                 }
             }
 

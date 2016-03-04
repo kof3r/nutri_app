@@ -15,6 +15,7 @@ angular.module('nutrition', ['converter', 'models', 'settings'])
             return value.toFixed(0) + ' ' + setting.value();
         }
     }])
+
     .filter('mass', ['settingsUnitsMass', function(setting){
         return function(value){
             return value.toFixed(0) + ' ' + setting.value();

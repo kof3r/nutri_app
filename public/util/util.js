@@ -16,7 +16,9 @@ angular.module('util', [])
                     scope.$on(event, handler);
                 })
             } else{
-                scope.$on(events, handler);
+                events.split(' ').forEach(function(event){
+                    scope.$on(event, handler);
+                })
             }
         },
 

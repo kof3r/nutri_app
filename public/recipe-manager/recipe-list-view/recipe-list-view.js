@@ -13,10 +13,8 @@ angular.module('recipeManager')
             selectedItems:'<',
             onSelect:'&',
             onDeselect:'&',
-            onDeleteSelected:'&',
             onNewClick:'&',
-            onEditClick:'&',
-            deselectAllOn:'@'
+            onEditClick:'&'
         },
         controller: ['$scope', 'orderByFilter', 'filterFilter', 'tableColumns', controller]
     });
@@ -37,8 +35,6 @@ function controller($scope, orderBy, filter, tableColumns){
         $scope.$watch(function() { return $scope.searchCriteria;}, invalidate)
 
         $scope.$watchCollection(function() { return ctrl.items;}, invalidate)
-
-        $scope.$on(ctrl.deselectAllOn, deselectAllRecipes);
 
         $scope.items = function(){
             if(!itemsCache.valid){
@@ -61,18 +57,6 @@ function controller($scope, orderBy, filter, tableColumns){
 
         $scope.$watch(function() { return $scope.searchCriteria; }, deselectAllRecipes);
 
-        $scope.handleDeleteClick = function(){
-            ctrl.onDeleteSelected();
-        }
-
-        $scope.handleSelectAllClick = function(){
-            selectAll();
-        }
-
-        $scope.handleDeselectAllClick = function(){
-            deselectAllRecipes();
-        }
-
         $scope.handleRowClick = function(item, index, $event){
             var isSelected = selected[index];
             if(!$event.ctrlKey){
@@ -87,15 +71,6 @@ function controller($scope, orderBy, filter, tableColumns){
 
         $scope.handleHeaderClick = function(p){
             $scope.orderCriteria = p;
-        }
-
-        $scope.handleKeyDown = function($event){
-            switch ($event.which){
-                case 46:{   //DELETE
-                    ctrl.onDeleteSelected();
-                    break;
-                }
-            }
         }
 
         $scope.whenRenderEditButton = function(){
@@ -117,8 +92,6 @@ function controller($scope, orderBy, filter, tableColumns){
         }
 
         function invalidate(newValue, oldValue){
-            console.log(oldValue)
-            console.log(newValue)
             if(newValue !== oldValue){
                 itemsCache.valid = false;
             }
