@@ -11,69 +11,61 @@ angular.module('recipeManager')
             data:'@',
             items:'<',
             selectedItems:'<',
-            onSelect:'&',
-            onDeselect:'&',
-            onRowDoubleClick:'&',
-            onNewClick:'&',
-            onEditClick:'&'
+            rowClickEvent:'@onRowClickEmit',
+            rowDblClickEvent:'@onRowDblClickEmit',
+            rowCtrlClickEvent:'@onRowCtrlClickEmit',
+            newClickEvent:'@onNewClickEmit',
+            editClickEvent:'@onEditClickEmit',
+            deleteClickEvent:'@onDeleteClickEmit'
         },
-        controller: ['$scope', 'orderByFilter', 'filterFilter', 'tableColumns', controller]
+        controller: ['$scope', 'orderByFilter', 'tableColumns', controller]
     });
 
-function controller($scope, orderBy, filter, tableColumns){
+function controller($scope, orderBy, tableColumns){
     var ctrl = this;
 
     this.$onInit = function(){
-        var selected = $scope.selected = Object.create(null);
-
+        var cache = new Cache(function(){ return orderBy(ctrl.items, $scope.orderCriteria); })
         var columns = $scope.columns = tableColumns[ctrl.data];
-        var itemsCache = {
-            valid: false
-        };
 
-        $scope.$watch(function() { return $scope.orderCriteria;}, invalidate)
+        (function registerWatches(){
+            $scope.$watch('orderCriteria', handleOrderCriteriaChanged);
 
-        $scope.$watch(function() { return $scope.searchCriteria;}, invalidate)
+            $scope.$watchCollection('$ctrl.items', handleItemsCollectionChanged);
 
-        $scope.$watchCollection(function() { return ctrl.items;}, invalidate)
+            $scope.$watch('$ctrl.items', handleItemsChanged);
+        })();
 
         $scope.items = function(){
-            if(!itemsCache.valid){
-                itemsCache.items = orderBy(filter(ctrl.items, $scope.searchCriteria), $scope.orderCriteria);
-                itemsCache.valid = true;
-            }
-            return itemsCache.items;
+            return cache.value();
         }
 
         $scope.displayItem = function(item, p){
             if(!item[p]) return null;
-            var value = item[p].constructor === Function ? item[p]() : item[p];
+            var value = resolveValue(item, p);
             value = columns[p].filter ? columns[p].filter(value) : value;
             return value;
-        }
 
-        $scope.$watchCollection(function() { return ctrl.selectedItems}, refreshView);
-
-        $scope.$watchCollection(function() { return $scope.items()}, refreshView);
-
-        $scope.$watch(function() { return $scope.searchCriteria; }, deselectAll);
-
-        $scope.handleRowClick = function(item, index, $event){
-            var isSelected = selected[index];
-            if(!$event.ctrlKey){
-                deselectAll();
-            }
-            if(isSelected){
-                deselect(item);
-            } else{
-                select(item);
+            function resolveValue(item, p){
+                if(columns[p].reflect){
+                    return columns[p].reflect(item);
+                } else if(item[p].constructor === Function){
+                    return item[p]();
+                }
+                return item[p];
             }
         }
 
-        $scope.handleRowDoubleClick = function(item){
-            deselectAll();
-            select(item);
-            ctrl.onRowDoubleClick();
+        $scope.handleRowClick = function(item, $event){
+            if($event.ctrlKey){
+                $scope.$emit(ctrl.rowCtrlClickEvent, item);
+            } else {
+                $scope.$emit(ctrl.rowClickEvent, item);
+            }
+        }
+
+        $scope.handleRowDblClick = function(item){
+            $scope.$emit(ctrl.rowDblClickEvent, item);
         }
 
         $scope.handleHeaderClick = function(p){
@@ -84,65 +76,62 @@ function controller($scope, orderBy, filter, tableColumns){
             ctrl.selectedItems.length === 1;
         }
 
+        $scope.whenRenderDeleteButton = function(){
+            ctrl.selectedItems.length === 1;
+        }
+
         $scope.handleNewClick = function(){
-            ctrl.onNewClick();
+            $scope.$emit(ctrl.newClickEvent);
         }
 
         $scope.handleEditClick = function(){
-            ctrl.onEditClick();
+            $scope.$emit(ctrl.editClickEvent);
         }
 
-        $scope.resolveRowClass = function(index){
-            var cls = selected[index] ? 'selected ' : '';
-            cls += $scope.items()[index].id ? '' : 'new';
+        $scope.handleDeleteClick = function(){
+            $scop.$emit(ctrl.deleteClickEvent);
+        }
+
+        $scope.resolveRowClass = function(item){
+            var cls = (ctrl.selectedItems.indexOf(item) !== -1) ? 'selected ' : '';
+            cls += item.id ? '' : 'new';
             return cls;
         }
 
-        function invalidate(newValue, oldValue){
-            if(newValue !== oldValue){
-                itemsCache.valid = false;
+        $scope.resolveCellStyle = function(p){
+            return {
+                align: columns[p].align ? columns[p].align : 'left'
             }
         }
 
-        function refreshView(){
-            var items = $scope.items();
-            var selectedItems = ctrl.selectedItems;
-
-            for(var index in selected){
-                delete(selected[index]);
-            }
-
-            angular.forEach(selectedItems, function(item){
-                var index = items.indexOf(item);
-                if(index != -1){
-                    selected[index] = true;
-                }
-            })
-
-        };
-
-        function select(item){
-            ctrl.onSelect({item: item});
+        function handleItemsCollectionChanged() {
+            cache.invalidate();
         }
 
-        function deselect(item){
-            ctrl.onDeselect({item: item});
+        function handleItemsChanged(){
+            cache.invalidate();
         }
 
-        function deselectAll(){
-            var items = ctrl.selectedItems.slice(0);
-            angular.forEach(items, function(item){
-                deselect(item);
-            })
-        }
-
-        function selectAll(){
-            var items = ctrl.items.slice(0);
-            angular.forEach(items, function(item){
-                select(item);
-            })
+        function handleOrderCriteriaChanged(){
+            cache.invalidate();
         }
 
     }
 
+}
+
+function Cache(calculate){
+    this.valid = false;
+    this.calculate = calculate;
+}
+
+Cache.prototype.invalidate = function(){
+    this.valid = false;
+}
+
+Cache.prototype.value = function(){
+    if(!this.valid){
+        this._value = this.calculate();
+    }
+    return this._value;
 }

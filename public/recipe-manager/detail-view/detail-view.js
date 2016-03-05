@@ -11,20 +11,30 @@ function controller($scope, $document, formFields, util, models){
         var fields = $scope.fields = formFields[ctrl.fields];
         var Model = models[ctrl.fields];
 
-        util.wireEvents($scope, ctrl.cancelInputOn, cancelInput)
+        (function registerWatches(){
 
-        $scope.$watch(function() { return ctrl.item; }, handleItemChange);
+            $scope.$watch('$ctrl.item', handleItemChange);
+
+        })();
+
+        (function wireEvents(){
+
+            util.wireEvents($scope, ctrl.cancelInputOn, cancelInput);
+
+            util.wireEvents($scope, ctrl.enableInputOn, enableInput);
+
+        })();
 
         $scope.isInputEnabled = function(){
             return isInputEnabled();
         }
 
         $scope.handleNewClick = function(){
-            ctrl.onNewClick();
+            enableInput();
         }
 
         $scope.handleEditClick = function(){
-            ctrl.onEditClick();
+            enableInput();
         }
 
         $scope.handleCancelClick = function () {
@@ -32,7 +42,8 @@ function controller($scope, $document, formFields, util, models){
         }
 
         $scope.handleSaveClick = function(){
-            ctrl.onSaveClick({ item: $scope.item });
+            $scope.$emit(ctrl.saveClickEvent, angular.copy($scope.item));
+            disableInput();
         }
 
         $scope.whenShowLabel = function(p){
@@ -76,13 +87,25 @@ function controller($scope, $document, formFields, util, models){
             return 12 - $scope.firstColumnWidth();
         }
 
+        function enableInput(){
+            $scope.inputEnabled = true;
+        }
+
+        function disableInput(){
+            $scope.inputEnabled = false;
+        }
+
+        function isInputEnabled(){
+            return $scope.inputEnabled;
+        }
+
         function handleItemChange(){
             copy();
         }
 
         function cancelInput(){
             copy();
-            ctrl.onCancelInput();
+            disableInput();
         }
 
         function isReadOnly(p){
@@ -101,10 +124,6 @@ function controller($scope, $document, formFields, util, models){
                 $scope.item = new Model();
             }
         }
-
-        function isInputEnabled(){
-            return ctrl.inputEnabled;
-        }
     };
 
 }
@@ -117,13 +136,10 @@ angular.module('recipeManager')
         bindings:{
 
             fields:'@',
-            inputEnabled:'<',
             item:'<',
-            onNewClick:'&',
-            onEditClick:'&',
-            onSaveClick:'&',
-            onCancelInput:'&onCancelClick',
-            cancelInputOn:'<'
+            saveClickEvent:'@onSaveClickEmit',
+            cancelInputOn:'@',
+            enableInputOn:'@'
 
         },
         controller:['$scope', '$document', 'formFields', 'util', 'models', controller]

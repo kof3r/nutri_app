@@ -30,7 +30,7 @@ angular.module('server', ['mapper', 'util'])
         }
     }])
 
-    .factory('serverRecipeService', ['$http', 'mapper', 'handleResponse', function($http, mapper, handleResponse){
+    .factory('serverRecipeService', ['$http', 'mapper', 'messageQueue', 'handleResponse', function($http, mapper, messageQueue, handleResponse){
         return {
 
             get: function(id){
@@ -57,8 +57,12 @@ angular.module('server', ['mapper', 'util'])
 
             post: function(recipe){
                 return $http.post('api/recipe', recipe).then(function(res){
-                    console.log(res.data.response);
-                    return handleResponse(res, mapper.mapRecipe, sprintf('Successfully updated \"%s\".', recipe.name))
+                    if(res.data.error){
+                        messageQueue.addMessages(res.data.error);
+                        return Promise.reject();
+                    }
+                    messageQueue.addMessages(sprintf('Successfully updated %s.', recipe.name));
+                    return mapper.mapRecipe(res.data.response);
                 });
             },
 

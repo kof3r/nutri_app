@@ -2,7 +2,7 @@
  * Created by ggrab on 24.2.2016..
  */
 
-function controller($scope, recipeSvc, SelectionManager, util, mapper, $window){
+function controller($scope, recipeSvc, SelectionManager, util, $window, $timeout){
 
     var ctrl = this;
 
@@ -16,67 +16,48 @@ function controller($scope, recipeSvc, SelectionManager, util, mapper, $window){
         var recipeManager = new SelectionManager($scope, 'recipes', 'selectedRecipes');
         var ingredientManager = new SelectionManager($scope, 'ingredients', 'selectedIngredients');
 
-        util.wireEvents($scope, 'escKeyDown', handleEscKeyDown);
+        (function wireEvents(){
 
-        util.wireEvents($scope, 'delKeyDown', handleDelKeyDown);
+            util.wireEvents($scope, 'recipeListRowClicked', handleRecipeListRowClicked);
+
+            util.wireEvents($scope, 'recipeListRowCtrlClicked', handleRecipeListRowCtrlClicked);
+
+            util.wireEvents($scope, 'ingredientListRowClicked', handleIngredientListRowClicked);
+
+            util.wireEvents($scope, 'ingredientListRowCtrlClicked', handleIngredientListRowCtrlClicked);
+
+            util.wireEvents($scope, 'recipeListRowDblClicked', handleRecipeListRowDblClicked);
+
+            util.wireEvents($scope, 'ingredientListRowDblClicked', handleIngredientListRowDblClicked);
+
+            util.wireEvents($scope, 'recipeSubmitted', handleRecipeSubmitted);
+
+            util.wireEvents($scope, 'escKeyDown', handleEscKeyDown);
+
+            util.wireEvents($scope, 'delKeyDown', handleDelKeyDown);
+
+        })();
+
+        (function registerWatches(){
+
+            $scope.$watchCollection('selectedRecipes', handleSelectedRecipesChange);
+
+        })();
 
         recipeSvc.get().then(function(recipes){
-            angular.forEach(recipes, function(recipe){
-                recipeManager.add(recipe);
-            })
+            $scope.recipes = recipes;
         });
-
-        $scope.$watchCollection('selectedRecipes', handleSelectedRecipesChange);
 
         $scope.whenRenderRecipeForm = function(){
             return !$scope.whenRenderIngredientForm();
         }
 
         $scope.whenRenderIngredientForm = function(){
-            return $scope.selectedRecipes.length === 1 && ($scope.selectedIngredients.length === 1 || $scope.ingredientInputEnabled);
-        }
-
-        $scope.selectRecipe = function(recipe){
-            recipeManager.select(recipe);
-            $scope.$broadcast('disruptInput');
-        }
-
-        $scope.deselectRecipe = function(recipe){
-            recipeManager.deselect(recipe);
-            $scope.$broadcast('disruptInput');
-        }
-
-        $scope.deselectAllRecipes = function(){
-            recipeManager.deselectAll();
-            $scope.$broadcast('disruptInput');
-        }
-
-        $scope.selectAllRecipes = function(){
-            recipeManager.selectAll();
+            return $scope.selectedRecipes.length === 1 && $scope.selectedIngredients.length === 1;
         }
 
         $scope.deleteSelectedRecipes = function(){
             deleteSelectedRecipes();
-        }
-
-        $scope.saveRecipe = function(item){
-            if(item.id){
-                var old = $scope.selectedRecipes[0];
-                console.log(item.recipes);
-                recipeSvc.post(item).then(function(recipe){
-                    console.log(recipe);
-                    recipeManager.remove(old);
-                    recipeManager.add(recipe);
-                    recipeManager.select(recipe);
-                }).catch(function(){
-
-                })
-            } else {
-                recipeSvc.put(item).then(function(recipe){
-                    recipeManager.add(recipe);
-                    recipeManager.select(recipe);
-                });
-            }
         }
 
         $scope.saveIngredient = function(item){
@@ -88,16 +69,6 @@ function controller($scope, recipeSvc, SelectionManager, util, mapper, $window){
             } else {
                 ingredientManager.add(item);
             }
-        }
-
-        $scope.selectIngredient = function(ingredient){
-            ingredientManager.select(ingredient);
-            $scope.$broadcast('disruptInput');
-        }
-
-        $scope.deselectIngredient = function(ingredient){
-            ingredientManager.deselect(ingredient);
-            $scope.$broadcast('disruptInput');
         }
 
         $scope.enableRecipeInput = function(){
@@ -124,7 +95,51 @@ function controller($scope, recipeSvc, SelectionManager, util, mapper, $window){
             $scope.enableIngredientInput();
         }
 
+
+
+        function handleRecipeSubmitted(event, recipe){
+            event.stopPropagation();
+            saveRecipe(recipe);
+        }
+
+        function handleIngredientListRowClicked(event, recipe){
+            handleListRowClicked(event, recipe, ingredientManager);
+        }
+
+        function handleIngredientListRowCtrlClicked(event, recipe){
+            handleListRowCtrlClicked(event, recipe, ingredientManager);
+        }
+
+        function handleRecipeListRowClicked(event, recipe){
+            handleListRowClicked(event, recipe, recipeManager);
+        }
+
+        function handleRecipeListRowCtrlClicked(event, recipe){
+            handleListRowCtrlClicked(event, recipe, recipeManager);
+        }
+
+        function handleListRowCtrlClicked(event, item, manager){
+            event.stopPropagation();
+            if(manager.isSelected(item)){
+                manager.deselect(item);
+            } else {
+                manager.select(item);
+            }
+        }
+
+        function handleListRowClicked(event, item, manager){
+            event.stopPropagation();
+            var isSelected = manager.isSelected(item);
+            manager.deselectAll();
+            if(isSelected){
+                manager.deselect(item);
+            } else {
+                manager.select(item);
+            }
+        }
+
         function handleEscKeyDown(){
+            $scope.$broadcast('disruptInput');
             if($scope.selectedIngredients.length != 0){
                 ingredientManager.deselectAll();
             } else {
@@ -138,6 +153,37 @@ function controller($scope, recipeSvc, SelectionManager, util, mapper, $window){
             } else if($scope.selectedRecipes.length > 0){
                 deleteSelectedRecipes();
             }
+        }
+
+        function handleRecipeListRowDblClicked($event, recipe){
+            recipeManager.deselectAll();
+            recipeManager.select(recipe);
+            $scope.$broadcast('enableRecipeInput');
+        }
+
+        function handleIngredientListRowDblClicked($event, ingredient){
+            ingredientManager.deselectAll();
+            ingredientManager.select(ingredient);
+            $scope.$broadcast('enableIngredientInput');
+        }
+
+        function saveRecipe(recipe){
+            if(recipe.id){
+                recipeSvc.post(recipe).then(function(updated){
+                    recipeManager.remove(getSelectedRecipe());
+                    recipeManager.add(updated);
+                    recipeManager.select(updated);
+                });
+            } else {
+                recipeSvc.put(recipe).then(function(recipe){
+                    recipeManager.add(recipe);
+                    recipeManager.select(recipe);
+                });
+            }
+        }
+
+        function getSelectedRecipe(){
+            return $scope.selectedRecipes[0];
         }
 
         function deleteSelectedRecipes(){
@@ -181,7 +227,7 @@ angular.module('recipeManager', ['server', 'util', 'data', 'mapper'])
 
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
-        controller: ['$scope', 'serverRecipeService', 'selectionManager', 'util', 'mapper', '$window', controller],
+        controller: ['$scope', 'serverRecipeService', 'selectionManager', 'util', '$window', '$timeout', controller],
         bindings:{
             deselectAllOn:'<'
         }

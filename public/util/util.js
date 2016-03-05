@@ -58,9 +58,11 @@ angular.module('util', [])
             this.scope[this.items].splice(0);
         }
 
-        SelectionManager.prototype.select = function(item){
-            if(this.scope[this.items].indexOf(item) === -1) throw new Error('Attempted to select non existing item.');
+        SelectionManager.prototype.isSelected = function(item){
+            return this.scope[this.selected].indexOf(item) !== -1;
+        }
 
+        SelectionManager.prototype.select = function(item){
             this.scope[this.selected].push(item);
         }
 
