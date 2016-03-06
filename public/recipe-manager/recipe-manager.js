@@ -112,7 +112,7 @@ function controller($scope, recipeSvc, ingredientService, SelectionManager, util
         }
 
         $scope.handleIngredientListDeleteClicked = function(){
-
+            deleteSelectedIngredients();
         }
 
         $scope.handleIngredientListSyncClicked = function(){
@@ -219,6 +219,25 @@ function controller($scope, recipeSvc, ingredientService, SelectionManager, util
                         if(recipe){
                             recipe.removeIngredient(ingredient);
                             recipe.addIngredient(saved);
+                        }
+                    })
+                }
+            }))
+        }
+
+        function deleteSelectedIngredients(){
+            return Promise.all($scope.selectedIngredients.map(function(ingredient){
+                if(ingredient.isNew()){
+                    var recipe = $scope.recipes.find(function(recipe) { return recipe.id === ingredient.recipe_id; });
+                    if(recipe){
+                        recipe.removeIngredient(ingredient);
+                    }
+                } else {
+                    ingredientService.delete(ingredient).then(function(){
+                        var recipe = $scope.recipes.find(function(recipe) { return recipe.id === ingredient.recipe_id; });
+                        console.log(recipe);
+                        if(recipe){
+                            recipe.removeIngredient(ingredient);
                         }
                     })
                 }

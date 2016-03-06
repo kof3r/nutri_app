@@ -49,7 +49,7 @@ router.post('/', function(req, res){
 router.delete('/:id', function(req, res){
     var id = req.params.id;
 
-    Recipe.destroy(id).then(function(n){
+    Recipe.destroy({ where: { id: id } }).then(function(n){
         if(n === 1){
             res.json(new Response());
         } else {

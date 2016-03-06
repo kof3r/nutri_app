@@ -107,8 +107,20 @@ angular.module('server', ['packer', 'util'])
                     messageQueue.addMessages(sprintf('Successfully saved \'%s\'.', ingredient.name));
                     return packer.unpackIngredient(res.data.response);
                 })
-            }
+            },
 
+            delete: function(ingredient){
+                var id = ingredient.id;
+
+                return $http.delete('api/ingredient/' + id).then(function(res){
+                    if(res.data.error){
+                        messageQueue.addMessages(res.data.error);
+                        return Promise.reject();
+                    }
+                    messageQueue.addMessages(sprintf('Successfully deleted \'%s\'', ingredient.name));
+                })
+
+            }
         }
 
     }]);

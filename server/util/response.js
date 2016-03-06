@@ -3,13 +3,8 @@
  */
 
 function Response(response, error){
-
-    if(arguments.length === 0){
-        this.error = 'An error occurred.'
-    }else{
-        this.response = response;
-        this.error = error;
-    }
+    this.response = response;
+    this.error = error;
 };
 
 module.exports = Response;

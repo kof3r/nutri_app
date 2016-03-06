@@ -2,6 +2,10 @@
  * Created by ggrab on 23.2.2016..
  */
 
+//TODO: Promijeni ime u list-view
+//TODO: Izvuci u framework
+//TODO: Sortiranje i indikatori
+
 angular.module('recipeManager')
 
     .component('recipeListView', {
