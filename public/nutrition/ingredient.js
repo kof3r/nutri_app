@@ -36,6 +36,8 @@ angular.module('nutrition')
                 + this.protein * calConst.perProtein;
         }
 
+        Ingredient.prototype.caloriesNominal = caloriesNominal;
+
         Ingredient.prototype.totalCalories = function(){
             return caloriesNominal.call(this) * this.amount / 100;
         }

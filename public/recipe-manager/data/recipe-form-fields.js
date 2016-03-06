@@ -4,7 +4,7 @@
 
 angular.module('data')
 
-    .factory('recipeFormFields', ['formFieldConstructor', 'filters', function(FormField, filters){
+    .factory('recipeFormFields', ['formField', function(FormField){
         return {
             name: new FormField('Name', 'text'),
             totalCalories: new FormField('Calories', undefined, 'energy'),

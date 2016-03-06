@@ -3,15 +3,12 @@
  */
 
 angular.module('data')
-    .factory('ingredientListColumns', ['filters', function(filters){
+    .factory('ingredientListColumns', ['tableColumn', function(TableColumn){
         return {
-            name:{
-                header:'Name'
-            },
-            totalCalories:{
-                header:'Calories',
-                function:true,
-                filter: filters.energy
-            }
+            name: new TableColumn('Name'),
+            totalCalories: new TableColumn('Total calories', 'energy', 'right'),
+            totalCarbs: new TableColumn('Total carbs', 'mass', 'right'),
+            totalFats: new TableColumn('Total fats', 'mass', 'right'),
+            totalProtein: new TableColumn('Total protein', 'mass', 'right')
         }
     }])

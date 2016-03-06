@@ -12,7 +12,7 @@ angular.module('data', ['nutrition'])
         };
     }])
 
-    .factory('formFieldConstructor', ['filters', function(filters){
+    .factory('formField', ['filters', function(filters){
 
         function FormField(field, type, filter){
             this.field = field;
@@ -21,5 +21,16 @@ angular.module('data', ['nutrition'])
         }
 
         return FormField;
+
+    }])
+    .factory('tableColumn', ['filters', function(filters){
+
+        function TableColumn(header, filter, align){
+            this.header = header;
+            this.filter = filters[filter];
+            this.align = align;
+        }
+
+        return TableColumn;
 
     }]);
