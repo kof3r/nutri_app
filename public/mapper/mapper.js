@@ -70,19 +70,12 @@ angular.module('packer', ['nutrition'])
 
         return {
 
-            mapRecipe: function(data){
-                if(data.constructor === Array){
-                    return data.map(function(dto){
-                        return unpackRecipe(dto);
-                    })
-                }
-                return unpackRecipe(data);
-            },
-
-            mapIngredient: unpackIngredient,
-
             packRecipe: packRecipe,
 
-            unpackRecipe: unpackRecipe
+            unpackRecipe: unpackRecipe,
+
+            packIngredient: packIngredient,
+
+            unpackIngredient: unpackIngredient
         }
     }])

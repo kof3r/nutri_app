@@ -6,6 +6,7 @@ angular.module('data')
     .factory('ingredientListColumns', ['tableColumn', function(TableColumn){
         return {
             name: new TableColumn('Name'),
+            amount: new TableColumn('Amount', 'mass', 'right'),
             totalCalories: new TableColumn('Total calories', 'energy', 'right'),
             totalCarbs: new TableColumn('Total carbs', 'mass', 'right'),
             totalFats: new TableColumn('Total fats', 'mass', 'right'),

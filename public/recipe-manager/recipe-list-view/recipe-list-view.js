@@ -16,7 +16,8 @@ angular.module('recipeManager')
             rowCtrlClickEvent:'@onRowCtrlClickEmit',
             newClick:'&onNewClick',
             editClick:'&onEditClick',
-            deleteClick:'&onDeleteClick'
+            deleteClick:'&onDeleteClick',
+            syncClick:'&onSyncClick'
         },
         controller: ['$scope', 'orderByFilter', 'tableColumns', controller]
     });
@@ -94,6 +95,10 @@ function controller($scope, orderBy, tableColumns){
 
         $scope.handleDeleteClick = function(){
             ctrl.deleteClick();
+        }
+
+        $scope.handleSyncClick = function(){
+            ctrl.syncClick();
         }
 
         $scope.resolveRowClass = function(item){

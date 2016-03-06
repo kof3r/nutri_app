@@ -30,7 +30,7 @@ angular.module('server', ['packer', 'util'])
         }
     }])
 
-    .factory('serverRecipeService', ['$http', 'packer', 'messageQueue', 'handleResponse', function($http, packer, messageQueue, handleResponse){
+    .factory('serverRecipeService', ['$http', 'packer', 'messageQueue', function($http, packer, messageQueue){
         return {
 
             get: function(id){
@@ -93,4 +93,22 @@ angular.module('server', ['packer', 'util'])
                 });
             }
         }
+    }])
+    .factory('serverIngredientService', ['$http', 'packer', 'messageQueue', function($http, packer, messageQueue){
+
+        return {
+
+            put: function(ingredient){
+                return $http.put('api/ingredient', packer.packIngredient(ingredient)).then(function(res){
+                    if(res.data.error){
+                        messageQueue.addMessages(res.data.error);
+                        return Promise.reject();
+                    }
+                    messageQueue.addMessages(sprintf('Successfully saved \'%s\'.', ingredient.name));
+                    return packer.unpackIngredient(res.data.response);
+                })
+            }
+
+        }
+
     }]);

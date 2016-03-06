@@ -16,19 +16,18 @@ angular.module('nutrition')
         Recipe.prototype = new Base();
 
         Recipe.prototype.addIngredient = function(ingredient){
-            var i = this.ingredients.findIndex(function(e){ return e.id === ingredient.id; });
-            console.log(this.ingredients);
-            console.log(this.ingredients[i]);
-            console.log(ingredient);
-            if(i != -1){
-                this.ingredients.splice(i, 1);
-            }
+            this.removeIngredient(ingredient);
             ingredient.recipe_id = this.id;
             this.ingredients.push(ingredient);
         }
 
         Recipe.prototype.removeIngredient = function(ingredient){
-            var i = this.ingredients.findIndex(function (e) { return e.id === ingredient.id; });
+            var i;
+            if(ingredient.id){
+                i = this.ingredients.findIndex(function (e) { return e.id === ingredient.id; });
+            } else {
+                i = this.ingredients.indexOf(ingredient);
+            }
             if(i != -1){
                 this.ingredients.splice(i ,1);
             }

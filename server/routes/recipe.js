@@ -47,14 +47,13 @@ router.post('/', function(req, res){
 })
 
 router.delete('/:id', function(req, res){
-    console.log(req.params.id);
-    Recipe.findById(req.params.id).then(function(recipe){
-        if(recipe){
-            return recipe.destroy().then(function(recipe){
-                res.json(new Response(recipe, recipe ? null : 'Failed to delete recipe.'))
-            })
-        } else{
-            res.json(new Response(null, 'Recipe was not found.'))
+    var id = req.params.id;
+
+    Recipe.destroy(id).then(function(n){
+        if(n === 1){
+            res.json(new Response());
+        } else {
+            res.json(new Response(null, 'Failed to delete recipe.'));
         }
     })
 });

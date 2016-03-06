@@ -2,7 +2,7 @@
  * Created by ggrab on 24.2.2016..
  */
 
-function controller($scope, recipeSvc, SelectionManager, util, $window, $timeout){
+function controller($scope, recipeSvc, ingredientService, SelectionManager, util, $window){
 
     var ctrl = this;
 
@@ -76,7 +76,7 @@ function controller($scope, recipeSvc, SelectionManager, util, $window, $timeout
 
         $scope.saveIngredient = function(item){
             $scope.selectedRecipes[0].addIngredient(item);
-        }
+        };
 
         $scope.handleIngredientInputCancelClick = function(){
             inputtingIngredient = false;
@@ -115,6 +115,9 @@ function controller($scope, recipeSvc, SelectionManager, util, $window, $timeout
 
         }
 
+        $scope.handleIngredientListSyncClicked = function(){
+            syncIngredients();
+        }
 
 
         function handleIngredientListRowClicked(event, recipe){
@@ -208,6 +211,20 @@ function controller($scope, recipeSvc, SelectionManager, util, $window, $timeout
 
         }
 
+        function syncIngredients(){
+            return Promise.all($scope.selectedIngredients.map(function(ingredient){
+                if(ingredient.isNew()){
+                    return ingredientService.put(ingredient).then(function(saved){
+                        var recipe = $scope.recipes.find(function(recipe) { return recipe.id === saved.recipe_id});
+                        if(recipe){
+                            recipe.removeIngredient(ingredient);
+                            recipe.addIngredient(saved);
+                        }
+                    })
+                }
+            }))
+        }
+
         function handleSelectedRecipesChange(){
             $scope.$broadcast('disruptInput');
             $scope.ingredients = [];
@@ -228,7 +245,7 @@ angular.module('recipeManager', ['server', 'util', 'data', 'packer'])
 
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
-        controller: ['$scope', 'serverRecipeService', 'selectionManager', 'util', '$window', '$timeout', controller],
+        controller: ['$scope', 'serverRecipeService', 'serverIngredientService', 'selectionManager', 'util', '$window', '$timeout', controller],
         bindings:{
             deselectAllOn:'<'
         }
