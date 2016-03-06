@@ -2,7 +2,7 @@
  * Created by ggrab on 23.2.2016..
  */
 
-angular.module('server', ['mapper', 'util'])
+angular.module('server', ['packer', 'util'])
 
     .factory('handleResponse', ['messageQueue', function(messageQueue){
         return function(res){
@@ -30,45 +30,66 @@ angular.module('server', ['mapper', 'util'])
         }
     }])
 
-    .factory('serverRecipeService', ['$http', 'mapper', 'messageQueue', 'handleResponse', function($http, mapper, messageQueue, handleResponse){
+    .factory('serverRecipeService', ['$http', 'packer', 'messageQueue', 'handleResponse', function($http, packer, messageQueue, handleResponse){
         return {
 
             get: function(id){
                 if(arguments.length === 0){
                     return $http.get('api/recipe').then(function(res){
-                        if(res.data.response){
-                            var message;
-                            if(res.data.response.constructor === Array){
-                                message = 'Recipes successfully loaded.'
-                            } else {
-                                message = sprintf('Recipe %s successfully loaded.', res.data.response.name);
-                            }
+                        var response = res.data.response;
+                        var error = res.data.error;
+                        if(error){
+                            messageQueue.addMessages(error);
+                            return Promise.reject();
                         }
-                        return handleResponse(res, mapper.mapRecipe, message);
+                        var messages;
+                        var recipes;
+                        if(response.constructor === Array){
+                            messages = response.map(function(recipe) { return sprintf('\'%s\' successfully loaded.', recipe.name); });
+                            recipes = response.map(function(recipe) { return packer.unpackRecipe(recipe); });
+                        } else{
+                            messages = sprintf('\'%s\' successfully loaded.', res.response.name);
+                            recipes = [];
+                            recipes.push(packer.unpackRecipe(response));
+                        }
+                        messageQueue.addMessages(messages);
+                        return recipes;
                     })
                 }
             },
 
             put: function(recipe){
-                return $http.put('api/recipe', recipe).then(function(res){
-                    return handleResponse(res, mapper.mapRecipe, res.data.response ? sprintf('Recipe \"%s\" successfully created.', res.data.response.name) : null);
+                return $http.put('api/recipe', packer.packRecipe(recipe)).then(function(res){
+                    var response = res.data.response;
+                    var error = res.data.error;
+                    if(error){
+                        messageQueue.addMessages(error);
+                        return Promise.reject();
+                    }
+                    messageQueue.addMessages(sprintf('Successfully updated \'%s\'.', recipe.name));
+                    return packer.unpackRecipe(response);
                 });
             },
 
             post: function(recipe){
-                return $http.post('api/recipe', recipe).then(function(res){
+                recipe.id = 2000;
+                return $http.post('api/recipe', packer.packRecipe(recipe)).then(function(res){
                     if(res.data.error){
                         messageQueue.addMessages(res.data.error);
                         return Promise.reject();
                     }
                     messageQueue.addMessages(sprintf('Successfully updated %s.', recipe.name));
-                    return mapper.mapRecipe(res.data.response);
+                    return packer.unpackRecipe(res.data.response);
                 });
             },
 
-            delete: function(id){
-                return $http.delete('api/recipe/' + id).then(function(res){
-                    return handleResponse(res, sprintf('Recipe \"%s\" was successfully deleted.', res.data.response.name));
+            delete: function(recipe){
+                return $http.delete('api/recipe/' + recipe.id).then(function(res){
+                    if(res.data.error){
+                        messageQueue.addMessages(res.data.error);
+                        return Promise.reject();
+                    }
+                    messageQueue.addMessages(sprintf('Successfully deleted \'%s\'.', recipe.name));
                 });
             }
         }

@@ -14,9 +14,9 @@ angular.module('recipeManager')
             rowClickEvent:'@onRowClickEmit',
             rowDblClickEvent:'@onRowDblClickEmit',
             rowCtrlClickEvent:'@onRowCtrlClickEmit',
-            newClickEvent:'@onNewClickEmit',
-            editClickEvent:'@onEditClickEmit',
-            deleteClickEvent:'@onDeleteClickEmit'
+            newClick:'&onNewClick',
+            editClick:'&onEditClick',
+            deleteClick:'&onDeleteClick'
         },
         controller: ['$scope', 'orderByFilter', 'tableColumns', controller]
     });
@@ -72,29 +72,33 @@ function controller($scope, orderBy, tableColumns){
             $scope.orderCriteria = p;
         }
 
+        $scope.whenRenderNewButton = function(){
+            return ctrl.selectedItems.length === 0;
+        }
+
         $scope.whenRenderEditButton = function(){
-            ctrl.selectedItems.length === 1;
+            return ctrl.selectedItems.length === 1;
         }
 
         $scope.whenRenderDeleteButton = function(){
-            ctrl.selectedItems.length === 1;
+            return ctrl.selectedItems.length > 0;
         }
 
         $scope.handleNewClick = function(){
-            $scope.$emit(ctrl.newClickEvent);
+            ctrl.newClick();
         }
 
         $scope.handleEditClick = function(){
-            $scope.$emit(ctrl.editClickEvent);
+            ctrl.editClick();
         }
 
         $scope.handleDeleteClick = function(){
-            $scop.$emit(ctrl.deleteClickEvent);
+            ctrl.deleteClick();
         }
 
         $scope.resolveRowClass = function(item){
             var cls = (ctrl.selectedItems.indexOf(item) !== -1) ? 'selected ' : '';
-            cls += item.id ? '' : 'new';
+            cls += item.isNew() ? 'new' : item.isDirty() ? 'dirty' : '';
             return cls;
         }
 

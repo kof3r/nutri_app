@@ -93,8 +93,8 @@ tr:hover{
     color: forestgreen;
 }
 
-.new:hover{
-    color: darkgreen;
+.dirty{
+    color: darkorange;
 }
 
 tr{

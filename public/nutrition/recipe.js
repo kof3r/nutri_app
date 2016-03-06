@@ -6,17 +6,33 @@ angular.module('nutrition')
 
     .factory('Recipe', ['mapProperties', 'modelBase', 'Ingredient', function(mapProperties, Base, Ingredient){
 
-        function Recipe(recipe){ }
+        function Recipe(){
+
+            this.dirty = false;
+            this.ingredients = [];
+
+        }
 
         Recipe.prototype = new Base();
 
-        Recipe.prototype.isModified = function () {
-            return Base.prototype.isModified.call(this) && !this.isNew();
-        };
+        Recipe.prototype.addIngredient = function(ingredient){
+            var i = this.ingredients.findIndex(function(e){ return e.id === ingredient.id; });
+            console.log(this.ingredients);
+            console.log(this.ingredients[i]);
+            console.log(ingredient);
+            if(i != -1){
+                this.ingredients.splice(i, 1);
+            }
+            ingredient.recipe_id = this.id;
+            this.ingredients.push(ingredient);
+        }
 
-        Recipe.prototype.isNew = function () {
-            return this.id === undefined;
-        };
+        Recipe.prototype.removeIngredient = function(ingredient){
+            var i = this.ingredients.findIndex(function (e) { return e.id === ingredient.id; });
+            if(i != -1){
+                this.ingredients.splice(i ,1);
+            }
+        }
 
         function sumIngredientsNutritionalAspect(nutritionalAspect){
             return this.ingredients.reduce(function (prev, curr) {

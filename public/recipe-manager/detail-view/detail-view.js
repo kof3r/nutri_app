@@ -42,7 +42,7 @@ function controller($scope, $document, formFields, util, models){
         }
 
         $scope.handleSaveClick = function(){
-            $scope.$emit(ctrl.saveClickEvent, angular.copy($scope.item));
+            ctrl.submitItem({item: $scope.item});
             disableInput();
         }
 
@@ -79,6 +79,10 @@ function controller($scope, $document, formFields, util, models){
             return value;
         }
 
+        $scope.handleModelChange = function(){
+            $scope.item.dirty = true;
+        }
+
         $scope.firstColumnWidth = function(){
             return 4;
         }
@@ -93,6 +97,7 @@ function controller($scope, $document, formFields, util, models){
 
         function disableInput(){
             $scope.inputEnabled = false;
+            ctrl.onDisableInput();
         }
 
         function isInputEnabled(){
@@ -134,10 +139,11 @@ angular.module('recipeManager')
 
         templateUrl:'recipe-manager/detail-view/detail-view.html',
         bindings:{
-
+            title:'@',
             fields:'@',
             item:'<',
-            saveClickEvent:'@onSaveClickEmit',
+            submitItem:'&onSaveClick',
+            onDisableInput:'&onCancelClick',
             cancelInputOn:'@',
             enableInputOn:'@'
 

@@ -7,15 +7,12 @@ angular.module('models', [])
 
         function Base(){ }
 
-        Base.prototype.dirty = false;
+        Base.prototype.isNew = function(){
+            return typeof this.id === 'undefined';
+        }
 
-        Base.prototype.set = function(property, value){
-            this[property] = value;
-            this.dirty = true;
-        };
-
-        Base.prototype.isModified = function(){
-            return this.dirty;
+        Base.prototype.isDirty = function(){
+            return !this.isNew() && this.dirty;
         };
 
         return Base;

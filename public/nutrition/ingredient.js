@@ -6,17 +6,13 @@ angular.module('nutrition')
 
     //TODO: Odgovornost mapiranja bi trebalo maknut iz modela
     .factory('Ingredient', ['mapProperties', 'modelBase', 'calorieConstant', function(mapProperties, Base, calConst){
-        function Ingredient(ingredient){  }
+        function Ingredient(){
+
+            this.dirty = false;
+
+        }
 
         Ingredient.prototype = new Base();
-
-        Ingredient.prototype.isNew = function(){
-            return this.id === undefined;
-        }
-
-        Ingredient.prototype.isModified = function(){
-            return Base.prototype.isModified.call(this) && !this.isNew();
-        }
 
         function nutrientAmount(nutrient){
             return this[nutrient] * this.amount / 100;

@@ -36,25 +36,13 @@ router.put('/', function(req, res){
 router.post('/', function(req, res){
     var body = req.body;
 
-    Recipe.findById(body.id).then(function(recipe){
-        if(recipe){
-            return Promise.all([
-                Recipe.upsert(body),
-                Promise.all(body.ingredients.map(function(ingredient){
-                    if(!ingredient.recipe_id){
-                        ingredient.recipe_id = body.id;
-                    }
-                    return Ingredient.upsert(ingredient);
-                }))]
-            );
+    Recipe.update(body, { where: { id: body.id } }).then(function(results){
+        var n =  results[0];
+        if(n !== 1){
+            res.json(new Response(null, 'Failed to update ' + body.name + '.'));
+        } else {
+            res.json(new Response(body));
         }
-        throw new Error('Update of ' + body.name + ' failed.');
-    }).then(function(){
-        return Recipe.findById(body.id, {include: [Ingredient]})
-    }).then(function(recipe){
-        res.json(new Response(recipe));
-    }).catch(function(err){
-        res.json(new Response(null, err.message));
     })
 })
 

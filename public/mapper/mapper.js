@@ -2,7 +2,7 @@
  * Created by ggrab on 25.2.2016..
  */
 
-angular.module('mapper', ['nutrition'])
+angular.module('packer', ['nutrition'])
 
     .factory('mapProperties', function(){
         return function MapProperties(dto){
@@ -17,39 +17,72 @@ angular.module('mapper', ['nutrition'])
         }
     })
 
-    .factory('mapper', ['mapProperties', 'Recipe', 'Ingredient', function(mapProperties, Recipe, Ingredient){
+    .factory('packer', ['mapProperties', 'Recipe', 'Ingredient', function(mapProperties, Recipe, Ingredient){
 
-        function _map(dto, Type){
+        var dummies = {
+            recipe: new Recipe(),
+            ingredient: new Ingredient()
+        }
+
+        function _pack(domain, include, dummy){
+            var dto = Object.create(null);
+            for(var p in domain){
+                if(typeof dummy[p] === 'undefined' || (include && include.indexOf(p) !== -1)){
+                    dto[p] = domain[p];
+                }
+            }
+            return dto;
+        }
+
+        function packRecipe(domain, include){
+            console.log(domain);
+            var dto =_pack(domain, include, dummies.recipe);
+            if(dto.ingredients){
+                dto.ingredients = dto.ingredients.map(function(ingredient){ return _pack(ingredient, null, dummies.ingredient) });
+            }
+            console.log(dto);
+            return dto;
+        }
+
+        function packIngredient(domain, include){
+            return _pack(domain, include, dummies.ingredient)
+        }
+
+        function _unpack(dto, Type){
             var instance = new Type();
-            mapProperties.call(instance, dto);
+            for(var p in dto){
+                instance[p] = dto[p];
+            }
             return instance;
         }
 
-        function mapRecipe(dto){
-            var recipe = _map(dto, Recipe);
+        function unpackRecipe(dto){
+            var recipe = _unpack(dto, Recipe);
             if(recipe.ingredients && recipe.ingredients.length !== 0){
-                var ingredients = recipe.ingredients.map(function(dto){ return mapIngredient(dto); });
-                recipe.ingredients = ingredients;
-            } else {
-                recipe.ingredients = [];
+                recipe.ingredients = recipe.ingredients.map(function(dto){ return unpackIngredient(dto); });
             }
             return recipe;
         }
 
-        function mapIngredient(dto){
-            return _map(dto, Ingredient);
+        function unpackIngredient(dto){
+            return _unpack(dto, Ingredient);
         }
 
         return {
+
             mapRecipe: function(data){
                 if(data.constructor === Array){
                     return data.map(function(dto){
-                        return mapRecipe(dto);
+                        return unpackRecipe(dto);
                     })
                 }
-                return mapRecipe(data);
+                return unpackRecipe(data);
             },
 
-            mapIngredient: mapIngredient
+            mapIngredient: unpackIngredient,
+
+            packRecipe: packRecipe,
+
+            unpackRecipe: unpackRecipe
         }
     }])
