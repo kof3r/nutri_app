@@ -109,6 +109,17 @@ angular.module('server', ['packer', 'util'])
                 })
             },
 
+            post: function(ingredient){
+                return $http.post('api/ingredient', packer.packIngredient(ingredient)).then(function(res){
+                    if(res.data.error){
+                        messageQueue.addMessages(res.data.error);
+                        return Promise.reject();
+                    }
+                    messageQueue.addMessages(sprintf('Successfully updated \'%s\'.', ingredient.name));
+                    return packer.unpackIngredient(res.data.response);
+                })
+            },
+
             delete: function(ingredient){
                 var id = ingredient.id;
 

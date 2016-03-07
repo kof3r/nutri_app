@@ -215,10 +215,18 @@ function controller($scope, recipeSvc, ingredientService, SelectionManager, util
             return Promise.all($scope.selectedIngredients.map(function(ingredient){
                 if(ingredient.isNew()){
                     return ingredientService.put(ingredient).then(function(saved){
-                        var recipe = $scope.recipes.find(function(recipe) { return recipe.id === saved.recipe_id});
+                        var recipe = $scope.recipes.find(function(recipe) { return recipe.id === saved.recipe_id });
                         if(recipe){
                             recipe.removeIngredient(ingredient);
                             recipe.addIngredient(saved);
+                        }
+                    })
+                } else if(ingredient.isDirty()){
+                    return ingredientService.post(ingredient).then(function(updated){
+                        var recipe = $scope.recipes.find(function(recipe) { return recipe.id === updated.recipe_id });
+                        if(recipe){
+                            recipe.removeIngredient(ingredient);
+                            recipe.addIngredient(updated);
                         }
                     })
                 }
