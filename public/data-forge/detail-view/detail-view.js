@@ -2,14 +2,34 @@
  * Created by ggrab on 29.2.2016..
  */
 
-function controller($scope, $document, formFields, util, models){
+angular.module('dataForge')
+
+    .component('detailView', {
+
+        templateUrl:'data-forge/detail-view/detail-view.html',
+        bindings:{
+            title:'@',
+            detailView:'@',
+            modelName:'@',
+            item:'<',
+            submitItem:'&onSaveClick',
+            onDisableInput:'&onCancelClick',
+            cancelInputOn:'@',
+            enableInputOn:'@'
+
+        },
+        controller:['$scope', 'dataForge', '$filter', 'wireEvents', controller]
+
+    });
+
+function controller($scope, dataForge, $filter, wireEvents){
 
     var ctrl = this;
 
     this.$onInit = function(){
 
-        var fields = $scope.fields = formFields[ctrl.fields];
-        var Model = models[ctrl.fields];
+        var fields = $scope.fields = dataForge.detailViewDefinition(ctrl.detailView);
+        var Model = dataForge.dataModel(ctrl.modelName);
 
         (function registerWatches(){
 
@@ -17,11 +37,11 @@ function controller($scope, $document, formFields, util, models){
 
         })();
 
-        (function wireEvents(){
+        (function wireThemEvents(){
 
-            util.wireEvents($scope, ctrl.cancelInputOn, cancelInput);
+            wireEvents($scope, ctrl.cancelInputOn, cancelInput);
 
-            util.wireEvents($scope, ctrl.enableInputOn, enableInput);
+            wireEvents($scope, ctrl.enableInputOn, enableInput);
 
         })();
 
@@ -76,7 +96,7 @@ function controller($scope, $document, formFields, util, models){
             var value = resolveValue(item, p);
             if(value !== value) return null;
             var filter = fields[p].filter;
-            value = filter ? filter(value) : value;
+            value = filter ? $filter(filter)(value) : value;
             return value;
 
             function resolveValue(item, p){
@@ -149,22 +169,3 @@ function controller($scope, $document, formFields, util, models){
     };
 
 }
-
-angular.module('recipeManager')
-
-    .component('detailView', {
-
-        templateUrl:'recipe-manager/detail-view/detail-view.html',
-        bindings:{
-            title:'@',
-            fields:'@',
-            item:'<',
-            submitItem:'&onSaveClick',
-            onDisableInput:'&onCancelClick',
-            cancelInputOn:'@',
-            enableInputOn:'@'
-
-        },
-        controller:['$scope', '$document', 'formFields', 'util', 'models', controller]
-
-    });

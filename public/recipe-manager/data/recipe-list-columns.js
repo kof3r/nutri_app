@@ -2,7 +2,7 @@
  * Created by ggrab on 2.3.2016..
  */
 
-angular.module('data')
+angular.module('recipeManager')
     .factory('recipeListColumns', ['filters', function(filters){
         return {
             name:{

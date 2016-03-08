@@ -2,18 +2,18 @@
  * Created by ggrab on 23.2.2016..
  */
 
-//TODO: Promijeni ime u list-view
+//TODO: Promijeni ime u table-view
 //TODO: Izvuci u framework
 //TODO: Sortiranje i indikatori
 //TODO: Kada komponenta dobije fokus neka okine SelectedItemsChangedEvent
 
-angular.module('recipeManager')
+angular.module('dataForge')
 
-    .component('recipeListView', {
-        templateUrl:'recipe-manager/recipe-list-view/recipe-list-view.html',
+    .component('tableView', {
+        templateUrl:'data-forge/table-view/table-view.html',
         bindings:{
             title:'@',
-            data:'@',
+            tableView:'@',
             items:'<',
             itemSelectedEvent:'@onItemSelectedEmit',
             itemDeselectedEvent:'@onItemDeselectedEmit',
@@ -26,10 +26,10 @@ angular.module('recipeManager')
             deleteClick:'&onDeleteClick',
             syncClick:'&onSyncClick'
         },
-        controller: ['$scope', 'cache', 'selection', 'orderByFilter', 'tableColumns', controller]
+        controller: ['$scope', 'dataForge', 'cache', 'selection', '$filter', 'orderByFilter', controller]
     });
 
-function controller($scope, Cache, Selection, orderBy, tableColumns){
+function controller($scope, dataForge, Cache, Selection, $filter, orderBy){
     var ctrl = this;
 
     this.$onInit = function(){
@@ -47,7 +47,7 @@ function controller($scope, Cache, Selection, orderBy, tableColumns){
             }
             return orderBy(ctrl.items, p);
         })
-        var columns = $scope.columns = tableColumns[ctrl.data];
+        var columns = $scope.columns = dataForge.tableViewDefinition(ctrl.tableView);
         var selection = new Selection();
         $scope.$emit(ctrl.selectedItemsChangedEvent, selection.selected);
 
@@ -75,7 +75,7 @@ function controller($scope, Cache, Selection, orderBy, tableColumns){
             if(!item[p]) return null;
             var value = resolveValue(item, p);
             if(value !== value) return null;
-            value = columns[p].filter ? columns[p].filter(value) : value;
+            value = columns[p].filter ? $filter(columns[p].filter)(value) : value;
             return value;
 
             function resolveValue(item, p){

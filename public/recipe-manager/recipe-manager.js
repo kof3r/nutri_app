@@ -2,7 +2,54 @@
  * Created by ggrab on 24.2.2016..
  */
 
-angular.module('recipeManager', ['server', 'util', 'data', 'packer'])
+angular.module('recipeManager', ['server', 'util', 'dataForge', 'nutrition'])
+
+    .run(['dataForge', 'Recipe', 'Ingredient', function(dataForge, Recipe, Ingredient){
+
+        dataForge.registerDataModel('recipe', Recipe);
+
+        dataForge.registerDetailView('recipeDetailView', {
+
+            name: dataForge.FormField().labelAs('Name').ofType('text'),
+            totalCalories: dataForge.FormField().labelAs('Calories').displayAs('energy'),
+            totalCarbs: dataForge.FormField().labelAs('Carbs').displayAs('mass'),
+            totalFats: dataForge.FormField().labelAs('Fats').displayAs('mass'),
+            totalProtein: dataForge.FormField().labelAs('Protein').displayAs('mass')
+
+        });
+
+        dataForge.registerTableView('recipeTableView', {
+
+            name: dataForge.TableColumn().withHeader('Name'),
+            created_at: dataForge.TableColumn().withHeader('Date created').displayAs('date')
+
+        });
+
+        dataForge.registerDataModel('ingredient', Ingredient);
+
+        dataForge.registerDetailView('ingredientDetailView', {
+
+            name: dataForge.FormField().labelAs('Name').ofType('text'),
+            amount: dataForge.FormField().labelAs('Amount').ofType('number').withStep(0.1).displayAs('mass'),
+            caloriesNominal: dataForge.FormField().labelAs('Nominal').displayAs('energy'),
+            carbs: dataForge.FormField().labelAs('Carbs').ofType('number').withStep(0.1).displayAs('mass'),
+            fats: dataForge.FormField().labelAs('Fats').ofType('number').withStep(0.1).displayAs('mass'),
+            protein: dataForge.FormField().labelAs('Protein').ofType('number').withStep(0.1).displayAs('mass')
+
+        });
+
+        dataForge.registerTableView('ingredientTableView', {
+
+            name: dataForge.TableColumn().withHeader('Name'),
+            amount: dataForge.TableColumn().withHeader('Amount').displayAs('mass'),
+            totalCalories: dataForge.TableColumn().withHeader('Total calories').displayAs('energy'),
+            totalCarbs: dataForge.TableColumn().withHeader('Carbs').displayAs('mass'),
+            totalFats: dataForge.TableColumn().withHeader('Fats').displayAs('mass'),
+            totalProtein: dataForge.TableColumn().withHeader('Protein').displayAs('mass')
+
+        });
+
+    }])
 
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
@@ -11,29 +58,6 @@ angular.module('recipeManager', ['server', 'util', 'data', 'packer'])
             deselectAllOn:'<'
         }
     })
-
-    .factory('formFields', ['recipeFormFields', 'ingredientFormFields', function(recipe, ingredient){
-        return{
-            recipe: recipe,
-            ingredient: ingredient
-        }
-    }])
-
-    .factory('tableColumns', ['recipeListColumns', 'ingredientListColumns', function(recipes, ingredients){
-        return{
-            recipes: recipes,
-            ingredients: ingredients
-        }
-    }])
-
-    .factory('models', ['Recipe', 'Ingredient', function(Recipe, Ingredient){
-
-        return {
-            recipe: Recipe,
-            ingredient: Ingredient
-        }
-
-    }])
 
 function controller($scope, recipeSvc, ingredientService, util, $window){
 
