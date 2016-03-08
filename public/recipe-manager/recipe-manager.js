@@ -53,13 +53,13 @@ angular.module('recipeManager', ['server', 'util', 'dataForge', 'nutrition'])
 
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
-        controller: ['$scope', 'serverRecipeService', 'serverIngredientService', 'util', '$window', controller],
+        controller: ['$scope', 'serverRecipeService', 'serverIngredientService', '$window', controller],
         bindings:{
             deselectAllOn:'<'
         }
     })
 
-function controller($scope, recipeSvc, ingredientService, util, $window){
+function controller($scope, recipeSvc, ingredientService, $window){
 
     var ctrl = this;
 
@@ -293,7 +293,7 @@ function controller($scope, recipeSvc, ingredientService, util, $window){
 
                 Promise.all($scope.selectedRecipes.map(function(recipe){
                     return recipeSvc.delete(recipe).then(function(){
-                        recipeManager.remove(recipe);
+                        removeFromRecipes(recipe);
                     }).catch();
                 }))
             }

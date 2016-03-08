@@ -24,7 +24,7 @@
                     <label for="{{p}}" class="col-sm-{{firstColumnWidth()}} control-label">{{f.field}}</label>
                     <div class="col-sm-{{secondColumnWidth()}}">
                         <div style="position: relative; top: 7px; left: 13px" ng-show="whenShowLabel(p)" ng-bind="displayValue(p)"></div>
-                        <input id="{{p}}" name="{{p}}" class="form-control" ng-show="whenShowInput(p)" ng-if="doesInputRender(p)" type="{{f.type || 'text'}}" ng-model="item[p]" ng-change="handleModelChange()">
+                        <input id="{{p}}" name="{{p}}" class="form-control" ng-show="whenShowInput(p)" ng-if="doesInputRender(p)" type="{{f.type || 'text'}}" step="{{f.step || ''}}" ng-model="item[p]" ng-change="handleModelChange()">
                         <select class="form-control" ng-show="whenShowSelect(p)" ng-if="doesSelectRender(p)" ng-model="item[p]" ng-change="handleModelChange()">
                             <option ng-repeat="o in f.type">{{o}}</option>
                         </select>
