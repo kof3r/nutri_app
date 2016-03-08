@@ -38,6 +38,7 @@ angular.module('dataForgeUtilities', [])
         return Selection;
 
     })
+
     .factory('cache', function(){
 
         function Cache(calculate){
@@ -58,4 +59,17 @@ angular.module('dataForgeUtilities', [])
 
         return Cache;
 
-    });
+    })
+
+    .value('wireEvents', function(scope, events, handler){
+            if(events.constructor === Array){
+                events.forEach(function(event){
+                    scope.$on(event, handler);
+                })
+            } else{
+                events.split(' ').forEach(function(event){
+                    scope.$on(event, handler);
+                })
+            }
+        }
+    );

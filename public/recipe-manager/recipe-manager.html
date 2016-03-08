@@ -4,9 +4,11 @@
     <div class="row">
 
         <div class="col-md-3">
-            <detail-view ng-show="whenRenderRecipeDetailView()" title="Recipe panel"
+            <detail-view ng-show="whenRenderRecipeDetailView()"
+                         title="Recipe panel"
                          item="selectedRecipes.length === 1 ? selectedRecipes[0] : null"
-                         fields="recipe"
+                         detail-view="recipeDetailView"
+                         model-name="recipe"
                          on-save-click="saveRecipe(item)"
                          cancel-input-on="escKeyDown disruptInput"
                          enable-input-on="enableRecipeInput">
@@ -14,7 +16,8 @@
             <detail-view ng-show="whenRenderIngredientDetailView()"
                          title="Ingredient panel"
                          item="selectedIngredients.length === 1 ? selectedIngredients[0] : null"
-                         fields="ingredient"
+                         detail-view="ingredientDetailView"
+                         model-name="ingredient"
                          on-save-click="saveIngredient(item)"
                          on-cancel-click="handleIngredientInputCancelClick()"
                          cancel-input-on="escKeyDown disruptInput"
@@ -28,8 +31,8 @@
                 <div class="row">
 
                     <div class="col-md-4">
-                        <recipe-list-view title="Recipes"
-                                          data="recipes"
+                        <table-view title="Recipes"
+                                          table-view="recipeTableView"
                                           items="recipes"
                                           on-item-selected-emit="recipeSelected"
                                           on-item-deselected-emit="recipeDeselected"
@@ -40,12 +43,12 @@
                                           on-edit-click="handleRecipeListEditClicked()"
                                           on-delete-click="handleRecipeListDeleteClicked()"
                                           on-row-dbl-click-emit="recipeListRowDblClicked">
-                        </recipe-list-view>
+                        </table-view>
                     </div>
 
                     <div class="col-md-8">
-                        <recipe-list-view title="Ingredients"
-                                          data="ingredients"
+                        <table-view title="Ingredients"
+                                          table-view="ingredientTableView"
                                           items="ingredients"
                                           on-item-selected-emit="ingredientSelected"
                                           on-item-deselected-emit="ingredientDeselected"
@@ -57,7 +60,7 @@
                                           on-delete-click="handleIngredientListDeleteClicked()"
                                           on-sync-click="handleIngredientListSyncClicked()"
                                           on-row-dbl-click-emit="ingredientListRowDblClicked">
-                        </recipe-list-view>
+                        </table-view>
                     </div>
 
                 </div>
