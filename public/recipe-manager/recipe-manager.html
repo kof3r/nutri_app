@@ -8,7 +8,7 @@
                          item="selectedRecipes.length === 1 ? selectedRecipes[0] : null"
                          fields="recipe"
                          on-save-click="saveRecipe(item)"
-                         cancel-input-on="disruptInput"
+                         cancel-input-on="escKeyDown disruptInput"
                          enable-input-on="enableRecipeInput">
             </detail-view>
             <detail-view ng-show="whenRenderIngredientDetailView()"
@@ -17,7 +17,7 @@
                          fields="ingredient"
                          on-save-click="saveIngredient(item)"
                          on-cancel-click="handleIngredientInputCancelClick()"
-                         cancel-input-on="disruptInput"
+                         cancel-input-on="escKeyDown disruptInput"
                          enable-input-on="enableIngredientInput">
             </detail-view>
         </div>
@@ -31,9 +31,11 @@
                         <recipe-list-view title="Recipes"
                                           data="recipes"
                                           items="recipes"
-                                          selected-items="selectedRecipes"
-                                          on-row-click-emit="recipeListRowClicked"
-                                          on-row-ctrl-click-emit="recipeListRowCtrlClicked"
+                                          on-item-selected-emit="recipeSelected"
+                                          on-item-deselected-emit="recipeDeselected"
+                                          on-selected-items-changed-emit="selectedRecipesChanged"
+                                          select-item-on="selectRecipe"
+                                          deselect-all-on="deselectAllRecipes"
                                           on-new-click="handleRecipeListNewClicked()"
                                           on-edit-click="handleRecipeListEditClicked()"
                                           on-delete-click="handleRecipeListDeleteClicked()"
@@ -45,9 +47,11 @@
                         <recipe-list-view title="Ingredients"
                                           data="ingredients"
                                           items="ingredients"
-                                          selected-items="selectedIngredients"
-                                          on-row-click-emit="ingredientListRowClicked"
-                                          on-row-ctrl-click-emit="ingredientListRowCtrlClicked"
+                                          on-item-selected-emit="ingredientSelected"
+                                          on-item-deselected-emit="ingredientDeselected"
+                                          on-selected-items-changed-emit="selectedIngredientsChanged"
+                                          select-item-on="selectIngredient"
+                                          deselect-all-on="deselectAllIngredients"
                                           on-new-click="handleIngredientListNewClicked()"
                                           on-edit-click="handleIngredientListEditClicked()"
                                           on-delete-click="handleIngredientListDeleteClicked()"

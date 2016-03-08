@@ -2,7 +2,7 @@
  * Created by ggrab on 2.3.2016..
  */
 
-angular.module('data', ['nutrition'])
+angular.module('data', ['nutrition', 'dataForgeUtilities'])
 
     .factory('filters', ['dateFilter', 'energyFilter', 'massFilter', function(date, energy, mass){
         return {

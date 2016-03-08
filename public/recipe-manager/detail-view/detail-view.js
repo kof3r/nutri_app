@@ -72,11 +72,28 @@ function controller($scope, $document, formFields, util, models){
 
         $scope.displayValue = function(p){
             var item = $scope.item;
-            if(!ctrl.item || !item[p]) return null;
-            var value = item[p].constructor === Function ? item[p]() : item[p];
+            if(!ctrl.item) return null;
+            var value = resolveValue(item, p);
+            if(value !== value) return null;
             var filter = fields[p].filter;
             value = filter ? filter(value) : value;
             return value;
+
+            function resolveValue(item, p){
+                if(fields[p].reflect) {
+                    return fields[p].reflect(item);
+                }
+                if (item[p] || item[p] === 0) {
+                    if (item[p].constructor === Function) {
+                        return item[p]();
+                    }
+                    return item[p];
+                }
+                if(!item[p] && (fields[p].type === 'number')){
+                    return 0;
+                }
+                return null;
+            }
         }
 
         $scope.handleModelChange = function(){
