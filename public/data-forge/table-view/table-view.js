@@ -115,7 +115,7 @@ function controller($scope, registry, resolveComparator, Cache, Selection, $filt
                 deselectAll();
             }
             if(keysPressed[16] && lastSelectedItem){    // SHIFT
-                rangeSelect(item);
+                rangeSelect(lastSelectedItem, item);
             } else {
                 if(isSelected){
                     deselectItem(item);
@@ -218,11 +218,15 @@ function controller($scope, registry, resolveComparator, Cache, Selection, $filt
 
         function selectAll(){
             selection.selectAll(ctrl.items);
-            $scope.$emit(ctrl.selectedItemsChangedEvent, selection.selected.slice(0, selection.selected.length));
+            triggerSelecteditemsChanged()
         }
 
         function deselectAll(){
             selection.deselectAll();
+            triggerSelecteditemsChanged();
+        }
+
+        function triggerSelecteditemsChanged(){
             $scope.$emit(ctrl.selectedItemsChangedEvent, selection.selected.slice(0, selection.selected.length));
         }
 
@@ -247,16 +251,18 @@ function controller($scope, registry, resolveComparator, Cache, Selection, $filt
             }
         }
 
-        function rangeSelect(item){
+        function rangeSelect(from, to){
             var items = $scope.items();
-            var lastSelectedIndex = items.indexOf(lastSelectedItem);
-            var selectedIndex = items.indexOf(item);
+            var lastSelectedIndex = items.indexOf(from);
+            var selectedIndex = items.indexOf(to);
             var diff = selectedIndex - lastSelectedIndex;
             var inc = diff / Math.abs(diff);
             for(var i = lastSelectedIndex; i != selectedIndex; i += inc){
-                selectItem(items[i]);
+                selection.select(items[i]);
             }
-            selectItem(items[i]);
+            selection.select(items[i]);
+            lastSelectedItem = items[i];
+            triggerSelecteditemsChanged();
         }
 
     }
