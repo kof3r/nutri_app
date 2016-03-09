@@ -18,7 +18,10 @@ angular.module('dataForge')
             itemDeselectedEvent:'@onItemDeselectedEmit',
             selectedItemsChangedEvent:'@onSelectedItemsChangedEmit',
             rowDblClickEvent:'@onRowDblClickEmit',
+            delKeyUpEvent:'@onDelKeyUpEmit',
             resetEvent:'@resetOn',
+            enableEvent:'@enableOn',
+            disableEvent:'@disableOn',
             selectItemEvent:'@selectItemOn',
             newClick:'&onNewClick',
             editClick:'&onEditClick',
@@ -39,6 +42,7 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
         var lastTouchedItem;
         var lastSelectedItem;
         var keysPressed = Object.create(null);
+        $scope.disabled = false;
 
         var cache = new Cache(function(){
             var p = $scope.orderCriteria;
@@ -81,12 +85,23 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
 
         (function wireEvents() {
 
-            $scope.$on(ctrl.resetEvent, function reset(){
+            $scope.$on(ctrl.resetEvent, function handleReset(){
                 deselectAll();
                 lastTouchedItem = null;
+                lastSelectedItem = null;
             });
 
-            $scope.$on(ctrl.selectItemEvent, handleSelectItem);
+            $scope.$on(ctrl.selectItemEvent, function handleSelectItem($event, item){
+                selectItem(item);
+            });
+
+            $scope.$on(ctrl.enableEvent, function handleEnable(){
+                $scope.disabled = false;
+            });
+
+            $scope.$on(ctrl.disableEvent, function handleDisable(){
+                $scope.disabled = true;
+            });
 
         })()
 
@@ -94,7 +109,7 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
             return cache.value();
         }
 
-        $scope.displayItem = function(item, p){
+        $scope.resolveValue = function(item, p){
             if(!item[p]) return null;
             var value = resolveValue(item, p);
             if(value !== value) return null;
@@ -111,9 +126,9 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
             }
         }
 
-        $scope.handleRowClick = function(item, $event){
+        $scope.handleRowClick = function(item){
             var isSelected = selection.isSelected(item);
-            if(!keysPressed[17] && !keysPressed[16]){   //  CTRL
+            if(!keysPressed[17] && !keysPressed[16]){   //  CTRL, SHIFT
                 deselectAll();
             }
             if(keysPressed[16] && lastSelectedItem){    // SHIFT
@@ -141,8 +156,15 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
             }
         }
 
-        $scope.handleKeyUp = function ($event) {
+        $scope.handleKeyUp = function($event) {
             delete(keysPressed[$event.which]);
+
+            switch($event.which){
+                case 46:{
+                    $scope.$emit(ctrl.delKeyUpEvent);
+                    break;
+                }
+            }
         }
 
         $scope.handleRowDblClick = function(item){
@@ -188,10 +210,14 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
             ctrl.syncClick();
         }
 
+        $scope.resolveButtonStyle = function(){
+            return $scope.disabled ? config.disabledButtonStyle : {};
+        }
+
         $scope.resolveRowStyle = function(item){
             var style = {};
             if(selection.isSelected(item)){
-                leftMap(style, config.selectedTableRowStyle);
+                leftMap(style, $scope.disabled ? config.disabledTableRowStyle : config.selectedTableRowStyle);
             }
             if(item.isNew()){
                 leftMap(style, config.newItemStyle);
@@ -206,10 +232,6 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
             return {
                 'text-align': columns[p].align
             }
-        }
-
-        function handleSelectItem($event, item){
-            selectItem(item);
         }
 
         function selectItem(item){

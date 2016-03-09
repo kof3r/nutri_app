@@ -12,8 +12,9 @@ angular.module('dataForge')
             detailView:'@',
             modelName:'@',
             item:'<',
+            onEnablingInput:'&',
+            onDisablingInput:'&',
             submitItem:'&onSaveClick',
-            onDisableInput:'&onCancelClick',
             cancelInputOn:'@',
             enableInputOn:'@'
 
@@ -34,6 +35,14 @@ function controller($scope, registry, $filter, wireEvents){
         (function registerWatches(){
 
             $scope.$watch('$ctrl.item', handleItemChange);
+
+            $scope.$watch('inputEnabled', function handleInputEnabledChanged(newValue){
+                if(newValue){
+                    ctrl.onEnablingInput();
+                } else{
+                    ctrl.onDisablingInput();
+                }
+            })
 
         })();
 
@@ -134,7 +143,6 @@ function controller($scope, registry, $filter, wireEvents){
 
         function disableInput(){
             $scope.inputEnabled = false;
-            ctrl.onDisableInput();
         }
 
         function isInputEnabled(){

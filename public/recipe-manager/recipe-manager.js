@@ -4,64 +4,12 @@
 
 angular.module('recipeManager', ['server', 'util', 'dataForge', 'nutrition'])
 
-    .run(['dataForge', 'Recipe', 'Ingredient', function(dataForge, Recipe, Ingredient){
-
-        dataForge.registerDataModel('recipe', Recipe);
-
-        dataForge.registerDetailView('recipeDetailView', {
-
-            name: dataForge.FormField().labelAs('Name').ofType('text'),
-            totalCalories: dataForge.FormField().labelAs('Calories').displayAs('energy'),
-            totalCarbs: dataForge.FormField().labelAs('Carbs').displayAs('mass'),
-            totalFats: dataForge.FormField().labelAs('Fats').displayAs('mass'),
-            totalProtein: dataForge.FormField().labelAs('Protein').displayAs('mass')
-
-        });
-
-        dataForge.registerTableView('recipeTableView', {
-
-            name: dataForge.TableColumn().withHeader('Name'),
-            totalCalories: dataForge.TableColumn().withHeader('Calories').displayAs('energy').alignTo('right')
-
-        });
-
-        dataForge.registerDataModel('ingredient', Ingredient);
-
-        dataForge.registerDetailView('ingredientDetailView', {
-
-            name: dataForge.FormField().labelAs('Name').ofType('text'),
-            amount: dataForge.FormField().labelAs('Amount').ofType('number').withStep(0.1).displayAs('mass'),
-            caloriesNominal: dataForge.FormField().labelAs('Nominal').displayAs('energy'),
-            carbs: dataForge.FormField().labelAs('Carbs').ofType('number').withStep(0.1).displayAs('mass'),
-            fats: dataForge.FormField().labelAs('Fats').ofType('number').withStep(0.1).displayAs('mass'),
-            protein: dataForge.FormField().labelAs('Protein').ofType('number').withStep(0.1).displayAs('mass')
-
-        });
-
-        dataForge.registerTableView('ingredientTableView', {
-
-            name: dataForge.TableColumn().withHeader('Name'),
-            amount: dataForge.TableColumn().withHeader('Količina').displayAs('mass').alignTo('right'),
-            totalCalories: dataForge.TableColumn().withHeader('Ukupno Kalorija').displayAs('energy').alignTo('right'),
-            totalCarbs: dataForge.TableColumn().withHeader('UH').displayAs('mass').alignTo('right'),
-            totalFats: dataForge.TableColumn().withHeader('Masti').displayAs('mass').alignTo('right'),
-            totalProtein: dataForge.TableColumn().withHeader('Proteini').displayAs('mass').alignTo('right')
-
-        });
-
-    }])
-
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
-        controller: ['$scope', 'serverRecipeService', 'serverIngredientService', '$window', controller],
-        bindings:{
-            deselectAllOn:'<'
-        }
+        controller: ['$scope', 'serverRecipeService', 'serverIngredientService', '$window', controller]
     })
 
 function controller($scope, recipeSvc, ingredientService, $window){
-
-    var ctrl = this;
 
     this.$onInit = function(){
 
@@ -74,23 +22,13 @@ function controller($scope, recipeSvc, ingredientService, $window){
 
         (function registerWatches(){
 
-            $scope.$watchCollection('selectedRecipes', handleSelectedRecipesChange);
-
-            function handleSelectedRecipesChange(){
-                $scope.$broadcast('disruptInput');
+            $scope.$watchCollection('selectedRecipes', function handleSelectedRecipesChange(){
                 if($scope.selectedRecipes.length === 1){
                     $scope.ingredients = getSelectedRecipe().ingredients;
                 } else {
                     $scope.ingredients = [];
                 }
-            }
-
-
-            $scope.$watchCollection('selectedIngredients', handleSelectedIngredientsChange);
-
-            function handleSelectedIngredientsChange(){
-                $scope.$broadcast('disruptInput');
-            }
+            });
 
         })();
 
@@ -131,37 +69,30 @@ function controller($scope, recipeSvc, ingredientService, $window){
             }
 
 
-            $scope.$on('recipeListRowDblClicked', handleRecipeListRowDblClicked);
+            $scope.$on('recipeListRowDblClicked', function handleRecipeListRowDblClicked(){
+                    enableRecipeInput();
+                });
 
-            $scope.$on('ingredientListRowDblClicked', handleIngredientListRowDblClicked);
-
-            function handleRecipeListRowDblClicked(){
-                enableRecipeInput();
-            }
-
-            function handleIngredientListRowDblClicked(){
+            $scope.$on('ingredientListRowDblClicked', function handleIngredientListRowDblClicked(){
                 enableIngredientInput();
-            }
+            });
 
-            $scope.$on('escKeyDown', handleEscKeyDown);
 
-            function handleEscKeyDown(){
+            $scope.$on('escKeyDown', function handleEscKeyDown(){
                 if($scope.selectedIngredients.length !== 0){
                     deselectAllIngredients();
                 } else {
                     deselectAllRecipes()
                 }
-            }
+            });
 
-            $scope.$on('delKeyDown', handleDelKeyDown);
+            $scope.$on('recipeListDelKeyUp', function($event){
+                deleteSelectedRecipes();
+            })
 
-            function handleDelKeyDown(){
-                if($scope.selectedIngredients.length > 0){
-
-                } else if($scope.selectedRecipes.length > 0){
-                    deleteSelectedRecipes();
-                }
-            }
+            $scope.$on('ingredientListDelKeyUp', function($event){
+                deleteSelectedIngredients();
+            })
 
         })();
 
@@ -199,7 +130,12 @@ function controller($scope, recipeSvc, ingredientService, $window){
             getSelectedRecipe().addIngredient(item);
         };
 
-        $scope.handleIngredientInputCancelClick = function(){
+        $scope.handleEnablingInput = function(){
+            disableListViews();
+        }
+
+        $scope.handleDisablingInput = function(){
+            enableListViews();
             inputtingIngredient = false;
         }
 
@@ -278,6 +214,14 @@ function controller($scope, recipeSvc, ingredientService, $window){
             return $scope.selectedRecipes[0];
         }
 
+        function enableListViews(){
+            $scope.$broadcast('disablingInput');
+        }
+
+        function disableListViews(){
+            $scope.$broadcast('enablingInput');
+        }
+
         function deleteSelectedRecipes(){
 
             var many = $scope.selectedRecipes.length;
@@ -334,7 +278,6 @@ function controller($scope, recipeSvc, ingredientService, $window){
                 } else {
                     ingredientService.delete(ingredient).then(function(){
                         var recipe = $scope.recipes.find(function(recipe) { return recipe.id === ingredient.recipe_id; });
-                        console.log(recipe);
                         if(recipe){
                             recipe.removeIngredient(ingredient);
                         }

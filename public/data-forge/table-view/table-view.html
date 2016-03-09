@@ -5,26 +5,26 @@
 
     <div class="row">
         <div class="btn-group">
-            <button ng-if="whenRenderNewButton()" class="btn-small nutri-btn" ng-click="handleNewClick()">New</button>
-            <button ng-if="whenRenderEditButton()" class="btn-small nutri-btn" ng-click="handleEditClick()">Edit</button>
-            <button ng-if="whenRenderDeleteButton()" class="btn-small nutri-btn" ng-click="handleDeleteClick()">Delete</button>
-            <button class="btn-small nutri-btn" ng-click="handleSyncClick()">Sync</button>
+            <button ng-if="whenRenderNewButton()" class="btn-small nutri-btn" ng-style="resolveButtonStyle()" ng-disabled="disabled" ng-click="handleNewClick()">New</button>
+            <button ng-if="whenRenderEditButton()" class="btn-small nutri-btn" ng-style="resolveButtonStyle()" ng-disabled="disabled" ng-click="handleEditClick()">Edit</button>
+            <button ng-if="whenRenderDeleteButton()" class="btn-small nutri-btn" ng-style="resolveButtonStyle()" ng-disabled="disabled" ng-click="handleDeleteClick()">Delete</button>
+            <button class="btn-small nutri-btn" ng-style="resolveButtonStyle()" ng-disabled="disabled" ng-click="handleSyncClick()">Sync</button>
         </div>
     </div>
 
-    <div class="row top-buffer" tabindex="0" ng-keydown="handleKeyDown($event)" ng-keyup="handleKeyUp($event)" style="outline: none">
+    <div class="row top-buffer" tabindex="0" ng-keydown="disabled || handleKeyDown($event)" ng-keyup="disabled || handleKeyUp($event)" style="outline: none">
         <table class="table">
             <thead>
             <tr>
-                <th ng-repeat="(p, c) in columns" ng-click="handleHeaderClick(p)">{{c.header}}</th>
+                <th ng-repeat="(p, c) in columns" ng-click="disabled || handleHeaderClick(p)">{{c.header}}</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="i in items()"
-                ng-mouseup="$parent.handleRowClick(i, $event)"
-                ng-dblclick="$parent.handleRowDblClick(i)"
+                ng-mouseup="disabled || $parent.handleRowClick(i, $event)"
+                ng-dblclick="disabled || $parent.handleRowDblClick(i)"
                 ng-style="resolveRowStyle(i)">
-                <td ng-style="resolveCellStyle(p)" ng-repeat="(p, c) in columns">{{displayItem(i, p)}}</td>
+                <td ng-style="resolveCellStyle(p)" ng-repeat="(p, c) in columns">{{resolveValue(i, p)}}</td>
             </tr>
             </tbody>
         </table>
