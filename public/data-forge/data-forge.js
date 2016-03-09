@@ -6,24 +6,16 @@
 
 angular.module('dataForge', ['dataForge_util'])
 
-    .factory('dataForge', ['formField', 'tableColumn', function(FormField, TableColumn){
+    .factory('dataForge', ['formField', 'tableColumn', 'dataForge_registry', function(FormField, TableColumn, registry){
 
-        var tableViewDefinitions = Object.create(null);
-        var detailViewDefinitions = Object.create(null);
-        var dataModels = Object.create(null);
-
-        return{
+        return {
 
             TableColumn: function() {
                 return new TableColumn();
             },
 
             registerTableView: function(name, definition){
-                tableViewDefinitions[name] = angular.copy(definition);
-            },
-
-            tableViewDefinition: function(name){
-                return tableViewDefinitions[name];
+                registry.registerTableView(name, definition);
             },
 
             FormField: function(){
@@ -31,20 +23,12 @@ angular.module('dataForge', ['dataForge_util'])
             },
 
             registerDetailView: function(name, definition){
-                detailViewDefinitions[name] = angular.copy(definition);
-            },
-
-            detailViewDefinition: function(name){
-                return detailViewDefinitions[name];
+                registry.registerDetailView(name, definition);
             },
 
             registerDataModel: function(name, dataModel){
-                dataModels[name] = dataModel;
+                registry.registerDataModel(name, dataModel);
             },
-
-            dataModel: function(name){
-                return dataModels[name];
-            }
         }
     }])
 

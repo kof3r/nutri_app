@@ -24,15 +24,15 @@ angular.module('dataForge')
             deleteClick:'&onDeleteClick',
             syncClick:'&onSyncClick'
         },
-        controller: ['$scope', 'dataForge','dataForge_util_resolveComparator', 'cache', 'selection', '$filter', controller]
+        controller: ['$scope', 'dataForge_registry','dataForge_util_resolveComparator', 'cache', 'selection', '$filter', controller]
     });
 
-function controller($scope, dataForge, resolveComparator, Cache, Selection, $filter){
+function controller($scope, registry, resolveComparator, Cache, Selection, $filter){
     var ctrl = this;
 
     this.$onInit = function(){
 
-        var columns = $scope.columns = dataForge.tableViewDefinition(ctrl.tableView);
+        var columns = $scope.columns = registry.tableViewDefinition(ctrl.tableView);
         var reverse = $scope.reverse = Object.create(null);
         var lastTouchedItem;
         var lastSelectedItem;

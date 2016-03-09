@@ -18,18 +18,18 @@ angular.module('dataForge')
             enableInputOn:'@'
 
         },
-        controller:['$scope', 'dataForge', '$filter', 'wireEvents', controller]
+        controller:['$scope', 'dataForge_registry', '$filter', 'wireEvents', controller]
 
     });
 
-function controller($scope, dataForge, $filter, wireEvents){
+function controller($scope, registry, $filter, wireEvents){
 
     var ctrl = this;
 
     this.$onInit = function(){
 
-        var fields = $scope.fields = dataForge.detailViewDefinition(ctrl.detailView);
-        var Model = dataForge.dataModel(ctrl.modelName);
+        var fields = $scope.fields = registry.detailViewDefinition(ctrl.detailView);
+        var Model = registry.dataModel(ctrl.modelName);
 
         (function registerWatches(){
 
