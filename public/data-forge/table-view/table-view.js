@@ -26,7 +26,7 @@ angular.module('dataForge')
             deleteClick:'&onDeleteClick',
             syncClick:'&onSyncClick'
         },
-        controller: ['$scope', 'dataForge', 'dataForge_util_resolveComparator', 'cache', 'selection', '$filter', controller]
+        controller: ['$scope', 'dataForge','dataForge_util_resolveComparator', 'cache', 'selection', '$filter', controller]
     });
 
 function controller($scope, dataForge, resolveComparator, Cache, Selection, $filter){
@@ -37,16 +37,12 @@ function controller($scope, dataForge, resolveComparator, Cache, Selection, $fil
         var columns = $scope.columns = dataForge.tableViewDefinition(ctrl.tableView);
         var reverse = $scope.reverse = Object.create(null);
 
-        //TODO: Malo uljepsaj ovo
         var cache = new Cache(function(){
-
             var p = $scope.orderCriteria;
-            console.log(p, reverse[p]);
             if(ctrl.items && p && ctrl.items.length > 0){
                 return ctrl.items.slice(0, ctrl.items.length).sort(resolveComparator(ctrl.items[0], p, reverse[p]));
             }
             return ctrl.items.slice(0, ctrl.items.length);
-
         });
 
         var selection = new Selection();
@@ -111,9 +107,6 @@ function controller($scope, dataForge, resolveComparator, Cache, Selection, $fil
 
         $scope.handleRowClick = function(item, $event){
             var isSelected = selection.isSelected(item);
-            if(!$event.ctrlKey){
-                deselectAll();
-            }
             if(isSelected){
                 deselectItem(item);
             } else {
@@ -128,8 +121,12 @@ function controller($scope, dataForge, resolveComparator, Cache, Selection, $fil
         }
 
         $scope.handleHeaderClick = function(p){
+            if(p === $scope.orderCriteria){
+                $scope.reverse[p] = !$scope.reverse[p];
+            } else {
+                $scope.reverse[p] = false;
+            }
             $scope.orderCriteria = p;
-            $scope.reverse[p] = !$scope.reverse[p];
         }
 
         $scope.whenRenderNewButton = function(){
@@ -168,7 +165,7 @@ function controller($scope, dataForge, resolveComparator, Cache, Selection, $fil
 
         $scope.resolveCellStyle = function(p){
             return {
-                align: columns[p].align ? columns[p].align : 'left'
+                'text-align': columns[p].align
             }
         }
 

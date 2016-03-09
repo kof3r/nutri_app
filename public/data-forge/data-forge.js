@@ -92,7 +92,7 @@ angular.module('dataForge', ['dataForge_util'])
             return this;
         }
 
-        TableColumn.prototype.align = function(align){
+        TableColumn.prototype.alignTo = function(align){
             this.align = align;
             return this;
         }

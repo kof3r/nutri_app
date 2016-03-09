@@ -21,7 +21,7 @@ angular.module('recipeManager', ['server', 'util', 'dataForge', 'nutrition'])
         dataForge.registerTableView('recipeTableView', {
 
             name: dataForge.TableColumn().withHeader('Name'),
-            created_at: dataForge.TableColumn().withHeader('Date created').displayAs('date')
+            totalCalories: dataForge.TableColumn().withHeader('Calories').displayAs('energy').alignTo('right')
 
         });
 
@@ -41,11 +41,11 @@ angular.module('recipeManager', ['server', 'util', 'dataForge', 'nutrition'])
         dataForge.registerTableView('ingredientTableView', {
 
             name: dataForge.TableColumn().withHeader('Name'),
-            amount: dataForge.TableColumn().withHeader('Amount').displayAs('mass'),
-            totalCalories: dataForge.TableColumn().withHeader('Total calories').displayAs('energy'),
-            totalCarbs: dataForge.TableColumn().withHeader('Carbs').displayAs('mass'),
-            totalFats: dataForge.TableColumn().withHeader('Fats').displayAs('mass'),
-            totalProtein: dataForge.TableColumn().withHeader('Protein').displayAs('mass')
+            amount: dataForge.TableColumn().withHeader('Amount').displayAs('mass').alignTo('right'),
+            totalCalories: dataForge.TableColumn().withHeader('Total calories').displayAs('energy').alignTo('right'),
+            totalCarbs: dataForge.TableColumn().withHeader('Carbs').displayAs('mass').alignTo('right'),
+            totalFats: dataForge.TableColumn().withHeader('Fats').displayAs('mass').alignTo('right'),
+            totalProtein: dataForge.TableColumn().withHeader('Protein').displayAs('mass').alignTo('right')
 
         });
 
