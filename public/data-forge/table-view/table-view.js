@@ -26,37 +26,58 @@ angular.module('dataForge')
             deleteClick:'&onDeleteClick',
             syncClick:'&onSyncClick'
         },
-        controller: ['$scope', 'dataForge', 'cache', 'selection', '$filter', 'orderByFilter', controller]
+        controller: ['$scope', 'dataForge', 'dataForge_util_resolveComparator', 'cache', 'selection', '$filter', controller]
     });
 
-function controller($scope, dataForge, Cache, Selection, $filter, orderBy){
+function controller($scope, dataForge, resolveComparator, Cache, Selection, $filter){
     var ctrl = this;
 
     this.$onInit = function(){
 
+        var columns = $scope.columns = dataForge.tableViewDefinition(ctrl.tableView);
+        var reverse = $scope.reverse = Object.create(null);
+
         //TODO: Malo uljepsaj ovo
         var cache = new Cache(function(){
+
             var p = $scope.orderCriteria;
+            console.log(p, reverse[p]);
             if(ctrl.items && p && ctrl.items.length > 0){
-                if(ctrl.items[0][p].constructor === Function){
-                    var comparator = function(a, b){
-                        return a[p]() - b[p]();
-                    }
-                    return ctrl.items.slice(0, ctrl.items.length).sort(comparator);
-                }
+                return ctrl.items.slice(0, ctrl.items.length).sort(resolveComparator(ctrl.items[0], p, reverse[p]));
             }
-            return orderBy(ctrl.items, p);
-        })
-        var columns = $scope.columns = dataForge.tableViewDefinition(ctrl.tableView);
+            return ctrl.items.slice(0, ctrl.items.length);
+
+        });
+
         var selection = new Selection();
-        $scope.$emit(ctrl.selectedItemsChangedEvent, selection.selected);
 
         (function registerWatches(){
+
             $scope.$watch('orderCriteria', handleOrderCriteriaChanged);
+
+            function handleOrderCriteriaChanged(){
+                cache.invalidate();
+            }
+
+            $scope.$watch('reverse', function handleReverseChanged(){
+                cache.invalidate();
+            }, true)
+
 
             $scope.$watchCollection('$ctrl.items', handleItemsCollectionChanged);
 
+            function handleItemsCollectionChanged() {
+                deselectAll();
+                cache.invalidate();
+            }
+
+
             $scope.$watch('$ctrl.items', handleItemsChanged);
+
+            function handleItemsChanged(){
+                deselectAll();
+                cache.invalidate();
+            }
         })();
 
         (function wireEvents() {
@@ -108,6 +129,7 @@ function controller($scope, dataForge, Cache, Selection, $filter, orderBy){
 
         $scope.handleHeaderClick = function(p){
             $scope.orderCriteria = p;
+            $scope.reverse[p] = !$scope.reverse[p];
         }
 
         $scope.whenRenderNewButton = function(){
@@ -152,20 +174,6 @@ function controller($scope, dataForge, Cache, Selection, $filter, orderBy){
 
         function handleSelectItem($event, item){
             selectItem(item);
-        }
-
-        function handleItemsCollectionChanged() {
-            deselectAll();
-            cache.invalidate();
-        }
-
-        function handleItemsChanged(){
-            deselectAll();
-            cache.invalidate();
-        }
-
-        function handleOrderCriteriaChanged(){
-            cache.invalidate();
         }
 
         function selectItem(item){

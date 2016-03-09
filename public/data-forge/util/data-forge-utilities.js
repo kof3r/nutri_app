@@ -2,7 +2,7 @@
  * Created by ggrab on 7.3.2016..
  */
 
-angular.module('dataForgeUtilities', [])
+angular.module('dataForge_util', [])
 
     .factory('selection', function(){
 
@@ -53,6 +53,7 @@ angular.module('dataForgeUtilities', [])
         Cache.prototype.value = function(){
             if(!this.valid){
                 this._value = this.calculate();
+                this.valid = true;
             }
             return this._value;
         }
@@ -61,7 +62,7 @@ angular.module('dataForgeUtilities', [])
 
     })
 
-    .value('wireEvents', function(scope, events, handler){
+    .constant('wireEvents', function(scope, events, handler){
             if(events.constructor === Array){
                 events.forEach(function(event){
                     scope.$on(event, handler);
@@ -72,4 +73,41 @@ angular.module('dataForgeUtilities', [])
                 })
             }
         }
-    );
+    )
+
+    .constant('dataForge_util_resolveComparator', function(item, p, reverse){
+
+        if(angular.isFunction(item[p])){
+            return reverse ? reverseFuncarator : funcarator;
+        } else {
+            return reverse ? reverseComparator : comparator;
+        }
+
+        function funcarator(a, b){
+            a = a[p](), b = b[p]();
+            if(a < b) return -1;
+            if(a > b) return 1;
+            return 0;
+        }
+
+        function reverseFuncarator(a, b){
+            a = a[p](), b = b[p]();
+            if(a < b) return 1;
+            if(a > b) return -1;
+            return 0;
+        }
+
+        function comparator(a, b){
+            a = a[p], b = b[p];
+            if(a < b) return -1;
+            if(a > b) return 1;
+            return 0;
+        }
+
+        function reverseComparator(a, b){
+            a = a[p], b = b[p];
+            if(a < b) return 1;
+            if(a > b) return -1;
+            return 0;
+        }
+    });

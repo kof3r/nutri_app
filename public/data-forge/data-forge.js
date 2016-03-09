@@ -4,7 +4,7 @@
 
 //TODO: reflect = function(self, sve_druge);
 
-angular.module('dataForge', ['dataForgeUtilities'])
+angular.module('dataForge', ['dataForge_util'])
 
     .factory('dataForge', ['formField', 'tableColumn', function(FormField, TableColumn){
 
