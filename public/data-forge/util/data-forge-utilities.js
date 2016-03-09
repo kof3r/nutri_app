@@ -13,12 +13,15 @@ angular.module('dataForge_util', [])
         }
 
         Selection.prototype.select = function(item){
-            this.selected.push(item);
+            var i = this.selected.indexOf(item);
+            if(i === -1){
+                this.selected.push(item);
+            }
         }
 
         Selection.prototype.deselect = function(item){
             var i = this.selected.indexOf(item);
-            if(i != -1){
+            if(i !== -1){
                 this.selected.splice(i, 1);
             }
         }
@@ -33,6 +36,10 @@ angular.module('dataForge_util', [])
 
         Selection.prototype.deselectAll = function(){
             this.selected.splice(0, this.selected.length);
+        }
+
+        Selection.prototype.count = function(){
+            return this.selected.length;
         }
 
         return Selection;

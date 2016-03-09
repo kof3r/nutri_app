@@ -41,11 +41,11 @@ angular.module('recipeManager', ['server', 'util', 'dataForge', 'nutrition'])
         dataForge.registerTableView('ingredientTableView', {
 
             name: dataForge.TableColumn().withHeader('Name'),
-            amount: dataForge.TableColumn().withHeader('Amount').displayAs('mass').alignTo('right'),
-            totalCalories: dataForge.TableColumn().withHeader('Total calories').displayAs('energy').alignTo('right'),
-            totalCarbs: dataForge.TableColumn().withHeader('Carbs').displayAs('mass').alignTo('right'),
-            totalFats: dataForge.TableColumn().withHeader('Fats').displayAs('mass').alignTo('right'),
-            totalProtein: dataForge.TableColumn().withHeader('Protein').displayAs('mass').alignTo('right')
+            amount: dataForge.TableColumn().withHeader('Količina').displayAs('mass').alignTo('right'),
+            totalCalories: dataForge.TableColumn().withHeader('Ukupno Kalorija').displayAs('energy').alignTo('right'),
+            totalCarbs: dataForge.TableColumn().withHeader('UH').displayAs('mass').alignTo('right'),
+            totalFats: dataForge.TableColumn().withHeader('Masti').displayAs('mass').alignTo('right'),
+            totalProtein: dataForge.TableColumn().withHeader('Proteini').displayAs('mass').alignTo('right')
 
         });
 

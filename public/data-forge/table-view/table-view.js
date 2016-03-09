@@ -2,8 +2,6 @@
  * Created by ggrab on 23.2.2016..
  */
 
-//TODO: Promijeni ime u table-view
-//TODO: Izvuci u framework
 //TODO: Sortiranje i indikatori
 //TODO: Kada komponenta dobije fokus neka okine SelectedItemsChangedEvent
 
@@ -19,7 +17,7 @@ angular.module('dataForge')
             itemDeselectedEvent:'@onItemDeselectedEmit',
             selectedItemsChangedEvent:'@onSelectedItemsChangedEmit',
             rowDblClickEvent:'@onRowDblClickEmit',
-            deselectAllEvent:'@deselectAllOn',
+            resetEvent:'@resetOn',
             selectItemEvent:'@selectItemOn',
             newClick:'&onNewClick',
             editClick:'&onEditClick',
@@ -36,6 +34,9 @@ function controller($scope, dataForge, resolveComparator, Cache, Selection, $fil
 
         var columns = $scope.columns = dataForge.tableViewDefinition(ctrl.tableView);
         var reverse = $scope.reverse = Object.create(null);
+        var lastTouchedItem;
+        var lastSelectedItem;
+        var keysPressed = Object.create(null);
 
         var cache = new Cache(function(){
             var p = $scope.orderCriteria;
@@ -78,7 +79,10 @@ function controller($scope, dataForge, resolveComparator, Cache, Selection, $fil
 
         (function wireEvents() {
 
-            $scope.$on(ctrl.deselectAllEvent, deselectAll);
+            $scope.$on(ctrl.resetEvent, function reset(){
+                deselectAll();
+                lastTouchedItem = null;
+            });
 
             $scope.$on(ctrl.selectItemEvent, handleSelectItem);
 
@@ -107,11 +111,36 @@ function controller($scope, dataForge, resolveComparator, Cache, Selection, $fil
 
         $scope.handleRowClick = function(item, $event){
             var isSelected = selection.isSelected(item);
-            if(isSelected){
-                deselectItem(item);
-            } else {
-                selectItem(item);
+            if(!keysPressed[17] && !keysPressed[16]){   //  CTRL
+                deselectAll();
             }
+            if(keysPressed[16] && lastSelectedItem){    // SHIFT
+                rangeSelect(item);
+            } else {
+                if(isSelected){
+                    deselectItem(item);
+                } else {
+                    selectItem(item);
+                }
+            }
+        }
+
+        $scope.handleKeyDown = function($event){
+            keysPressed[$event.which] = true;
+            switch ($event.which){
+                case 40:{
+                    handleDownArrowKeyDown();
+                    break;
+                }
+                case 38:{
+                    handleUpArrowKeyDown();
+                    break;
+                }
+            }
+        }
+
+        $scope.handleKeyUp = function ($event) {
+            delete(keysPressed[$event.which]);
         }
 
         $scope.handleRowDblClick = function(item){
@@ -175,11 +204,15 @@ function controller($scope, dataForge, resolveComparator, Cache, Selection, $fil
 
         function selectItem(item){
             selection.select(item);
+            lastTouchedItem = item;
+            lastSelectedItem = item;
             $scope.$emit(ctrl.itemSelectedEvent, item);
         }
 
         function deselectItem(item){
             selection.deselect(item);
+            lastTouchedItem = item;
+            lastSelectedItem = null;
             $scope.$emit(ctrl.itemDeselectedEvent, item);
         }
 
@@ -191,6 +224,39 @@ function controller($scope, dataForge, resolveComparator, Cache, Selection, $fil
         function deselectAll(){
             selection.deselectAll();
             $scope.$emit(ctrl.selectedItemsChangedEvent, selection.selected.slice(0, selection.selected.length));
+        }
+
+        function handleDownArrowKeyDown(){
+            handleArrowKey(true);
+        }
+
+        function handleUpArrowKeyDown(){
+            handleArrowKey(false);
+        }
+
+        function handleArrowKey(down){
+            var items = $scope.items();
+            if(!lastTouchedItem){
+                selectItem(items[0]);
+            } else {
+                var i = items.indexOf(lastTouchedItem);
+                deselectAll();
+                i = down ? (i + 1) : (i + items.length - 1);
+                i %= items.length;
+                selectItem(items[i]);
+            }
+        }
+
+        function rangeSelect(item){
+            var items = $scope.items();
+            var lastSelectedIndex = items.indexOf(lastSelectedItem);
+            var selectedIndex = items.indexOf(item);
+            var diff = selectedIndex - lastSelectedIndex;
+            var inc = diff / Math.abs(diff);
+            for(var i = lastSelectedIndex; i != selectedIndex; i += inc){
+                selectItem(items[i]);
+            }
+            selectItem(items[i]);
         }
 
     }
