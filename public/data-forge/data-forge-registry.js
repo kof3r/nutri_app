@@ -3,7 +3,7 @@
  */
 
 angular.module('dataForge')
-    .factory('dataForge_registry', function(){
+    .factory('dataForge_registry', ['dataForge_tableViewDefaults', function(tableViewDefaults){
 
         var tableViewDefinitions = Object.create(null);
         var detailViewDefinitions = Object.create(null);
@@ -11,12 +11,20 @@ angular.module('dataForge')
 
         return {
 
+            tableViewDefaults: function(){
+                return angular.copy(tableViewDefaults);
+            },
+
             registerTableView: function(name, definition){
                 tableViewDefinitions[name] = angular.copy(definition);
             },
 
             tableViewDefinition: function(name){
                 return angular.copy(tableViewDefinitions[name]);
+            },
+
+            detailViewDefaults: function(){
+
             },
 
             registerDetailView: function(name, definition){
@@ -36,4 +44,4 @@ angular.module('dataForge')
             }
         }
 
-    })
+    }])

@@ -117,4 +117,28 @@ angular.module('dataForge_util', [])
             if(a > b) return -1;
             return 0;
         }
+    })
+
+    .constant('dataForge_util_leftProject', function(){
+
+        return Array.prototype.reduce.call(arguments, function(prev, curr){
+            for(var prop in prev){
+                if(typeof curr[prop] !== 'undefined'){
+                    prev[prop] = curr[prop];
+                }
+            }
+            return prev;
+        })
+
+    })
+
+    .constant('dataForge_util_leftMap', function(){
+
+        return Array.prototype.reduce.call(arguments, function(prev, curr){
+            for(var prop in curr){
+                prev[prop] = curr[prop];
+            }
+            return prev;
+        })
+
     });

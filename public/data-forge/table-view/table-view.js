@@ -4,6 +4,7 @@
 
 //TODO: Sortiranje i indikatori
 //TODO: Kada komponenta dobije fokus neka okine SelectedItemsChangedEvent
+//TODO: Cacheiraj stilove
 
 angular.module('dataForge')
 
@@ -24,15 +25,16 @@ angular.module('dataForge')
             deleteClick:'&onDeleteClick',
             syncClick:'&onSyncClick'
         },
-        controller: ['$scope', 'dataForge_registry','dataForge_util_resolveComparator', 'cache', 'selection', '$filter', controller]
+        controller: ['$scope', 'dataForge_registry', 'dataForge_util_leftProject', 'dataForge_util_leftMap','dataForge_util_resolveComparator', 'cache', 'selection', '$filter', controller]
     });
 
-function controller($scope, registry, resolveComparator, Cache, Selection, $filter){
+function controller($scope, registry, leftProject, leftMap, resolveComparator, Cache, Selection, $filter){
     var ctrl = this;
 
     this.$onInit = function(){
 
         var columns = $scope.columns = registry.tableViewDefinition(ctrl.tableView);
+        var config = leftProject(registry.tableViewDefaults(), ctrl);
         var reverse = $scope.reverse = Object.create(null);
         var lastTouchedItem;
         var lastSelectedItem;
@@ -186,10 +188,18 @@ function controller($scope, registry, resolveComparator, Cache, Selection, $filt
             ctrl.syncClick();
         }
 
-        $scope.resolveRowClass = function(item){
-            var cls = selection.isSelected(item) ? 'selected ' : '';
-            cls += item.isNew() ? 'new' : item.isDirty() ? 'dirty' : '';
-            return cls;
+        $scope.resolveRowStyle = function(item){
+            var style = {};
+            if(selection.isSelected(item)){
+                leftMap(style, config.selectedTableRowStyle);
+            }
+            if(item.isNew()){
+                leftMap(style, config.newItemStyle);
+            }
+            if(item.isDirty()){
+                leftMap(style, config.dirtyItemStyle);
+            }
+            return style;
         }
 
         $scope.resolveCellStyle = function(p){
