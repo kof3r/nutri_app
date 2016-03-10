@@ -5,7 +5,7 @@
 
         <div class="col-md-3">
             <detail-view ng-show="whenRenderRecipeDetailView()"
-                         title="Recipe panel"
+                         title="{{resolveRecipeDetailViewTitle()}}"
                          item="selectedRecipes.length === 1 ? selectedRecipes[0] : null"
                          detail-view="recipeDetailView"
                          model-name="recipe"
@@ -16,7 +16,7 @@
                          enable-input-on="enableRecipeInput">
             </detail-view>
             <detail-view ng-show="whenRenderIngredientDetailView()"
-                         title="Ingredient panel"
+                         title="{{resolveIngredientDetailViewTitle()}}"
                          item="selectedIngredients.length === 1 ? selectedIngredients[0] : null"
                          detail-view="ingredientDetailView"
                          model-name="ingredient"

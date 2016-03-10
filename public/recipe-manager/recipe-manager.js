@@ -87,8 +87,16 @@ function controller($scope, $window, $timeout, recipeSvc, ingredientService){
             return !$scope.whenRenderIngredientDetailView();
         }
 
+        $scope.resolveRecipeDetailViewTitle = function(){
+            return $scope.selectedRecipes.length === 1 ? $scope.selectedRecipes[0].name : 'Recipe panel';
+        }
+
         $scope.whenRenderIngredientDetailView = function(){
             return $scope.selectedRecipes.length === 1 && ($scope.selectedIngredients.length === 1 || inputtingIngredient);
+        }
+
+        $scope.resolveIngredientDetailViewTitle = function(){
+            return $scope.selectedIngredients.length === 1 ? $scope.selectedIngredients[0].name : 'Ingredient panel';
         }
 
         $scope.saveRecipe = function(recipe){

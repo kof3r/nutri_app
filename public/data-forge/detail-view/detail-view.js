@@ -101,25 +101,24 @@ function controller($scope, registry, $filter, wireEvents){
 
         $scope.displayValue = function(p){
             var item = $scope.item;
-            if(!ctrl.item) return null;
+            if(!item) return null;
+
             var value = resolveValue(item, p);
-            if(value !== value) return null;
-            var filter = fields[p].filter;
-            value = filter ? $filter(filter)(value) : value;
+            if(!value || value !== value) return null;
+
+            var filter = fields[p].filter ? $filter(fields[p].filter) : null;
+            value = filter ? filter(value) : value;
             return value;
 
             function resolveValue(item, p){
                 if(fields[p].reflect) {
-                    return fields[p].reflect(item);
+                    return (fields[p].reflect.bind(item))();
                 }
-                if (item[p] || item[p] === 0) {
-                    if (item[p].constructor === Function) {
+                if (item[p]) {
+                    if (isFunction(item[p])) {
                         return item[p]();
                     }
                     return item[p];
-                }
-                if(!item[p] && (fields[p].type === 'number')){
-                    return 0;
                 }
                 return null;
             }
@@ -160,7 +159,15 @@ function controller($scope, registry, $filter, wireEvents){
 
         function isReadOnly(p){
             var item = ctrl.item;
-            return (item && item[p] && item[p].constructor === Function) || fields[p].reflect || (typeof fields[p].type === 'undefined');
+            return (item && isGetterFunction(item[p])) || fields[p].reflect || (typeof fields[p].type === 'undefined');
+        }
+
+        function isFunction(f){
+            return angular.isFunction(f);
+        }
+
+        function isGetterFunction(f){
+            return angular.isFunction(f) && f.length === 0;
         }
 
         function isEnum(p){
