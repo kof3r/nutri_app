@@ -6,10 +6,10 @@ angular.module('recipeManager', ['server', 'util', 'dataForge', 'nutrition'])
 
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
-        controller: ['$scope', 'serverRecipeService', 'serverIngredientService', '$window', controller]
+        controller: ['$scope', '$window', '$timeout', 'serverRecipeService', 'serverIngredientService', controller]
     })
 
-function controller($scope, recipeSvc, ingredientService, $window){
+function controller($scope, $window, $timeout, recipeSvc, ingredientService){
 
     this.$onInit = function(){
 
@@ -69,15 +69,6 @@ function controller($scope, recipeSvc, ingredientService, $window){
             }
 
 
-            $scope.$on('recipeListRowDblClicked', function handleRecipeListRowDblClicked(){
-                    enableRecipeInput();
-                });
-
-            $scope.$on('ingredientListRowDblClicked', function handleIngredientListRowDblClicked(){
-                enableIngredientInput();
-            });
-
-
             $scope.$on('escKeyDown', function handleEscKeyDown(){
                 if($scope.selectedIngredients.length !== 0){
                     deselectAllIngredients();
@@ -85,14 +76,6 @@ function controller($scope, recipeSvc, ingredientService, $window){
                     deselectAllRecipes()
                 }
             });
-
-            $scope.$on('recipeListDelKeyUp', function($event){
-                deleteSelectedRecipes();
-            })
-
-            $scope.$on('ingredientListDelKeyUp', function($event){
-                deleteSelectedIngredients();
-            })
 
         })();
 
@@ -109,19 +92,18 @@ function controller($scope, recipeSvc, ingredientService, $window){
         }
 
         $scope.saveRecipe = function(recipe){
-            if(recipe.id){
-                var selectedRecipe = getSelectedRecipe();
-                recipeSvc.post(recipe).then(function(updated){
-                    //TODO: Možda bi trebalo dodati preko metode modela...
-                    updated.ingredients = selectedRecipe.ingredients;
-                    removeFromRecipes(selectedRecipe);
-                    addToRecipes(updated);
-                    selectRecipe(updated);
-                });
-            } else {
+            if(recipe.isNew()){
                 recipeSvc.put(recipe).then(function(recipe){
                     addToRecipes(recipe);
                     selectRecipe(recipe);
+                });
+            } else {
+                recipeSvc.post(recipe).then(function(updated){
+                    //TODO: Možda bi trebalo dodati preko metode modela...
+                    updated.ingredients = recipe.ingredients;
+                    removeFromRecipes(recipe);
+                    addToRecipes(updated);
+                    selectRecipe(updated);
                 });
             }
         }
@@ -175,15 +157,34 @@ function controller($scope, recipeSvc, ingredientService, $window){
             syncIngredients();
         }
 
+        $scope.handleRecipeListDelKeyUp = function(){
+            deleteSelectedRecipes();
+        }
+
+        $scope.handleIngredientListDelKeyUp = function(){
+            deleteSelectedIngredients();
+        }
+
+        $scope.handleRecipeListRowDblClick = function(){
+            enableRecipeInput();
+        }
+
+        $scope.handleIngredientListRowDblClick = function(){
+            enableIngredientInput();
+        }
+
         function addToRecipes(recipe){
             $scope.recipes.push(recipe);
         }
 
         function removeFromRecipes(recipe){
-            var i = $scope.recipes.indexOf(recipe);
-            if(i != -1){
-                $scope.recipes.splice(i, 1);
+            var i;
+            if(recipe.isNew()){
+                i = $scope.recipes.indexOf(recipe);
+            } else {
+                i = $scope.recipes.findIndex(function(e){ return e.id === recipe.id; });
             }
+            $scope.recipes.splice(i, 1);
         }
 
         function selectRecipe(recipe){

@@ -60,25 +60,22 @@ angular.module('server', ['packer', 'util'])
 
             put: function(recipe){
                 return $http.put('api/recipe', packer.packRecipe(recipe)).then(function(res){
-                    var response = res.data.response;
-                    var error = res.data.error;
-                    if(error){
+                    if(res.data.error){
                         messageQueue.addMessages(error);
-                        return Promise.reject();
+                    } else {
+                        messageQueue.addMessages(sprintf('Successfully created \'%s\'.', recipe.name));
                     }
-                    messageQueue.addMessages(sprintf('Successfully updated \'%s\'.', recipe.name));
-                    return packer.unpackRecipe(response);
+                    return packer.unpackRecipe(res.data.response);
                 });
             },
 
             post: function(recipe){
-                recipe.id = 2000;
                 return $http.post('api/recipe', packer.packRecipe(recipe)).then(function(res){
                     if(res.data.error){
                         messageQueue.addMessages(res.data.error);
-                        return Promise.reject();
+                    } else {
+                        messageQueue.addMessages(sprintf('Successfully updated %s.', recipe.name));
                     }
-                    messageQueue.addMessages(sprintf('Successfully updated %s.', recipe.name));
                     return packer.unpackRecipe(res.data.response);
                 });
             },

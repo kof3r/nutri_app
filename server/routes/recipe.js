@@ -27,9 +27,13 @@ router.put('/', function(req, res){
     Recipe.create(body, {
         include: body.ingredients ? [ Ingredient ] : []
     }).then(function(recipe){
-        res.json(new Response(recipe, recipe ? null : 'Failed to save recipe.'));
+        if(recipe){
+            res.json(new Response(recipe));
+        } else {
+            res.json(new Response(body, 'Failed to create recipe.'));
+        }
     }).catch(function(err){
-        res.json(new Response());
+        res.json(new Response(body, 'Failed to create recipe.'));
     })
 });
 
@@ -39,7 +43,7 @@ router.post('/', function(req, res){
     Recipe.update(body, { where: { id: body.id } }).then(function(results){
         var n =  results[0];
         if(n !== 1){
-            res.json(new Response(null, 'Failed to update ' + body.name + '.'));
+            res.json(new Response(body, 'Failed to update ' + body.name + '.'));
         } else {
             res.json(new Response(body));
         }

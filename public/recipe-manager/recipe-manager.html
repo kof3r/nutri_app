@@ -36,39 +36,46 @@
                     <div class="col-md-4">
                         <table-view title="Recipes"
                                     table-view="recipeTableView"
+
                                     items="recipes"
                                     on-item-selected-emit="recipeSelected"
                                     on-item-deselected-emit="recipeDeselected"
                                     on-selected-items-changed-emit="selectedRecipesChanged"
-                                    on-del-key-up-emit="recipeListDelKeyUp"
                                     select-item-on="selectRecipe"
+
                                     reset-on="deselectAllRecipes"
                                     disable-on="enablingInput"
                                     enable-on="disablingInput"
+
+                                    on-del-key-up="handleRecipeListDelKeyUp()"
                                     on-new-click="handleRecipeListNewClicked()"
                                     on-edit-click="handleRecipeListEditClicked()"
                                     on-delete-click="handleRecipeListDeleteClicked()"
-                                    on-row-dbl-click-emit="recipeListRowDblClicked">
+                                    on-row-dbl-click="handleRecipeListRowDblClick()">
                         </table-view>
                     </div>
 
                     <div class="col-md-8">
                         <table-view title="Ingredients"
                                     table-view="ingredientTableView"
+                                    name="ingredientTableView"
+
                                     items="ingredients"
                                     on-item-selected-emit="ingredientSelected"
                                     on-item-deselected-emit="ingredientDeselected"
                                     on-selected-items-changed-emit="selectedIngredientsChanged"
-                                    on-del-key-up-emit="ingredientListDelKeyUp"
                                     select-item-on="selectIngredient"
+
                                     reset-on="deselectAllIngredients"
                                     disable-on="enablingInput"
                                     enable-on="disablingInput"
+
                                     on-new-click="handleIngredientListNewClicked()"
                                     on-edit-click="handleIngredientListEditClicked()"
                                     on-delete-click="handleIngredientListDeleteClicked()"
                                     on-sync-click="handleIngredientListSyncClicked()"
-                                    on-row-dbl-click-emit="ingredientListRowDblClicked">
+                                    on-row-dbl-click="handleIngredientListRowDblClick()"
+                                    on-del-key-up="handleIngredientListDelKeyUp()">
                         </table-view>
                     </div>
 

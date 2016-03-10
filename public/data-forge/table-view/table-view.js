@@ -13,20 +13,25 @@ angular.module('dataForge')
         bindings:{
             title:'@',
             tableView:'@',
+
             items:'<',
             itemSelectedEvent:'@onItemSelectedEmit',
             itemDeselectedEvent:'@onItemDeselectedEmit',
             selectedItemsChangedEvent:'@onSelectedItemsChangedEmit',
-            rowDblClickEvent:'@onRowDblClickEmit',
-            delKeyUpEvent:'@onDelKeyUpEmit',
+            selectItemEvent:'@selectItemOn',
+
             resetEvent:'@resetOn',
             enableEvent:'@enableOn',
             disableEvent:'@disableOn',
-            selectItemEvent:'@selectItemOn',
+
             newClick:'&onNewClick',
             editClick:'&onEditClick',
             deleteClick:'&onDeleteClick',
-            syncClick:'&onSyncClick'
+            syncClick:'&onSyncClick',
+            onRowDblClick:'&',
+            onDelKeyUp:'&',
+            onRightArrowKeyDown:'&',
+            onLeftArrowKeyDown:'&'
         },
         controller: ['$scope', 'dataForge_registry', 'dataForge_util_leftProject', 'dataForge_util_leftMap','dataForge_util_resolveComparator', 'cache', 'selection', '$filter', controller]
     });
@@ -92,6 +97,7 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
             });
 
             $scope.$on(ctrl.selectItemEvent, function handleSelectItem($event, item){
+                console.log(item)
                 selectItem(item);
             });
 
@@ -145,14 +151,43 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
         $scope.handleKeyDown = function($event){
             keysPressed[$event.which] = true;
             switch ($event.which){
-                case 40:{
-                    handleDownArrowKeyDown();
+                case 37:{
+                    ctrl.onLeftArrowKeyDown();
                     break;
                 }
                 case 38:{
                     handleUpArrowKeyDown();
                     break;
                 }
+                case 39:{
+                    ctrl.onRightArrowKeyDown();
+                    break;
+                }
+                case 40:{
+                    handleDownArrowKeyDown();
+                    break;
+                }
+            }
+        }
+
+        function handleDownArrowKeyDown(){
+            handleArrowKey(true);
+        }
+
+        function handleUpArrowKeyDown(){
+            handleArrowKey(false);
+        }
+
+        function handleArrowKey(down){
+            var items = $scope.items();
+            if(!lastTouchedItem){
+                selectItem(items[0]);
+            } else {
+                var i = items.indexOf(lastTouchedItem);
+                deselectAll();
+                i = down ? (i + 1) : (i + items.length - 1);
+                i %= items.length;
+                selectItem(items[i]);
             }
         }
 
@@ -161,7 +196,7 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
 
             switch($event.which){
                 case 46:{
-                    $scope.$emit(ctrl.delKeyUpEvent);
+                    ctrl.onDelKeyUp();
                     break;
                 }
             }
@@ -170,7 +205,7 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
         $scope.handleRowDblClick = function(item){
             deselectAll();
             selectItem(item);
-            $scope.$emit(ctrl.rowDblClickEvent);
+            ctrl.onRowDblClick();
         }
 
         $scope.handleHeaderClick = function(p){
@@ -260,27 +295,6 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
 
         function triggerSelecteditemsChanged(){
             $scope.$emit(ctrl.selectedItemsChangedEvent, selection.selected.slice(0, selection.selected.length));
-        }
-
-        function handleDownArrowKeyDown(){
-            handleArrowKey(true);
-        }
-
-        function handleUpArrowKeyDown(){
-            handleArrowKey(false);
-        }
-
-        function handleArrowKey(down){
-            var items = $scope.items();
-            if(!lastTouchedItem){
-                selectItem(items[0]);
-            } else {
-                var i = items.indexOf(lastTouchedItem);
-                deselectAll();
-                i = down ? (i + 1) : (i + items.length - 1);
-                i %= items.length;
-                selectItem(items[i]);
-            }
         }
 
         function rangeSelect(from, to){
