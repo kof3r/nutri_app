@@ -52,8 +52,8 @@ angular.module('recipeManager')
             amount: dataForge.TableColumn().withHeader('Amount').displayAs(filter).alignTo('right'),
             totalCalories: dataForge.TableColumn().withHeader('Total calories').displayAs('energy').alignTo('right'),
             totalCarbs: dataForge.TableColumn().withHeader('Total carbs').displayAs('mass').alignTo('right'),
-            totalFats: dataForge.TableColumn().withHeader('Fats').displayAs('mass').alignTo('right'),
-            totalProtein: dataForge.TableColumn().withHeader('Protein').displayAs('mass').alignTo('right')
+            totalFats: dataForge.TableColumn().withHeader('Total fats').displayAs('mass').alignTo('right'),
+            totalProtein: dataForge.TableColumn().withHeader('Total protein').displayAs('mass').alignTo('right')
 
         });
 
