@@ -31,7 +31,6 @@ function controller($scope, registry, $filter, wireEvents){
 
         var fields = $scope.fields = registry.detailViewDefinition(ctrl.detailView);
         var Model = registry.dataModel(ctrl.modelName);
-        copy();
 
         (function registerWatches(){
 
@@ -64,9 +63,6 @@ function controller($scope, registry, $filter, wireEvents){
         }
 
         $scope.handleEditClick = function(){
-            if(!ctrl.item) {
-                $scope.item = new Model();
-            }
             enableInput();
         }
 
@@ -109,16 +105,16 @@ function controller($scope, registry, $filter, wireEvents){
             var item = $scope.item;
             if(!item) return null;
 
-            var value = resolveValue(item, p);
+            var value = resolveValue();
             if(!value || value !== value) return null;
 
-            var filter = fields[p].filter ? $filter(fields[p].filter) : null;
+            var filter = resolveFilter();
             value = filter ? filter(value) : value;
             return value;
 
-            function resolveValue(item, p){
+            function resolveValue(){
                 if(fields[p].reflect) {
-                    return (fields[p].reflect.bind(item))();
+                    return (fields[p].reflect.call(item))();
                 }
                 if (item[p]) {
                     if (isFunction(item[p])) {
@@ -128,10 +124,19 @@ function controller($scope, registry, $filter, wireEvents){
                 }
                 return null;
             }
+
+            function resolveFilter(){
+                console.log(p)
+                console.log(fields[p])
+                var filter = fields[p].filter;
+                if(isFunction(filter)){
+                    filter = filter.call(item);
+                }
+                return filter ? $filter(filter) : null;
+            }
         }
 
         $scope.handleModelChange = function(){
-            console.log($scope.form.$valid)
             $scope.item.dirty = true;
         }
 
@@ -148,13 +153,14 @@ function controller($scope, registry, $filter, wireEvents){
         }
 
         function enableInput(){
-            console.log('caought')
+            if(!ctrl.item) {
+                $scope.item = new Model();
+            }
             $scope.inputEnabled = true;
         }
 
         function disableInput(){
             $scope.inputEnabled = false;
-            copy();
         }
 
         function isInputEnabled(){
@@ -167,10 +173,6 @@ function controller($scope, registry, $filter, wireEvents){
 
         function cancelInput(){
             copy();
-            if($scope.form){
-                $scope.form.$setPristine();
-                $scope.form.$setUntouched();
-            }
             disableInput();
         }
 
@@ -193,6 +195,10 @@ function controller($scope, registry, $filter, wireEvents){
 
         function copy(){
             $scope.item = angular.copy(ctrl.item);
+            if($scope.form){
+                $scope.form.$setPristine();
+                $scope.form.$setUntouched();
+            }
         }
     };
 

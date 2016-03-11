@@ -23,15 +23,14 @@ angular.module('dataForge')
             resetEvent:'@resetOn',
             enableEvent:'@enableOn',
             disableEvent:'@disableOn',
+            focusEvents:'@focusOn',
 
             newClick:'&onNewClick',
             editClick:'&onEditClick',
             deleteClick:'&onDeleteClick',
             syncClick:'&onSyncClick',
             onRowDblClick:'&',
-            onDelKeyUp:'&',
-            onRightArrowKeyDown:'&',
-            onLeftArrowKeyDown:'&'
+            onDelKeyUp:'&'
         },
         controller: ['$scope', 'dataForge_registry', 'dataForge_util_leftProject', 'dataForge_util_leftMap','dataForge_util_resolveComparator', 'cache', 'selection', '$filter', controller]
     });
@@ -97,7 +96,6 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
             });
 
             $scope.$on(ctrl.selectItemEvent, function handleSelectItem($event, item){
-                console.log(item)
                 selectItem(item);
             });
 
@@ -115,20 +113,37 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
             return cache.value();
         }
 
+        $scope.resolveHeader = function(p){
+            return sprintf('%s%s', columns[p].header, typeof reverse[p] === 'undefined' ? '' : reverse[p] ? '▼' : '▲');
+        }
+
         $scope.resolveValue = function(item, p){
             if(!item[p]) return null;
-            var value = resolveValue(item, p);
+            var value = resolveValue();
             if(value !== value) return null;
-            value = columns[p].filter ? $filter(columns[p].filter)(value) : value;
+            var filter = resolveFilter();
+            value = filter ? filter(value) : value;
             return value;
 
-            function resolveValue(item, p){
+            function resolveValue(){
                 if(columns[p].reflect){
-                    return columns[p].reflect(item);
+                    console.log(columns[p].reflect)
+                    return columns[p].reflect.call(item);
                 } else if(item[p].constructor === Function){
                     return item[p]();
                 }
                 return item[p];
+            }
+
+            function resolveFilter(){
+                var filter = columns[p].filter;
+                if(filter){
+                    if(isFunction(filter)){
+                        filter = filter.call(item);
+                    }
+                    return $filter(filter);
+                }
+                return null;
             }
         }
 
@@ -151,16 +166,8 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
         $scope.handleKeyDown = function($event){
             keysPressed[$event.which] = true;
             switch ($event.which){
-                case 37:{
-                    ctrl.onLeftArrowKeyDown();
-                    break;
-                }
                 case 38:{
                     handleUpArrowKeyDown();
-                    break;
-                }
-                case 39:{
-                    ctrl.onRightArrowKeyDown();
                     break;
                 }
                 case 40:{
@@ -180,6 +187,7 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
 
         function handleArrowKey(down){
             var items = $scope.items();
+            if(items.length === 0) return;
             if(!lastTouchedItem){
                 selectItem(items[0]);
             } else {
@@ -209,11 +217,10 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
         }
 
         $scope.handleHeaderClick = function(p){
-            if(p === $scope.orderCriteria){
-                $scope.reverse[p] = !$scope.reverse[p];
-            } else {
-                $scope.reverse[p] = false;
+            if(p !== $scope.orderCriteria){
+                delete($scope.reverse[$scope.orderCriteria])
             }
+            $scope.reverse[p] = !$scope.reverse[p];
             $scope.orderCriteria = p;
         }
 
@@ -309,6 +316,10 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
             selection.select(items[i]);
             lastSelectedItem = items[i];
             triggerSelecteditemsChanged();
+        }
+
+        function isFunction(f){
+            return angular.isFunction(f);
         }
 
     }

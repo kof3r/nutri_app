@@ -99,23 +99,6 @@ function controller($scope, $window, $timeout, recipeSvc, ingredientService){
             return $scope.selectedIngredients.length === 1 ? $scope.selectedIngredients[0].name : 'Ingredient panel';
         }
 
-        $scope.saveRecipe = function(recipe){
-            if(recipe.isNew()){
-                recipeSvc.put(recipe).then(function(recipe){
-                    addToRecipes(recipe);
-                    selectRecipe(recipe);
-                });
-            } else {
-                recipeSvc.post(recipe).then(function(updated){
-                    //TODO: Možda bi trebalo dodati preko metode modela...
-                    updated.ingredients = recipe.ingredients;
-                    removeFromRecipes(recipe);
-                    addToRecipes(updated);
-                    selectRecipe(updated);
-                });
-            }
-        }
-
         $scope.saveIngredient = function(item){
             getSelectedRecipe().addIngredient(item);
         };
@@ -229,6 +212,23 @@ function controller($scope, $window, $timeout, recipeSvc, ingredientService){
 
         function disableListViews(){
             $scope.$broadcast('enablingInput');
+        }
+
+        $scope.saveRecipe = function(recipe){
+            if(recipe.isNew()){
+                recipeSvc.put(recipe).then(function(recipe){
+                    addToRecipes(recipe);
+                    selectRecipe(recipe);
+                });
+            } else {
+                recipeSvc.post(recipe).then(function(updated){
+                    //TODO: Možda bi trebalo dodati preko metode modela...
+                    updated.ingredients = recipe.ingredients;
+                    removeFromRecipes(recipe);
+                    addToRecipes(updated);
+                    selectRecipe(updated);
+                });
+            }
         }
 
         function deleteSelectedRecipes(){

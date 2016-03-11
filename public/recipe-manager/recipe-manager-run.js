@@ -32,8 +32,10 @@ angular.module('recipeManager')
 
             name: dataForge.FormField().labelAs('Name').ofType('text')
                 .validate('required', 'Name is required.'),
-            amount: dataForge.FormField().labelAs('Amount').ofType('number').withStep(0.1).displayAs('mass')
+            amount: dataForge.FormField().labelAs('Amount').ofType('number').withStep(0.1).displayAs(filter)
                 .validate('range:0', 'Positive values only.'),
+            measure: dataForge.FormField().labelAs('Measure').ofType(['mass', 'volume', 'quantity'])
+                .validate('required', 'Please choose a measure.'),
             caloriesNominal: dataForge.FormField().labelAs('Nominal').displayAs('energy'),
             carbs: dataForge.FormField().labelAs('Carbs').ofType('number').withStep(0.1).displayAs('mass')
                 .validate('range:0:100', '[0 - 100]'),
@@ -47,12 +49,16 @@ angular.module('recipeManager')
         dataForge.registerTableView('ingredientTableView', {
 
             name: dataForge.TableColumn().withHeader('Name'),
-            amount: dataForge.TableColumn().withHeader('Amount').displayAs('mass').alignTo('right'),
+            amount: dataForge.TableColumn().withHeader('Amount').displayAs(filter).alignTo('right'),
             totalCalories: dataForge.TableColumn().withHeader('Total calories').displayAs('energy').alignTo('right'),
             totalCarbs: dataForge.TableColumn().withHeader('Total carbs').displayAs('mass').alignTo('right'),
             totalFats: dataForge.TableColumn().withHeader('Fats').displayAs('mass').alignTo('right'),
             totalProtein: dataForge.TableColumn().withHeader('Protein').displayAs('mass').alignTo('right')
 
         });
+
+        function filter(){
+            return this.measure;
+        }
 
     }])

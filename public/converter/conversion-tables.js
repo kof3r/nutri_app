@@ -15,3 +15,7 @@ angular.module('conversionTables', [])
         kcal: 1.0,
         kj: 0.239006
     })
+
+    .value('mlsPerUnitTable', {
+        ml: 1.0
+    })

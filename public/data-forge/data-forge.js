@@ -4,7 +4,7 @@
 
 //TODO: reflect = function(self, sve_druge);
 
-angular.module('dataForge', ['dataForge_util'])
+angular.module('dataForge', ['dataForge_util', 'dataForge_directives'])
 
     .factory('dataForge', ['formField', 'tableColumn', 'dataForge_registry', function(FormField, TableColumn, registry){
 
@@ -64,6 +64,11 @@ angular.module('dataForge', ['dataForge_util'])
             return this;
         }
 
+        FormField.prototype.Self = function(reflect){
+            this.reflect = reflect;
+            return this;
+        }
+
         FormField.prototype.validate = function(validator, message){
             this.validators.push({validator: validator, message: message});
             return this;
@@ -86,6 +91,11 @@ angular.module('dataForge', ['dataForge_util'])
 
         TableColumn.prototype.displayAs = function(filter){
             this.filter = filter;
+            return this;
+        }
+
+        TableColumn.prototype.Self = function(reflect){
+            this.reflect = reflect;
             return this;
         }
 

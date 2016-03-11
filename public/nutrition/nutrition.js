@@ -20,4 +20,16 @@ angular.module('nutrition', ['converter', 'models', 'settings'])
         return function(value){
             return value.toFixed(1) + ' ' + setting.value();
         }
-    }]);
+    }])
+
+    .filter('volume', ['settingsUnitsVolume', function(setting){
+        return function(value){
+            return value.toFixed(1) + ' ' + setting.value();
+        }
+    }])
+
+    .filter('quantity', function(){
+        return function(value){
+            return value.toFixed(0);
+        }
+    });

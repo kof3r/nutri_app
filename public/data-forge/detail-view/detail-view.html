@@ -25,8 +25,8 @@
                     <div class="col-sm-{{secondColumnWidth()}}">
                         <div style="position: relative; top: 7px; left: 13px" ng-show="whenShowLabel(p)" ng-bind="displayValue(p)"></div>
                         <input name="{{p}}" class="form-control" ng-show="whenShowInput(p)" ng-if="doesInputRender(p)" type="{{f.type || 'text'}}" step="{{f.step || ''}}" ng-model="item[p]" ng-change="handleModelChange()" validate="{{p}}">
-                        <select class="form-control" ng-show="whenShowSelect(p)" ng-if="doesSelectRender(p)" ng-model="item[p]" ng-change="handleModelChange()">
-                            <option ng-repeat="o in f.type">{{o}}</option>
+                        <select name="{{p}}" class="form-control" ng-show="whenShowSelect(p)" ng-if="doesSelectRender(p)" ng-model="item[p]" ng-options="o for o in f.type" ng-change="handleModelChange()">
+
                         </select>
                     </div>
                     <p class="col-sm-offset-4 col-sm-8 help-block " ng-repeat="v in resolveValidators(p)" ng-show="(form.$submitted || form[p].$touched) && form[p].$error[v.validator]">{{v.message}}</p>

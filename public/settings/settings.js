@@ -26,4 +26,8 @@ angular.module('settings', ['conversionTables'])
 
     .factory('settingsUnitsEnergy', ['settingConstructor', 'calsPerUnitTable', function(Setting, calorieTable){
         return new Setting('kcal', Object.keys(calorieTable));
+    }])
+
+    .factory('settingsUnitsVolume', ['settingConstructor', 'mlsPerUnitTable', function(Setting, volumeTable){
+        return new Setting('ml', Object.keys(volumeTable));
     }]);

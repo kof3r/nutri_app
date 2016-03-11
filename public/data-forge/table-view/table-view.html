@@ -16,7 +16,7 @@
         <table class="table">
             <thead>
             <tr>
-                <th ng-repeat="(p, c) in columns" ng-click="disabled || handleHeaderClick(p)">{{c.header}}</th>
+                <th ng-repeat="(p, c) in columns" ng-click="disabled || handleHeaderClick(p)" ng-bind="resolveHeader(p)"></th>
             </tr>
             </thead>
             <tbody>

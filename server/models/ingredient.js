@@ -40,7 +40,7 @@ module.exports = {
         },
 
         measure:{
-            type: Seq.ENUM(['mass', 'volume']),
+            type: Seq.ENUM(['mass', 'volume', 'quantity']),
             defaultValue: 'mass'
         }
 

@@ -14,8 +14,16 @@ angular.module('nutrition')
 
         Ingredient.prototype = new Base();
 
+        function nominalAmount(){
+            if(this.measure !== 'quantity'){
+                return 100;
+            } else {
+                return 1;
+            }
+        }
+
         function nutrientAmount(nutrient){
-            return this[nutrient] * this.amount / 100;
+            return this[nutrient] * this.amount / nominalAmount.call(this);
         }
 
         Ingredient.prototype.totalCarbs = function(){
@@ -39,7 +47,7 @@ angular.module('nutrition')
         Ingredient.prototype.caloriesNominal = caloriesNominal;
 
         Ingredient.prototype.totalCalories = function(){
-            return caloriesNominal.call(this) * this.amount / 100;
+            return caloriesNominal.call(this) * this.amount / nominalAmount.call(this);
         }
 
         return Ingredient;
