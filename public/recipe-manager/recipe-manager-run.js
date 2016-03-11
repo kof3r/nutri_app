@@ -11,13 +11,22 @@ angular.module('recipeManager')
                 return false;
             }
             return true;
-        })
+        });
+
+        dataForge.registerValidator('minLength', function(modelValue, viewValue){
+            if(!modelValue || modelValue.length < 3){
+                return false;
+            }
+            return true;
+        });
 
         dataForge.registerDataModel('recipe', Recipe);
 
         dataForge.registerDetailView('recipeDetailView', {
 
-            name: dataForge.FormField().labelAs('Name').ofType('text').validate('required', 'Please provide a name for your recipe.'),
+            name: dataForge.FormField().labelAs('Name').ofType('text')
+                .validate('required', 'Please provide a name for your recipe.')
+                .validate('minLength', 'Your recipe name must be longer than two characters.'),
             totalCalories: dataForge.FormField().labelAs('Calories').displayAs('energy'),
             totalCarbs: dataForge.FormField().labelAs('Carbs').displayAs('mass'),
             totalFats: dataForge.FormField().labelAs('Fats').displayAs('mass'),

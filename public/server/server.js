@@ -61,7 +61,7 @@ angular.module('server', ['packer', 'util'])
             put: function(recipe){
                 return $http.put('api/recipe', packer.packRecipe(recipe)).then(function(res){
                     if(res.data.error){
-                        messageQueue.addMessages(error);
+                        messageQueue.addMessages(res.data.error);
                     } else {
                         messageQueue.addMessages(sprintf('Successfully created \'%s\'.', recipe.name));
                     }

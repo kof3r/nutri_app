@@ -31,6 +31,7 @@ function controller($scope, registry, $filter, wireEvents){
 
         var fields = $scope.fields = registry.detailViewDefinition(ctrl.detailView);
         var Model = registry.dataModel(ctrl.modelName);
+        copy();
 
         (function registerWatches(){
 
@@ -70,9 +71,15 @@ function controller($scope, registry, $filter, wireEvents){
             cancelInput();
         }
 
-        $scope.handleSaveClick = function(){
-            ctrl.submitItem({item: $scope.item});
-            disableInput();
+        $scope.submitItem = function(isValid){
+            if(isValid){
+                ctrl.submitItem({item: $scope.item});
+                if($scope.form){
+                    $scope.form.$setPristine();
+                    $scope.form.$setUntouched();
+                }
+                disableInput();
+            }
         }
 
         $scope.whenShowLabel = function(p){
@@ -96,7 +103,7 @@ function controller($scope, registry, $filter, wireEvents){
         }
 
         $scope.whenShowErrors = function(p){
-            return !isReadOnly(p) && form && (form.$submitted || (form[p] && form[p].$touched));
+            return !isReadOnly(p) && $scope.form && ($scope.form.$submitted || $scope.form[p].$touched);
         }
 
         $scope.displayValue = function(p){
@@ -125,6 +132,7 @@ function controller($scope, registry, $filter, wireEvents){
         }
 
         $scope.handleModelChange = function(){
+            console.log($scope.form.$valid)
             $scope.item.dirty = true;
         }
 
@@ -158,6 +166,10 @@ function controller($scope, registry, $filter, wireEvents){
 
         function cancelInput(){
             copy();
+            if($scope.form){
+                $scope.form.$setPristine();
+                $scope.form.$setUntouched();
+            }
             disableInput();
         }
 
@@ -183,10 +195,6 @@ function controller($scope, registry, $filter, wireEvents){
                 $scope.item = angular.copy(ctrl.item);
             } else {
                 $scope.item = new Model();
-            }
-            if($scope.form){
-                $scope.form.$setPristine();
-                $scope.form.$setUntouched();
             }
         }
     };
