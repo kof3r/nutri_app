@@ -60,6 +60,7 @@ function controller($scope, registry, $filter, wireEvents){
         }
 
         $scope.handleNewClick = function(){
+            $scope.item = new Model();
             enableInput();
         }
 
@@ -74,10 +75,6 @@ function controller($scope, registry, $filter, wireEvents){
         $scope.submitItem = function(isValid){
             if(isValid){
                 ctrl.submitItem({item: $scope.item});
-                if($scope.form){
-                    $scope.form.$setPristine();
-                    $scope.form.$setUntouched();
-                }
                 disableInput();
             }
         }
@@ -154,6 +151,7 @@ function controller($scope, registry, $filter, wireEvents){
 
         function disableInput(){
             $scope.inputEnabled = false;
+            copy();
         }
 
         function isInputEnabled(){
@@ -191,11 +189,7 @@ function controller($scope, registry, $filter, wireEvents){
         }
 
         function copy(){
-            if(ctrl.item){
-                $scope.item = angular.copy(ctrl.item);
-            } else {
-                $scope.item = new Model();
-            }
+            $scope.item = angular.copy(ctrl.item);
         }
     };
 
@@ -215,7 +209,11 @@ angular.module('dataForge')
                     var validators = scope.resolveValidators(attrs.validate);
 
                     validators.forEach(function(validatorObj){
-                        var validator = registry.validator(validatorObj.validator);
+                        var validatorInvocation = validatorObj.validator.split(':');
+                        var validator = registry.validator(validatorInvocation[0]);
+                        if(validator.length === 0){
+                            validator = validator.apply(ctrl, validatorInvocation);
+                        }
 
                         ctrl.$validators[validatorObj.validator] = validator.bind(ctrl);
                     })

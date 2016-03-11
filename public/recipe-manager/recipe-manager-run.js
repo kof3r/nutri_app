@@ -6,27 +6,12 @@ angular.module('recipeManager')
 
     .run(['dataForge', 'Recipe', 'Ingredient', function(dataForge, Recipe, Ingredient){
 
-        dataForge.registerValidator('required', function(modelValue, viewValue){
-            if(this.$isEmpty(modelValue)){
-                return false;
-            }
-            return true;
-        });
-
-        dataForge.registerValidator('minLength', function(modelValue, viewValue){
-            if(!modelValue || modelValue.length < 3){
-                return false;
-            }
-            return true;
-        });
-
         dataForge.registerDataModel('recipe', Recipe);
 
         dataForge.registerDetailView('recipeDetailView', {
 
             name: dataForge.FormField().labelAs('Name').ofType('text')
-                .validate('required', 'Please provide a name for your recipe.')
-                .validate('minLength', 'Your recipe name must be longer than two characters.'),
+                .validate('required', 'Name is required.'),
             totalCalories: dataForge.FormField().labelAs('Calories').displayAs('energy'),
             totalCarbs: dataForge.FormField().labelAs('Carbs').displayAs('mass'),
             totalFats: dataForge.FormField().labelAs('Fats').displayAs('mass'),
@@ -45,12 +30,16 @@ angular.module('recipeManager')
 
         dataForge.registerDetailView('ingredientDetailView', {
 
-            name: dataForge.FormField().labelAs('Name').ofType('text'),
+            name: dataForge.FormField().labelAs('Name').ofType('text')
+                .validate('required', 'Name is required.'),
             amount: dataForge.FormField().labelAs('Amount').ofType('number').withStep(0.1).displayAs('mass'),
             caloriesNominal: dataForge.FormField().labelAs('Nominal').displayAs('energy'),
-            carbs: dataForge.FormField().labelAs('Carbs').ofType('number').withStep(0.1).displayAs('mass'),
-            fats: dataForge.FormField().labelAs('Fats').ofType('number').withStep(0.1).displayAs('mass'),
+            carbs: dataForge.FormField().labelAs('Carbs').ofType('number').withStep(0.1).displayAs('mass')
+                .validate('range:0:100', '[0 - 100]'),
+            fats: dataForge.FormField().labelAs('Fats').ofType('number').withStep(0.1).displayAs('mass')
+                .validate('range:0:100', '[0 - 100]'),
             protein: dataForge.FormField().labelAs('Protein').ofType('number').withStep(0.1).displayAs('mass')
+                .validate('range:0:100', '[0 - 100]')
 
         });
 
