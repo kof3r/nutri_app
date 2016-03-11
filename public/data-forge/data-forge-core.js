@@ -21,10 +21,10 @@ angular.module('dataForge')
                 if(this.$isEmpty(modelValue)){
                     return true;
                 }
-                if(from && viewValue < from){
+                if((from === 0 || from) && viewValue < from){
                     return false;
                 }
-                if(to && to < viewValue){
+                if((to === 0 || to) && to < viewValue){
                     return false;
                 }
                 return true;
