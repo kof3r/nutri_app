@@ -16,7 +16,6 @@ angular.module('dataForge')
 
             var from = parseFloat(arguments[1]);
             var to = parseFloat(arguments[2]);
-            console.log(arguments[1])
 
             return function(modelValue, viewValue){
                 if(this.$isEmpty(modelValue)){
@@ -25,7 +24,7 @@ angular.module('dataForge')
                 if(from && viewValue < from){
                     return false;
                 }
-                if(to && viewValue > to){
+                if(to && to < viewValue){
                     return false;
                 }
                 return true;

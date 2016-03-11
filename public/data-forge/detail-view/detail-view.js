@@ -60,11 +60,13 @@ function controller($scope, registry, $filter, wireEvents){
         }
 
         $scope.handleNewClick = function(){
-            $scope.item = new Model();
             enableInput();
         }
 
         $scope.handleEditClick = function(){
+            if(!ctrl.item) {
+                $scope.item = new Model();
+            }
             enableInput();
         }
 
@@ -146,6 +148,7 @@ function controller($scope, registry, $filter, wireEvents){
         }
 
         function enableInput(){
+            console.log('caought')
             $scope.inputEnabled = true;
         }
 
