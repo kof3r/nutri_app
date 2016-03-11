@@ -32,4 +32,24 @@ angular.module('dataForge')
 
         })
 
+        registry.registerValidator('length', function(){
+
+            var from = parseInt(arguments[1]);
+            var to = parseInt(arguments[2]);
+
+            return function(modelValue, viewValue){
+                if(this.$isEmpty(modelValue)){
+                    return true;
+                }
+                if(from && modelValue.length < from){
+                    return false;
+                }
+                if(to && to < modelValue.length){
+                    return false;
+                }
+                return true;
+            }.bind(this);
+
+        })
+
     }]);

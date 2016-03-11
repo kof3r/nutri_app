@@ -32,7 +32,8 @@ angular.module('recipeManager')
 
             name: dataForge.FormField().labelAs('Name').ofType('text')
                 .validate('required', 'Name is required.'),
-            amount: dataForge.FormField().labelAs('Amount').ofType('number').withStep(0.1).displayAs('mass'),
+            amount: dataForge.FormField().labelAs('Amount').ofType('number').withStep(0.1).displayAs('mass')
+                .validate('range:0', 'Positive values only.'),
             caloriesNominal: dataForge.FormField().labelAs('Nominal').displayAs('energy'),
             carbs: dataForge.FormField().labelAs('Carbs').ofType('number').withStep(0.1).displayAs('mass')
                 .validate('range:0:100', '[0 - 100]'),
