@@ -26,6 +26,10 @@ angular.module('dataForge', ['dataForge_util'])
                 registry.registerDetailView(name, definition);
             },
 
+            registerValidator: function(name, validator){
+                registry.registerValidator(name, validator);
+            },
+
             registerDataModel: function(name, dataModel){
                 registry.registerDataModel(name, dataModel);
             },
@@ -34,7 +38,11 @@ angular.module('dataForge', ['dataForge_util'])
 
     .factory('formField', function(){
 
-        function FormField(){ }
+        function FormField(){
+
+            this.validators = [];
+
+        }
 
         FormField.prototype.labelAs = function(label){
             this.field = label;
@@ -53,6 +61,11 @@ angular.module('dataForge', ['dataForge_util'])
 
         FormField.prototype.displayAs = function(filter){
             this.filter = filter;
+            return this;
+        }
+
+        FormField.prototype.validate = function(validator, message){
+            this.validators.push({validator: validator, message: message});
             return this;
         }
 

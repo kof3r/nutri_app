@@ -6,11 +6,18 @@ angular.module('recipeManager')
 
     .run(['dataForge', 'Recipe', 'Ingredient', function(dataForge, Recipe, Ingredient){
 
+        dataForge.registerValidator('required', function(modelValue, viewValue){
+            if(this.$isEmpty(modelValue)){
+                return false;
+            }
+            return true;
+        })
+
         dataForge.registerDataModel('recipe', Recipe);
 
         dataForge.registerDetailView('recipeDetailView', {
 
-            name: dataForge.FormField().labelAs('Name').ofType('text'),
+            name: dataForge.FormField().labelAs('Name').ofType('text').validate('required', 'Please provide a name for your recipe.'),
             totalCalories: dataForge.FormField().labelAs('Calories').displayAs('energy'),
             totalCarbs: dataForge.FormField().labelAs('Carbs').displayAs('mass'),
             totalFats: dataForge.FormField().labelAs('Fats').displayAs('mass'),

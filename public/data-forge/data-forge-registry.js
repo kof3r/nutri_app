@@ -8,6 +8,7 @@ angular.module('dataForge')
         var tableViewDefinitions = Object.create(null);
         var detailViewDefinitions = Object.create(null);
         var dataModels = Object.create(null);
+        var validators = Object.create(null);
 
         return {
 
@@ -41,6 +42,14 @@ angular.module('dataForge')
 
             dataModel: function(name){
                 return dataModels[name];
+            },
+
+            registerValidator: function(name, validator){
+                validators[name] = validator;
+            },
+
+            validator: function(name){
+                return validators[name];
             }
         }
 

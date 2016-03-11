@@ -1,6 +1,6 @@
 
 
-<fieldset>
+<fieldset  data-forge-validator>
     <legend>{{$ctrl.title}}</legend>
 
 
@@ -24,17 +24,17 @@
                     <label for="{{p}}" class="col-sm-{{firstColumnWidth()}} control-label">{{f.field}}</label>
                     <div class="col-sm-{{secondColumnWidth()}}">
                         <div style="position: relative; top: 7px; left: 13px" ng-show="whenShowLabel(p)" ng-bind="displayValue(p)"></div>
-                        <input id="{{p}}" name="{{p}}" class="form-control" ng-show="whenShowInput(p)" ng-if="doesInputRender(p)" type="{{f.type || 'text'}}" step="{{f.step || ''}}" ng-model="item[p]" ng-change="handleModelChange()">
+                        <input id="{{p}}" name="{{p}}" class="form-control" ng-show="whenShowInput(p)" ng-if="doesInputRender(p)" type="{{f.type || 'text'}}" step="{{f.step || ''}}" ng-model="item[p]" ng-change="handleModelChange()" validate="{{p}}">
                         <select class="form-control" ng-show="whenShowSelect(p)" ng-if="doesSelectRender(p)" ng-model="item[p]" ng-change="handleModelChange()">
                             <option ng-repeat="o in f.type">{{o}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group" ng-if="whenShowErrors(p)">
+                <div class="form-group" ng-if="form.$submitted || form[p].$touched">
                     <label class="col-sm-{{firstColumnWidth()}} control-label"></label>
                     <div class="col-sm-{{secondColumnWidth()}}">
-                        <label>
-                            Errors.
+                        <label ng-repeat="v in resolveValidators(p)" ng-show="form.name.$error[v.validator]">
+                            {{v.message}}
                         </label>
                     </div>
                 </div>

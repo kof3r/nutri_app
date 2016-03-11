@@ -136,6 +136,10 @@ function controller($scope, registry, $filter, wireEvents){
             return 12 - $scope.firstColumnWidth();
         }
 
+        $scope.resolveValidators = function(p){
+            return fields[p].validators;
+        }
+
         function enableInput(){
             $scope.inputEnabled = true;
         }
@@ -180,7 +184,36 @@ function controller($scope, registry, $filter, wireEvents){
             } else {
                 $scope.item = new Model();
             }
+            if($scope.form){
+                $scope.form.$setPristine();
+                $scope.form.$setUntouched();
+            }
         }
     };
 
 }
+
+angular.module('dataForge')
+    .directive('validate', ['dataForge_registry', function(registry){
+
+
+
+        return {
+            restrict: 'A',
+            require:'ngModel',
+            link: function(scope, elem, attrs, ctrl){
+
+                attrs.$observe('validate', function(){
+                    var validators = scope.resolveValidators(attrs.validate);
+
+                    validators.forEach(function(validatorObj){
+                        var validator = registry.validator(validatorObj.validator);
+
+                        ctrl.$validators[validatorObj.validator] = validator.bind(ctrl);
+                    })
+                })
+
+            }
+        }
+
+    }])
