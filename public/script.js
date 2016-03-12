@@ -2,7 +2,16 @@
  * Created by ggrab on 23.2.2016..
  */
 
-angular.module('NutriApp', ['recipeManager', 'util'])
+angular.module('NutriApp', ['recipeManager', 'ngRoute'])
+
+    .config(['$routeProvider', function($route){
+
+        $route.when('/', {
+            template:'<recipe-manager></recipe-manager>'
+        })
+
+    }])
+
     .controller('Controller', ['$rootScope', '$scope', function($rootScope, $scope){
 
         this.$onInit = function(){
