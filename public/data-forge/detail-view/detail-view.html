@@ -1,13 +1,13 @@
 
 
-<fieldset  data-forge-validator>
+<fieldset>
     <legend>{{$ctrl.title}}</legend>
 
 
         <form class="form-horizontal" name="form" novalidate>
 
             <div class="form-group">
-                <div class="col-sm-offset-{{firstColumnWidth()}} col-sm-{{secondColumnWidth()}}">
+                <div class="col-sm-12">
                     <div class="btn-group" ng-show="isInputEnabled()">
                         <button class="btn btn-primary nutri-btn" ng-click="submitItem(form.$valid)" type="submit">Save</button>
                         <button class="btn btn-primary nutri-btn" ng-click="handleCancelClick()" type="reset">Cancel</button>

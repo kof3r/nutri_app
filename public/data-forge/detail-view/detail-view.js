@@ -126,8 +126,6 @@ function controller($scope, registry, $filter, wireEvents){
             }
 
             function resolveFilter(){
-                console.log(p)
-                console.log(fields[p])
                 var filter = fields[p].filter;
                 if(isFunction(filter)){
                     filter = filter.call(item);
@@ -141,7 +139,7 @@ function controller($scope, registry, $filter, wireEvents){
         }
 
         $scope.firstColumnWidth = function(){
-            return 4;
+            return 5;
         }
 
         $scope.secondColumnWidth = function(){

@@ -6,10 +6,10 @@ angular.module('recipeManager', ['server', 'util', 'dataForge', 'nutrition'])
 
     .component('recipeManager', {
         templateUrl: 'recipe-manager/recipe-manager.html',
-        controller: ['$scope', '$window', '$timeout', 'serverRecipeService', 'serverIngredientService', controller]
+        controller: ['$scope', '$window', 'serverRecipeService', 'serverIngredientService', controller]
     })
 
-function controller($scope, $window, $timeout, recipeSvc, ingredientService){
+function controller($scope, $window, recipeSvc, ingredientService){
 
     this.$onInit = function(){
 
