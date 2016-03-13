@@ -17,7 +17,13 @@ router.get('/', function(req, res){
     Recipe.findAll({
         include:{model: Ingredient, required:false}
     }).then(function(recipes){
-        res.json(new Response(recipes, recipes ? null : 'Failed to retrieve recipes.'));
+        if(recipes){
+            res.json(new Response(recipes));
+        } else {
+            res.json(new Response(null, 'Failed to retrieve recipes.'));
+        }
+    }).catch(function(error){
+        res.json(new Response(null, 'Failed to retrieve recipes.'))
     })
 });
 
@@ -55,9 +61,9 @@ router.delete('/:id', function(req, res){
 
     Recipe.destroy({ where: { id: id } }).then(function(n){
         if(n === 1){
-            res.json(new Response());
+            res.json(new Response(n));
         } else {
-            res.json(new Response(null, 'Failed to delete recipe.'));
+            res.json(new Response(0, 'Failed to delete recipe.'));
         }
     })
 });

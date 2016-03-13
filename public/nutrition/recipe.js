@@ -4,7 +4,7 @@
 
 angular.module('nutrition')
 
-    .factory('Recipe', ['mapProperties', 'modelBase', 'Ingredient', function(mapProperties, Base, Ingredient){
+    .factory('Recipe', ['modelBase', function(Base){
 
         function Recipe(){
 

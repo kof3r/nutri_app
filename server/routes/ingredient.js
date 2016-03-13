@@ -40,7 +40,7 @@ router.delete('/:id', function(req, res){
 
     Ingredient.destroy({ where: { id: id } }).then(function(n){
         if(n === 1){
-            res.json(new Response());
+            res.json(new Response(n));
         } else {
             res.json(new Response(null, 'Failed to delete ingredient.'));
         }

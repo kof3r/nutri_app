@@ -215,6 +215,7 @@ function controller($scope, $window, recipeSvc, ingredientService){
         }
 
         $scope.saveRecipe = function(recipe){
+            console.log(recipe);
             if(recipe.isNew()){
                 recipeSvc.put(recipe).then(function(recipe){
                     addToRecipes(recipe);
@@ -245,8 +246,11 @@ function controller($scope, $window, recipeSvc, ingredientService){
             function _delete(){
 
                 Promise.all($scope.selectedRecipes.map(function(recipe){
-                    return recipeSvc.delete(recipe).then(function(){
-                        removeFromRecipes(recipe);
+                    return recipeSvc.delete(recipe.id).then(function(count){
+                        console.log(count)
+                        if(count){
+                            removeFromRecipes(recipe);
+                        }
                     }).catch();
                 }))
             }
@@ -285,7 +289,7 @@ function controller($scope, $window, recipeSvc, ingredientService){
                         recipe.removeIngredient(ingredient);
                     }
                 } else {
-                    ingredientService.delete(ingredient).then(function(){
+                    ingredientService.delete(ingredient.id).then(function(){
                         var recipe = $scope.recipes.find(function(recipe) { return recipe.id === ingredient.recipe_id; });
                         if(recipe){
                             recipe.removeIngredient(ingredient);

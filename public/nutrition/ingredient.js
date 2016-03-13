@@ -5,7 +5,7 @@
 angular.module('nutrition')
 
     //TODO: Odgovornost mapiranja bi trebalo maknut iz modela
-    .factory('Ingredient', ['mapProperties', 'modelBase', 'calorieConstant', function(mapProperties, Base, calConst){
+    .factory('Ingredient', ['modelBase', 'calorieConstant', function(Base, calConst){
         function Ingredient(){
 
             this.dirty = false;

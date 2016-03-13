@@ -2,133 +2,115 @@
  * Created by ggrab on 23.2.2016..
  */
 
-angular.module('server', ['packer', 'util'])
+angular.module('server', ['util', 'nutrition'])
 
-    .factory('handleResponse', ['messageQueue', function(messageQueue){
-        return function(res){
-            if(res.data.error){
-                messageQueue.addMessages(res.data.error);
-                return Promise.reject(new Error('Rejection'));
-            }
-            var handler, messages;
-            if(arguments.length === 3){
-                handler = arguments[1];
-                messages = arguments[2];
-            } else if (arguments.length === 2){
-                if(arguments[1].constructor === Function){
-                    handler = arguments[1];
-                } else{
-                    messages = arguments[1];
+    .config(function(){
+        String.prototype.capitalizeFirstLetter = function() {
+            return this.charAt(0).toUpperCase() + this.slice(1);
+        }
+    })
+
+    .factory('serverService', ['$http', function($http){
+
+        function Service(path, packer, services){
+            this.path = path;
+            this.packer = packer;
+
+            if(services){
+                for(var serviceName in services){
+                    this[serviceName] = services[serviceName].bind(this);
                 }
             }
-            if(messages){
-                messageQueue.addMessages(messages);
-            }
-            if(handler){
-                return handler(res.data.response);
-            }
         }
-    }])
 
-    .factory('serverRecipeService', ['$http', 'packer', 'messageQueue', function($http, packer, messageQueue){
-        return {
+        function getError(res){
+            return res.data.error;
+        }
 
-            get: function(id){
-                if(arguments.length === 0){
-                    return $http.get('api/recipe').then(function(res){
-                        var response = res.data.response;
-                        var error = res.data.error;
-                        if(error){
-                            messageQueue.addMessages(error);
-                            return Promise.reject();
-                        }
-                        var messages;
-                        var recipes;
-                        if(response.constructor === Array){
-                            messages = response.map(function(recipe) { return sprintf('\'%s\' successfully loaded.', recipe.name); });
-                            recipes = response.map(function(recipe) { return packer.unpackRecipe(recipe); });
-                        } else{
-                            messages = sprintf('\'%s\' successfully loaded.', res.response.name);
-                            recipes = [];
-                            recipes.push(packer.unpackRecipe(response));
-                        }
-                        messageQueue.addMessages(messages);
-                        return recipes;
-                    })
+        function getResponse(res){
+            return res.data.response;
+        }
+
+        function errorHandler(service){
+            return this['on' + service.capitalizeFirstLetter() + 'Error'];
+        }
+
+        function successHandler(service){
+            return this['on' + service.capitalizeFirstLetter() + 'Success'];
+        }
+
+        function unpackResponse(response){
+            var service = this;
+            if(angular.isArray(response)){
+                return response.map(function(response) {
+                    return service.packer.unpack(response);
+                })
+            }
+            return this.packer.unpack(response);
+        }
+
+        function responseHandler(service){
+            return function(res){
+                var error = getError(res);
+                var response = getResponse(res);
+                if(error){
+                    var handler = errorHandler.call(this, service);
+                    handler && handler(error);
                 }
-            },
-
-            put: function(recipe){
-                return $http.put('api/recipe', packer.packRecipe(recipe)).then(function(res){
-                    if(res.data.error){
-                        messageQueue.addMessages(res.data.error);
-                    } else {
-                        messageQueue.addMessages(sprintf('Successfully created \'%s\'.', recipe.name));
-                    }
-                    return packer.unpackRecipe(res.data.response);
-                });
-            },
-
-            post: function(recipe){
-                return $http.post('api/recipe', packer.packRecipe(recipe)).then(function(res){
-                    if(res.data.error){
-                        messageQueue.addMessages(res.data.error);
-                    } else {
-                        messageQueue.addMessages(sprintf('Successfully updated %s.', recipe.name));
-                    }
-                    return packer.unpackRecipe(res.data.response);
-                });
-            },
-
-            delete: function(recipe){
-                return $http.delete('api/recipe/' + recipe.id).then(function(res){
-                    if(res.data.error){
-                        messageQueue.addMessages(res.data.error);
-                        return Promise.reject();
-                    }
-                    messageQueue.addMessages(sprintf('Successfully deleted \'%s\'.', recipe.name));
-                });
-            }
+                else {
+                    var handler = successHandler.call(this, service);
+                    handler && handler(response);
+                }
+                return angular.isObject(response) ? unpackResponse.call(this, response) : response;
+            }.bind(this);
         }
+
+        Service.prototype.get = function(id){
+            return $http.get(this.path + (id ? id : '')).then(responseHandler.call(this, 'get'));
+        }
+
+        Service.prototype.put = function(item){
+            return $http.put(this.path, this.packer.pack(item)).then(responseHandler.call(this, 'put'));
+        }
+
+        Service.prototype.post = function(item){
+            return $http.post(this.path, this.packer.pack(item)).then(responseHandler.call(this, 'post'));
+        }
+
+        Service.prototype.delete = function(id){
+            return $http.delete(this.path + (id ? id : '')).then(responseHandler.call(this, 'delete'));
+        }
+
+        return Service;
+
     }])
-    .factory('serverIngredientService', ['$http', 'packer', 'messageQueue', function($http, packer, messageQueue){
 
-        return {
+    .factory('serverRecipeService', ['serverService', 'recipePacker', 'messageQueue', function(Service, recipePacker, messageQueue){
 
-            put: function(ingredient){
-                return $http.put('api/ingredient', packer.packIngredient(ingredient)).then(function(res){
-                    if(res.data.error){
-                        messageQueue.addMessages(res.data.error);
-                        return Promise.reject();
-                    }
-                    messageQueue.addMessages(sprintf('Successfully saved \'%s\'.', ingredient.name));
-                    return packer.unpackIngredient(res.data.response);
-                })
-            },
+        var service = new Service('api/recipe/', recipePacker);
+        service.onGetSuccess = function(response){ messageQueue.addMessages(angular.isArray(response) ? response.map(function(recipe) { return sprintf('\'%s\' loaded.', recipe.name)}) : sprintf('\'%s\' loaded.', response.name)) };
+        service.onGetError = function(error) { messageQueue.addMessages(error) };
+        service.onPutSuccess = function(response) { messageQueue.addMessages(sprintf('\'%s\' created successfully.', response.name)) };
+        service.onPutError = function(error) { messageQueue.addMessages(error); };
+        service.onPostSuccess = function(response){ messageQueue.addMessages(sprintf('\'%s\' updated successfully.', response.name)) };
+        service.onPostError = function(error) { messageQueue.addMessages(error)}
+        service.onDeleteSuccess = function(response){ messageQueue.addMessages(sprintf('Recipe deleted successfully.', response.name)) };
+        service.onDeleteError = function(error) { messageQueue.addMessages(error)};
 
-            post: function(ingredient){
-                return $http.post('api/ingredient', packer.packIngredient(ingredient)).then(function(res){
-                    if(res.data.error){
-                        messageQueue.addMessages(res.data.error);
-                        return Promise.reject();
-                    }
-                    messageQueue.addMessages(sprintf('Successfully updated \'%s\'.', ingredient.name));
-                    return packer.unpackIngredient(res.data.response);
-                })
-            },
+        return service;
 
-            delete: function(ingredient){
-                var id = ingredient.id;
+    }])
 
-                return $http.delete('api/ingredient/' + id).then(function(res){
-                    if(res.data.error){
-                        messageQueue.addMessages(res.data.error);
-                        return Promise.reject();
-                    }
-                    messageQueue.addMessages(sprintf('Successfully deleted \'%s\'', ingredient.name));
-                })
+    .factory('serverIngredientService', ['serverService', 'ingredientPacker', 'messageQueue', function(Service, ingredientPacker, messageQueue){
 
-            }
-        }
+        var service = new Service('api/ingredient/', ingredientPacker);
+        service.onPutSuccess = function(response) { messageQueue.addMessages(sprintf('\'%s\' created successfully.', response.name)) };
+        service.onPutError = function(error) { messageQueue.addMessages(error); };
+        service.onPostSuccess = function(response){ messageQueue.addMessages(sprintf('\'%s\' updated successfully.', response.name)) };
+        service.onPostError = function(error) { messageQueue.addMessages(error)}
+        service.onDeleteSuccess = function(response){ messageQueue.addMessages(sprintf('Ingredient deleted successfully.', response.name)) };
+        service.onDeleteError = function(error) { messageQueue.addMessages(error)};
+
+        return service;
 
     }]);
