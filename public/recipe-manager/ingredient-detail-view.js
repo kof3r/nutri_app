@@ -20,7 +20,11 @@ angular.module('recipeManager')
             fats: new FormField().labelAs('Fats').ofType('number').withStep(0.1).displayAs('mass')
                 .validate('range:0:100', '[0 - 100]'),
             protein: new FormField().labelAs('Protein').ofType('number').withStep(0.1).displayAs('mass')
-                .validate('range:0:100', '[0 - 100]')
+                .validate('range:0:100', '[0 - 100]'),
+            totalCalories: new FormField().labelAs('Total calories').displayAs('energy'),
+            totalCarbs: new FormField().labelAs('Total carbs').displayAs('mass'),
+            totalFats: new FormField().labelAs('Total fats').displayAs('mass'),
+            totalProtein: new FormField().labelAs('Total protein').displayAs('mass')
 
         });
 
