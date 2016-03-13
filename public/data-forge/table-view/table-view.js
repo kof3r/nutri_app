@@ -32,16 +32,16 @@ angular.module('dataForge')
             onRowDblClick:'&',
             onDelKeyUp:'&'
         },
-        controller: ['$scope', 'dataForge_registry', 'dataForge_util_leftProject', 'dataForge_util_leftMap','dataForge_util_resolveComparator', 'cache', 'selection', '$filter', controller]
+        controller: ['$injector', '$scope', 'dataForge_util_leftMap', 'dataForge_util_resolveComparator', 'cache', 'selection', '$filter', controller]
     });
 
-function controller($scope, registry, leftProject, leftMap, resolveComparator, Cache, Selection, $filter){
+function controller($injector, $scope, leftMap, resolveComparator, Cache, Selection, $filter){
     var ctrl = this;
 
     this.$onInit = function(){
 
-        var columns = $scope.columns = registry.tableViewDefinition(ctrl.tableView);
-        var config = leftProject(registry.tableViewDefaults(), ctrl);
+        var tableView = $injector.get(ctrl.tableView);
+        var columns = $scope.columns = tableView.columns;
         var reverse = $scope.reverse = Object.create(null);
         var lastTouchedItem;
         var lastSelectedItem;
@@ -253,19 +253,19 @@ function controller($scope, registry, leftProject, leftMap, resolveComparator, C
         }
 
         $scope.resolveButtonStyle = function(){
-            return $scope.disabled ? config.disabledButtonStyle : {};
+            return $scope.disabled ? tableView.disabledButtonStyle : {};
         }
 
         $scope.resolveRowStyle = function(item){
             var style = {};
             if(selection.isSelected(item)){
-                leftMap(style, $scope.disabled ? config.disabledTableRowStyle : config.selectedTableRowStyle);
+                leftMap(style, $scope.disabled ? tableView.disabledTableRowStyle : tableView.selectedTableRowStyle);
             }
             if(item.isNew()){
-                leftMap(style, config.newItemStyle);
+                leftMap(style, tableView.newItemStyle);
             }
             if(item.isDirty()){
-                leftMap(style, config.dirtyItemStyle);
+                leftMap(style, tableView.dirtyItemStyle);
             }
             return style;
         }

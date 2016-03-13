@@ -6,26 +6,9 @@
 
 angular.module('dataForge', ['dataForge_util', 'dataForge_directives'])
 
-    .factory('dataForge', ['formField', 'tableColumn', 'dataForge_registry', function(FormField, TableColumn, registry){
+    .factory('dataForge', ['dataForge_registry', function(registry){
 
         return {
-
-            TableColumn: function() {
-                return new TableColumn();
-            },
-
-            registerTableView: function(name, definition){
-                registry.registerTableView(name, definition);
-            },
-
-            FormField: function(){
-                return new FormField();
-            },
-
-            registerDetailView: function(name, definition){
-                registry.registerDetailView(name, definition);
-            },
-
             registerValidator: function(name, validator){
                 registry.registerValidator(name, validator);
             },
@@ -34,76 +17,4 @@ angular.module('dataForge', ['dataForge_util', 'dataForge_directives'])
                 registry.registerDataModel(name, dataModel);
             },
         }
-    }])
-
-    .factory('formField', function(){
-
-        function FormField(){
-
-            this.validators = [];
-
-        }
-
-        FormField.prototype.labelAs = function(label){
-            this.field = label;
-            return this;
-        }
-
-        FormField.prototype.ofType = function(type){
-            this.type = type;
-            return this;
-        }
-
-        FormField.prototype.withStep = function(step){
-            this.step = step;
-            return this;
-        }
-
-        FormField.prototype.displayAs = function(filter){
-            this.filter = filter;
-            return this;
-        }
-
-        FormField.prototype.Self = function(reflect){
-            this.reflect = reflect;
-            return this;
-        }
-
-        FormField.prototype.validate = function(validator, message){
-            this.validators.push({validator: validator, message: message});
-            return this;
-        }
-
-        return FormField;
-
-    })
-
-    .factory('tableColumn', function(){
-
-        function TableColumn(){
-            this.align = 'left';
-        }
-
-        TableColumn.prototype.withHeader = function(header){
-            this.header = header;
-            return this;
-        }
-
-        TableColumn.prototype.displayAs = function(filter){
-            this.filter = filter;
-            return this;
-        }
-
-        TableColumn.prototype.Self = function(reflect){
-            this.reflect = reflect;
-            return this;
-        }
-
-        TableColumn.prototype.alignTo = function(align){
-            this.align = align;
-            return this;
-        }
-
-        return TableColumn;
-
-    });
+    }]);
