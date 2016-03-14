@@ -28,6 +28,16 @@ tr:hover{
     background-color: darkgreen;
 }
 
+.new{
+    color: green;
+}
+
+.dirty{
+    color: orange;
+}
+
+
+
 .highCal{
     color: orange;
 }

@@ -6,7 +6,8 @@ angular.module('recipeManager')
     .factory('ingredientTableView', ['tableViewConstructor', 'tableColumnConstructor', function(TableView, TableColumn){
 
         return new TableView({
-            selectedRowClass: 'selectedIngredient'
+            selectedRowClass: 'selected',
+            rowClass: function() { return this.isNew() ? 'new' : this.isDirty() ? 'dirty' : ''}
         },{
             name: new TableColumn()
                 .withHeader('Name')
