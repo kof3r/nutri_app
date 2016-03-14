@@ -6,17 +6,30 @@ angular.module('recipeManager')
     .factory('ingredientTableView', ['tableViewConstructor', 'tableColumnConstructor', function(TableView, TableColumn){
 
         return new TableView({
-            selectedRowClass: 'selectedIngredient',
-            rowClass:{
-                highCal: function(){ return this.caloriesNominal() > 400 }
-            }
+            selectedRowClass: 'selectedIngredient'
         },{
-            name: new TableColumn().withHeader('Name'),
+            name: new TableColumn()
+                .withHeader('Name')
+                .class(function() {
+                    return this.caloriesNominal() > 400 ? 'highCal' : '';
+                }),
+
             amount: new TableColumn().withHeader('Amount').displayAs(function() { return this.measure; }).alignTo('right'),
+
             totalCalories: new TableColumn().withHeader('Total calories').displayAs('energy').alignTo('right'),
+
             totalCarbs: new TableColumn().withHeader('Total carbs').displayAs('mass').alignTo('right'),
-            totalFats: new TableColumn().withHeader('Total fats').displayAs('mass').alignTo('right'),
+
+            totalFats: new TableColumn()
+                .withHeader('Total fats')
+                .displayAs('mass')
+                .alignTo('right')
+                .class(function(){
+                    return this.fats < 10 ? 'lowFat' : '';
+                }),
+
             totalProtein: new TableColumn().withHeader('Total protein').displayAs('mass').alignTo('right')
+
         });
 
     }])

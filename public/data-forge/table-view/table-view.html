@@ -23,8 +23,8 @@
             <tr ng-repeat="i in items()"
                 ng-mouseup="disabled || $parent.handleRowClick(i, $event)"
                 ng-dblclick="disabled || $parent.handleRowDblClick(i)"
-                class="{{resolveRowClass(i)}}">
-                <td ng-style="resolveCellStyle(p)" ng-repeat="(p, c) in columns">{{resolveValue(i, p)}}</td>
+                ng-class="resolveRowClass(i)">
+                <td ng-class="resolveCellClass(i, p)" ng-style="resolveCellStyle(p)" ng-repeat="(p, c) in columns">{{resolveValue(i, p)}}</td>
             </tr>
             </tbody>
         </table>

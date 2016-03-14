@@ -29,7 +29,11 @@ tr:hover{
 }
 
 .highCal{
-    color: red;
+    color: orange;
+}
+
+.lowFat{
+    color: #4dc71f;
 }
 
 tr{

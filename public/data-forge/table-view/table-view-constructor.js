@@ -52,6 +52,11 @@ angular.module('dataForge')
             return this;
         }
 
+        TableColumn.prototype.class = function(_class){
+            this._class = _class;
+            return this;
+        }
+
         return TableColumn;
 
     })

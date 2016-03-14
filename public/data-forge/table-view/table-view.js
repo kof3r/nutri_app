@@ -260,13 +260,25 @@ function controller($injector, $scope, leftMap, resolveComparator, Cache, Select
         $scope.resolveRowClass = function(item){
             var rowClassResolver = options.rowClass;
             var rowClass = '';
-            for(var p in rowClassResolver){
-                if(rowClassResolver[p].call(item)){
-                    rowClass += p + ' ';
+            if(rowClassResolver){
+                if(typeof rowClassResolver === 'string'){
+                    rowClass += rowClassResolver;
+                } else {
+                    rowClass += rowClassResolver.call(item);
                 }
             }
-            rowClass += selection.isSelected(item) ? options.selectedRowClass : '';
-            return rowClass;
+            return selection.isSelected(item) ? (rowClass + ' ' + options.selectedRowClass) : rowClass;
+        }
+
+        $scope.resolveCellClass = function(item, p){
+            var cellClassResolver = columns[p]._class;
+            if(cellClassResolver){
+                if(typeof cellClassResolver === 'string'){
+                    return cellClassResolver;
+                }
+                return cellClassResolver.call(item);
+            }
+            return '';
         }
 
         $scope.resolveRowStyle = function(item){
