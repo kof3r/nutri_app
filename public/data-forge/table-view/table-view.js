@@ -271,14 +271,17 @@ function controller($injector, $scope, leftMap, resolveComparator, Cache, Select
         }
 
         $scope.resolveCellClass = function(item, p){
+            var cellClass = options.cellClass ? (options.cellClass + ' ') : '';
             var cellClassResolver = columns[p]._class;
             if(cellClassResolver){
                 if(typeof cellClassResolver === 'string'){
-                    return cellClassResolver;
+                    cellClass += cellClassResolver;
                 }
-                return cellClassResolver.call(item);
+                else {
+                    cellClass += cellClassResolver.call(item);
+                }
             }
-            return '';
+            return cellClass;
         }
 
         $scope.resolveRowStyle = function(item){
