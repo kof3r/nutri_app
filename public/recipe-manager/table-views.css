@@ -37,7 +37,10 @@ tr:hover{
 }
 
 
-
+.test{
+    font-weight: bold;
+    color: #ff2a00;
+}
 
 .highCal{
     color: orange;

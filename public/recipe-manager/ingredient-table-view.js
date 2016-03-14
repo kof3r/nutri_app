@@ -25,7 +25,8 @@ angular.module('recipeManager')
             totalCalories: new TableColumn()
                 .withHeader('Total calories')
                 .displayAs('energy')
-                .alignTo('right'),
+                .alignTo('right')
+                .class(function(){ return this.totalCalories() > 1000 ? 'test' : '' }),
 
             totalCarbs: new TableColumn()
                 .withHeader('Total carbs')
