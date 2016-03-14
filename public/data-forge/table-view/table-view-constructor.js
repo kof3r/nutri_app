@@ -5,9 +5,11 @@
 angular.module('dataForge')
     .factory('tableViewConstructor', function(){
 
-        function TableView(columns)
+        function TableView(options, columns)
         {
-            this.columns = angular.copy(columns);
+            this.columns = angular.copy(arguments.length === 1 ? options : columns);
+
+            this.options = angular.copy(options);
         }
 
         TableView.prototype.disabledButtonStyle = { 'background-color': 'lightgrey', border: 'none'};

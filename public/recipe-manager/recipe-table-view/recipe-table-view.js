@@ -6,10 +6,10 @@ angular.module('recipeManager')
     .factory('recipeTableView', ['tableViewConstructor', 'tableColumnConstructor', function(TableView, TableColumn){
 
         return new TableView({
-
+            selectedRowClass: 'selected'
+        },{
             name: new TableColumn().withHeader('Name'),
             totalCalories: new TableColumn().withHeader('Calories').displayAs('energy').alignTo('right')
-
         });
 
     }])

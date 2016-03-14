@@ -40,7 +40,8 @@ function controller($injector, $scope, leftMap, resolveComparator, Cache, Select
 
     this.$onInit = function(){
 
-        var tableView = $injector.get(ctrl.tableView);
+        var tableView = angular.copy($injector.get(ctrl.tableView));
+        var options = tableView.options;
         var columns = $scope.columns = tableView.columns;
         var reverse = $scope.reverse = Object.create(null);
         var lastTouchedItem;
@@ -256,11 +257,20 @@ function controller($injector, $scope, leftMap, resolveComparator, Cache, Select
             return $scope.disabled ? tableView.disabledButtonStyle : {};
         }
 
+        $scope.resolveRowClass = function(item){
+            var rowClassResolver = options.rowClass;
+            var rowClass = '';
+            for(var p in rowClassResolver){
+                if(rowClassResolver[p].call(item)){
+                    rowClass += p + ' ';
+                }
+            }
+            rowClass += selection.isSelected(item) ? options.selectedRowClass : '';
+            return rowClass;
+        }
+
         $scope.resolveRowStyle = function(item){
             var style = {};
-            if(selection.isSelected(item)){
-                leftMap(style, $scope.disabled ? tableView.disabledTableRowStyle : tableView.selectedTableRowStyle);
-            }
             if(item.isNew()){
                 leftMap(style, tableView.newItemStyle);
             }
