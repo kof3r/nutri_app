@@ -32,8 +32,12 @@ tr:hover{
     color: orange;
 }
 
-.lowFat{
+.highProtein{
     color: #4dc71f;
+}
+
+.highFat{
+    color: #ff2a00;
 }
 
 tr{

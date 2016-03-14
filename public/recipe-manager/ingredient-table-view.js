@@ -25,10 +25,16 @@ angular.module('recipeManager')
                 .displayAs('mass')
                 .alignTo('right')
                 .class(function(){
-                    return this.fats < 10 ? 'lowFat' : '';
+                    return this.fats >= 15 ? 'highFat' : '';
                 }),
 
-            totalProtein: new TableColumn().withHeader('Total protein').displayAs('mass').alignTo('right')
+            totalProtein: new TableColumn()
+                .withHeader('Total protein')
+                .displayAs('mass')
+                .alignTo('right')
+                .class(function(){
+                    return this.protein >= 15 ? 'highProtein' : '';
+                })
 
         });
 
