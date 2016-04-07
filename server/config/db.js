@@ -4,11 +4,11 @@
 
 module.exports = {
     database: 'nutrition',
-    username: 'root',
-    password: 'root',
+    username: 'nutriapp',
+    password: 'nutriap',
     options:{
         host: 'localhost',
-        dialect: 'mysql',
+        dialect: 'postgres',
         pool: {
             max: 5,
             min: 0,
