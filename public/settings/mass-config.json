@@ -1,9 +1,0 @@
-{
-  "default": "g",
-  "unitPerGramTable":{
-    "g":1,
-    "kg":0.001,
-    "oz":0.035274,
-    "lbs":0.00220462
-  }
-}
