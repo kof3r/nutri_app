@@ -1,0 +1,92 @@
+
+<div class="container-fluid top-buffer">
+
+    <div class="row">
+
+        <div class="col-md-3">
+            <detail-view ng-show="whenRenderRecipeDetailView()"
+                         title="{{resolveRecipeDetailViewTitle()}}"
+                         item="selectedRecipes.length === 1 ? selectedRecipes[0] : null"
+                         detail-view="recipeDetailView"
+                         model-name="Recipe"
+                         on-enabling-input="handleEnablingInput()"
+                         on-disabling-input="handleDisablingInput()"
+                         on-save-click="saveRecipe(item)"
+                         cancel-input-on="escKeyDown"
+                         enable-input-on="enableRecipeInput">
+            </detail-view>
+            <detail-view ng-show="whenRenderIngredientDetailView()"
+                         title="{{resolveIngredientDetailViewTitle()}}"
+                         item="selectedIngredients.length === 1 ? selectedIngredients[0] : null"
+                         detail-view="ingredientDetailView"
+                         model-name="Ingredient"
+                         on-enabling-input="handleEnablingInput()"
+                         on-disabling-input="handleDisablingInput()"
+                         on-save-click="saveIngredient(item)"
+                         cancel-input-on="escKeyDown"
+                         enable-input-on="enableIngredientInput">
+            </detail-view>
+        </div>
+
+        <div class="col-md-9">
+            <div class="container-fluid">
+
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <table-view title="Recipes"
+                                    table-view="recipeTableView"
+
+                                    items="recipes"
+                                    on-item-selected-emit="recipeSelected"
+                                    on-item-deselected-emit="recipeDeselected"
+                                    on-selected-items-changed-emit="selectedRecipesChanged"
+                                    select-item-on="selectRecipe"
+
+                                    reset-on="deselectAllRecipes"
+                                    disable-on="enablingInput"
+                                    enable-on="disablingInput"
+
+                                    on-del-key-up="handleRecipeListDelKeyUp()"
+                                    on-new-click="handleRecipeListNewClicked()"
+                                    on-edit-click="handleRecipeListEditClicked()"
+                                    on-delete-click="handleRecipeListDeleteClicked()"
+                                    on-row-dbl-click="handleRecipeListRowDblClick()">
+                        </table-view>
+                    </div>
+
+                    <div class="col-md-8">
+                        <table-view title="Ingredients"
+                                    table-view="ingredientTableView"
+                                    name="ingredientTableView"
+
+                                    items="ingredients"
+                                    on-item-selected-emit="ingredientSelected"
+                                    on-item-deselected-emit="ingredientDeselected"
+                                    on-selected-items-changed-emit="selectedIngredientsChanged"
+                                    select-item-on="selectIngredient"
+
+                                    reset-on="deselectAllIngredients"
+                                    disable-on="enablingInput"
+                                    enable-on="disablingInput"
+
+                                    on-new-click="handleIngredientListNewClicked()"
+                                    on-edit-click="handleIngredientListEditClicked()"
+                                    on-delete-click="handleIngredientListDeleteClicked()"
+                                    on-sync-click="handleIngredientListSyncClicked()"
+                                    on-row-dbl-click="handleIngredientListRowDblClick()"
+                                    on-del-key-up="handleIngredientListDelKeyUp()">
+                        </table-view>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
