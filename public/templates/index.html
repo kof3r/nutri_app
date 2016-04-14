@@ -1,40 +1,38 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="NutriApp">
+<!DOCTYPE HTML>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>NutriApp</title>
-    <script src="components/sprintf/dist/sprintf.min.js"></script>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="styles/stylesheet.css">
-    <link rel="stylesheet" type="text/css" href="styles/button.css">
-    <link rel="stylesheet" type="text/css" href="styles/table-views.css">
-
+  <meta charset="utf-8">
+  <title>WD Tests</title>
+  <link rel="stylesheet" href="styles/site.css">
 </head>
-<body ng-controller="Controller" ng-keydown="handleKeyDown($event)">
+<body>
 
-    <div id="header" class="navbar navbar-default navbar-fixed-top"></div>
+  <div class="test-lr">
+    Testing livereload thing
 
-    <div id="wrapper">
-        <div id="sidebar-wrapper" class="col-md-1">
-            <div id="sidebar">
+    <a href="#" class="fun">fun</a>
+  </div>
 
-            </div>
-        </div>
+  <script>document.write('<script src="http://'
+    + location.host
+    + '/livereload.js?snipver=1"></'
+    + 'script>')</script>
 
-        <div id="main-wrapper" class="col-md-11 pull-right">
-            <div id="main" ng-view></div>
-        </div>
+  <script>
+  (function() {
 
-        <div class="col-md-12 footer" style="overflow-y: auto">
-            <status-log></status-log>
-        </div>
+    window.onload = function() {
+      var fun = document.querySelector('.fun');
+      var lr = document.querySelector('.test-lr');
+      fun.addEventListener('click', function(e) {
+        e.preventDefault();
+        var d3 = /d3/.test(lr.className) ? '' : 'd3';
+        lr.className = 'test-lr ' + d3;
+      });
+    };
+  })();
+  </script>
 
-    </div>
-
-
-
-    <script src="bundle.js"></script>
 
 </body>
 </html>
