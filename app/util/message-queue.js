@@ -11,7 +11,7 @@ module.exports = function(){
 
         MessageQueue.prototype.subscribe = function(callback){
             this._subscribers.push(callback);
-        }
+        };
 
         MessageQueue.prototype._notify = function(){
             var queue = this;
@@ -19,7 +19,7 @@ module.exports = function(){
                 callback(queue._queue.slice());
             });
             this._queue = [];
-        }
+        };
         
         MessageQueue.prototype.addMessages = function(messages){
             if(messages.constructor !== Array){
@@ -33,7 +33,7 @@ module.exports = function(){
             }.bind(this));
 
             this._notify();
-        }
+        };
 
         return new MessageQueue();
 };

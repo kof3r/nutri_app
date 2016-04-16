@@ -2,8 +2,6 @@
  * Created by ggrab on 23.2.2016..
  */
 
-var Promise = require('bluebird');
-
 var orm = require('../orm');
 
 var Recipe = orm.model('recipe');
@@ -23,8 +21,8 @@ router.get('/', function(req, res){
             res.json(new Response(null, 'Failed to retrieve recipes.'));
         }
     }).catch(function(error){
-        res.json(new Response(null, 'Failed to retrieve recipes.'))
-    })
+        res.json(new Response(null, 'Failed to retrieve recipes.'));
+    });
 });
 
 router.put('/', function(req, res){
@@ -40,7 +38,7 @@ router.put('/', function(req, res){
         }
     }).catch(function(err){
         res.json(new Response(body, 'Failed to create recipe.'));
-    })
+    });
 });
 
 router.post('/', function(req, res){
@@ -53,8 +51,8 @@ router.post('/', function(req, res){
         } else {
             res.json(new Response(body));
         }
-    })
-})
+    });
+});
 
 router.delete('/:id', function(req, res){
     var id = req.params.id;
@@ -65,7 +63,7 @@ router.delete('/:id', function(req, res){
         } else {
             res.json(new Response(0, 'Failed to delete recipe.'));
         }
-    })
+    });
 });
 
 module.exports = router;

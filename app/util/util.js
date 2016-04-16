@@ -13,11 +13,11 @@ module.exports = {
             if(events.constructor === Array){
                 events.forEach(function(event){
                     scope.$on(event, handler);
-                })
-            } else{
+                });
+            } else {
                 events.split(' ').forEach(function(event){
                     scope.$on(event, handler);
-                })
+                });
             }
         },
 
@@ -25,7 +25,7 @@ module.exports = {
             if(source.constructor === Array){
                 source.forEach(function(i){
                     destination.push(i);
-                })
+                });
             } else {
                 destination.push(source);
             }

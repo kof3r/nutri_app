@@ -16,10 +16,10 @@ module.exports = {
             function addNewMessages(messages){
                 messages.forEach(function(message){
                     $scope.messages.unshift(message);
-                })
+                });
                 $scope.messages.splice(limit);
             }
-        }
+        };
 
     }]
-}
+};

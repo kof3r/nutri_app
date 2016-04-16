@@ -5,6 +5,6 @@
 function Response(response, error){
     this.response = response;
     this.error = error;
-};
+}
 
 module.exports = Response;

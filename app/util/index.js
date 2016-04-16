@@ -11,7 +11,7 @@ util.factory('messageQueue', require('./message-queue'));
 util.filter('message', function(){
     return function (message){
         return sprintf('[%s]:\t%s', message.time.toLocaleTimeString(), message.message);
-    }
+    };
 });
 util.component('statusLog', require('./status-log'));
 

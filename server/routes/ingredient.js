@@ -2,8 +2,6 @@
  * Created by ggrab on 6.3.2016..
  */
 
-var Promise = require('bluebird');
-
 var orm = require('../orm');
 
 var Ingredient = orm.model('ingredient');
@@ -20,7 +18,7 @@ router.put('/', function(req, res){
         res.json(new Response(ingredient));
     }).catch(function(error){
         res.json(new Response(null, 'Failed to save ' + body.name + '.'));
-    })
+    });
 });
 
 router.post('/', function(req, res){
@@ -32,7 +30,7 @@ router.post('/', function(req, res){
         } else {
             res.json(new Response(null, 'Failed to update ' + body.name + '.'));
         }
-    })
+    });
 });
 
 router.delete('/:id', function(req, res){
@@ -44,8 +42,8 @@ router.delete('/:id', function(req, res){
         } else {
             res.json(new Response(null, 'Failed to delete ingredient.'));
         }
-    })
-})
+    });
+});
 
 
 module.exports = router;

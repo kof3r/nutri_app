@@ -38,7 +38,7 @@ module.exports = ['$http', function($http){
             if(angular.isArray(response)){
                 return response.map(function(response) {
                     return service.packer.unpack(response);
-                })
+                });
             }
             return this.packer.unpack(response);
         }
@@ -47,13 +47,18 @@ module.exports = ['$http', function($http){
             return function(res){
                 var error = getError(res);
                 var response = getResponse(res);
+                var handler;
                 if(error){
-                    var handler = errorHandler.call(this, service);
-                    handler && handler(error);
+                    handler = errorHandler.call(this, service);
+                    if (handler) {
+                        handler(error);
+                    }
                 }
                 else {
-                    var handler = successHandler.call(this, service);
-                    handler && handler(response);
+                    handler = successHandler.call(this, service);
+                    if (handler) {
+                        handler(response);
+                    }
                 }
                 return angular.isObject(response) ? unpackResponse.call(this, response) : response;
             }.bind(this);
@@ -61,19 +66,19 @@ module.exports = ['$http', function($http){
 
         Service.prototype.get = function(id){
             return $http.get(this.path + (id ? id : '')).then(responseHandler.call(this, 'get'));
-        }
+        };
 
         Service.prototype.put = function(item){
             return $http.put(this.path, this.packer.pack(item)).then(responseHandler.call(this, 'put'));
-        }
+        };
 
         Service.prototype.post = function(item){
             return $http.post(this.path, this.packer.pack(item)).then(responseHandler.call(this, 'post'));
-        }
+        };
 
         Service.prototype.delete = function(id){
             return $http.delete(this.path + (id ? id : '')).then(responseHandler.call(this, 'delete'));
-        }
+        };
 
         return Service;
 

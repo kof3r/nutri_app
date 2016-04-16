@@ -17,18 +17,18 @@ settings.factory('settingConstructor', function () {
             return this._value;
         }
         this._value = value;
-    }
+    };
 
     return Setting;
-})
+});
 
 settings.factory('settingsUnitsMass', ['settingConstructor', function (Setting) {
     return new Setting('g');
-}])
+}]);
 
 settings.factory('settingsUnitsEnergy', ['settingConstructor', function(Setting){
     return new Setting('kcal');
-}])
+}]);
 
 settings.factory('settingsUnitsVolume', ['settingConstructor', function(Setting){
     return new Setting('ml');

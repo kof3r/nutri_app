@@ -23,7 +23,5 @@ module.exports = {
     relations:{
         hasMany:['ingredient']
     }
-}
-
-
+};
 

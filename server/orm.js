@@ -19,18 +19,18 @@ function Singleton(){
         var config = require('./config/db');
         config.options.define = require('./config/model');
 
-        sequelize = new Sequelize(config.database, config.username, config.password, config.options)
+        sequelize = new Sequelize(config.database, config.username, config.password, config.options);
 
         return init();
-    }
+    };
 
     this.model = function(name){
         return models[name];
-    }
+    };
 
     this.Seq = function(){
         return Sequelize;
-    }
+    };
 
     function init(){
         fs.readdirSync(modelsPath).forEach(function(modelFileName){
@@ -39,7 +39,7 @@ function Singleton(){
             var modelName = modelFileName.replace(/\.js$/i, '');
             models[modelName] = sequelize.define(modelName, definition.attributes, options);
             if('relations' in definition){
-                relations[modelName] = definition['relations'];
+                relations[modelName] = definition.relations;
             }
         });
 
@@ -47,10 +47,9 @@ function Singleton(){
             for(var relationTypeName in relations[modelName]){
                 relations[modelName][relationTypeName].forEach(function(relatedTableName){
                     models[modelName][relationTypeName](models[relatedTableName]);
-                })
+                });
             }
         }
-        console.log('Finished setting up models.');
         return sequelize.sync();
     }
 }
@@ -62,6 +61,6 @@ Singleton.getInstance = function(){
         this.instance = new Singleton();
     }
     return this.instance;
-}
+};
 
 module.exports = Singleton.getInstance();
