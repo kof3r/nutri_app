@@ -4,7 +4,9 @@
 
 const name = 'dataForge';
 
-const dataForge = require('angular').module(name, [require('./utilities')]);
+const dataForge = require('angular').module(name, [
+    require('./utilities')
+]);
 
 dataForge.run(require('./data-forge-run'));
 

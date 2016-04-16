@@ -4,7 +4,8 @@
 
 const app = require('angular').module('NutriApp', [
     require('./recipe-manager'),
-    require('angular-route')
+    require('angular-route'),
+    'ngMaterial'
 ])
 
     .config(['$routeProvider', function($route){
@@ -15,9 +16,13 @@ const app = require('angular').module('NutriApp', [
 
     }])
 
-    .controller('Controller', ['$rootScope', '$scope', function($rootScope, $scope){
+    .controller('Controller', ['$rootScope', '$scope', '$mdSidenav', function($rootScope, $scope, $mdSidenav){
 
-        this.$onInit = function(){
+        this.$onInit = () => {
+
+            $scope.openMenu = () => {
+                $mdSidenav('menu').toggle();
+            };
 
             $scope.handleKeyDown = function($event){
                 switch($event.which){
@@ -28,7 +33,5 @@ const app = require('angular').module('NutriApp', [
                 }
             }
 
-        }
-
+        };
     }]);
-

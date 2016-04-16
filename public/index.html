@@ -1,40 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="NutriApp">
 <head>
-    <meta charset="UTF-8">
     <title>NutriApp</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <script src="components/sprintf/dist/sprintf.min.js"></script>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="styles/stylesheet.css">
-    <link rel="stylesheet" type="text/css" href="styles/button.css">
-    <link rel="stylesheet" type="text/css" href="styles/table-views.css">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+
+    <script src="bundle.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
 
 </head>
 <body ng-controller="Controller" ng-keydown="handleKeyDown($event)">
 
-    <div id="header" class="navbar navbar-default navbar-fixed-top"></div>
+    <div layout="row">
+        <md-sidenav md-component-id="menu" class="md-sidenav-left">
+            Left Nav!
+        </md-sidenav>
+        <md-content ng-view>
 
-    <div id="wrapper">
-        <div id="sidebar-wrapper" class="col-md-1">
-            <div id="sidebar">
-
-            </div>
-        </div>
-
-        <div id="main-wrapper" class="col-md-11 pull-right">
-            <div id="main" ng-view></div>
-        </div>
-
-        <div class="col-md-12 footer" style="overflow-y: auto">
-            <status-log></status-log>
-        </div>
-
+        </md-content>
     </div>
-
-
-
-    <script src="bundle.js"></script>
 
 </body>
 </html>
