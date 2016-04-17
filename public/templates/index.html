@@ -1,38 +1,42 @@
-<!DOCTYPE HTML>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" ng-app="NutriApp">
 <head>
-  <meta charset="utf-8">
-  <title>WD Tests</title>
-  <link rel="stylesheet" href="styles/site.css">
+    <title>NutriApp</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="components/sprintf/dist/sprintf.min.js"></script>
+
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="components/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css"/>
+
+
+    <script src="bundle.js"></script>
+    <script src="components/angular-material-data-table/dist/md-data-table.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+
 </head>
-<body>
+<body ng-controller="Controller" ng-keydown="handleKeyDown($event)" layout="row">
 
-  <div class="test-lr">
-    Testing livereload thing
+    <md-sidenav md-whiteframe="4" layout="column" class="sidenav1" md-is-locked-open='true'>
+        <md-list>
+            <md-list-item layout="row"><md-button style="width: 100%">Recipes</md-button></md-list-item>
+            <md-list-item layout="row"><md-button style="width: 100%">Ingredients</md-button></md-list-item>
+            <md-list-item layout="row"><md-button style="width: 100%">Options</md-button></md-list-item>
+        </md-list>
+    </md-sidenav>
 
-    <a href="#" class="fun">fun</a>
-  </div>
 
-  <script>document.write('<script src="http://'
-    + location.host
-    + '/livereload.js?snipver=1"></'
-    + 'script>')</script>
+    <md-content flex layout="column">
+        <ng-view>
 
-  <script>
-  (function() {
-
-    window.onload = function() {
-      var fun = document.querySelector('.fun');
-      var lr = document.querySelector('.test-lr');
-      fun.addEventListener('click', function(e) {
-        e.preventDefault();
-        var d3 = /d3/.test(lr.className) ? '' : 'd3';
-        lr.className = 'test-lr ' + d3;
-      });
-    };
-  })();
-  </script>
-
+        </ng-view>
+    </md-content>
 
 </body>
 </html>

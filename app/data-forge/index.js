@@ -22,4 +22,7 @@ dataForge.component('tableView', require('./table-view/table-view'));
 dataForge.factory('tableViewConstructor', require('./table-view/table-view-constructor'));
 dataForge.factory('tableColumnConstructor', require('./table-view/table-column-constructor'));
 
+dataForge.component('tableViewTest', require('./table-view/table-view-test'));
+dataForge.controller('tableViewTestController', require('./table-view/table-view-test-controller'));
+
 module.exports = name;

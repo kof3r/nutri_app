@@ -1,0 +1,26 @@
+
+
+
+    <md-tabs style="height: 100%">
+        <md-tab label="Overview">
+            <md-tab-body>
+                <md-list layout="column">
+                    <md-list-item ng-repeat="i in items">
+                        <md-card>
+                            <md-card-header>
+                                <md-card-header-text ng-bind="i.name"></md-card-header-text>
+                            </md-card-header>
+                        </md-card>
+                    </md-list-item>
+                </md-list>
+            </md-tab-body>
+            <md-card layout="column">
+                <md-card-content>{{item.name}}</md-card-content>
+            </md-card>
+        </md-tab>
+        <md-tab label="Table view">
+            <md-tab-body>
+                <table-view-test items="items" table-view="recipeTableView" on-selected-items-changed="onSelectedItemsChanged(items)"></table-view-test>
+            </md-tab-body>
+        </md-tab>
+    </md-tabs>

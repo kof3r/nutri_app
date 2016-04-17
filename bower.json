@@ -17,6 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "sprintf": "^1.0.3"
+    "sprintf": "^1.0.3",
+    "angular-material-data-table": "^0.10.5"
   }
 }

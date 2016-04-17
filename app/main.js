@@ -5,14 +5,19 @@
 const app = require('angular').module('NutriApp', [
     require('./recipe-manager'),
     require('angular-route'),
-    'ngMaterial'
+    'ngMaterial',
+    'md.data.table'
 ])
 
-    .config(['$routeProvider', function($route){
+    .config(['$routeProvider', '$mdThemingProvider', function($route, $mdThemingProvider){
 
         $route.when('/', {
-            template:'<recipe-manager></recipe-manager>'
-        })
+            templateUrl:'templates/recipes.html',
+            controller: 'recipeViewController',
+            resolve:{
+                service: 'serverRecipeService'
+            }
+        });
 
     }])
 
@@ -34,4 +39,6 @@ const app = require('angular').module('NutriApp', [
             }
 
         };
-    }]);
+    }])
+    
+    .controller('recipeViewController', require('./views/recipes/recipeViewController'));
