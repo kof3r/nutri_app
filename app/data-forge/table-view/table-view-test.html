@@ -1,0 +1,22 @@
+
+<md-toolbar class="md-table-toolbar md-default">
+    <div class="md-toolbar-tools">
+        <span>{{$ctrl.title}}</span>
+    </div>
+</md-toolbar>
+
+<!-- exact table from live demo -->
+<md-table-container>
+    <table md-table md-row-select multiple ng-model="selected">
+        <thead md-head md-order="query.order" md-on-reorder="getItems">
+        <tr md-row>
+            <th md-column ng-repeat="(p, c) in columns"><span ng-bind="columns[p].header"></span></th>
+        </tr>
+        </thead>
+        <tbody md-body>
+        <tr md-row md-select="i" md-select-id="id" md-auto-select ng-repeat="i in items">
+            <td md-cell ng-repeat="(p, c) in columns">{{resolveValue(i, p)}}</td>
+        </tr>
+        </tbody>
+    </table>
+</md-table-container>
