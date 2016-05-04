@@ -4,7 +4,7 @@
 
 const name = 'server';
 
-const server = require('angular').module(name, [
+const server = angular.module(name, [
     require('../util'),
     require('../nutrition')
 ]);

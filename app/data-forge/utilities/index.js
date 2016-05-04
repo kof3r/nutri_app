@@ -4,7 +4,7 @@
 
 const name = 'dataForge_utilities';
 
-const utilities = require('angular').module(name, []);
+const utilities = angular.module(name, []);
 
 utilities.factory('selection', require('./selection'));
 utilities.factory('cache', require('./cache'));

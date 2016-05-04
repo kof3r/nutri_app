@@ -2,8 +2,6 @@
  * Created by ggrab on 23.2.2016..
  */
 
-var angular = require('angular');
-
 module.exports = ['$http', function($http){
 
         function Service(path, packer, services){

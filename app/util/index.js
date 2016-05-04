@@ -4,7 +4,7 @@
 
 const name = 'util';
 
-const util = require('angular').module(name, []);
+const util = angular.module(name, []);
 
 util.value('util', require('./util'));
 util.factory('messageQueue', require('./message-queue'));

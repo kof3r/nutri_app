@@ -13,30 +13,35 @@
     <link href="components/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css"/>
 
 
-    <script src="bundle.js"></script>
-    <script src="components/angular-material-data-table/dist/md-data-table.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+    <script src="components/angular-material-data-table/dist/md-data-table.js"></script>
+    <script src="bundle.js"></script>
 
 </head>
 <body ng-controller="Controller" ng-keydown="handleKeyDown($event)" layout="row">
 
-    <md-sidenav md-whiteframe="4" layout="column" class="sidenav1" md-is-locked-open='true'>
+    <md-sidenav flex="15" md-whiteframe="4" layout="column" class="sidenav1" md-is-locked-open='true'>
         <md-list>
             <md-list-item layout="row"><md-button style="width: 100%">Recipes</md-button></md-list-item>
-            <md-list-item layout="row"><md-button style="width: 100%">Ingredients</md-button></md-list-item>
             <md-list-item layout="row"><md-button style="width: 100%">Options</md-button></md-list-item>
         </md-list>
     </md-sidenav>
 
+    <div flex layout="column">
 
-    <md-content flex layout="column">
-        <ng-view>
+        <md-toolbar class="md-whiteframe-1dp" layout="row">
+            <div class="md-toolbar-tools">
+                <div class="md-title">NutriApp</div>
+            </div>
+        </md-toolbar>
 
-        </ng-view>
-    </md-content>
+        <ng-view></ng-view>
+
+    </div>
 
 </body>
 </html>

@@ -2,7 +2,7 @@
  * Created by ggrab on 23.2.2016..
  */
 
-const app = require('angular').module('NutriApp', [
+angular.module('NutriApp', [
     require('./recipe-manager'),
     require('angular-route'),
     'ngMaterial',
@@ -19,6 +19,9 @@ const app = require('angular').module('NutriApp', [
             }
         });
 
+        $mdThemingProvider.theme('default')
+            .primaryPalette('amber')
+            .accentPalette('deep-purple');
     }])
 
     .controller('Controller', ['$rootScope', '$scope', '$mdSidenav', function($rootScope, $scope, $mdSidenav){

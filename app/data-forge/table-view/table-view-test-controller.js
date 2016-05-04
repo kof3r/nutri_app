@@ -2,8 +2,6 @@
  * Created by gordan on 17.04.16..
  */
 
-const angular = require('angular');
-
 module.exports = ['$scope', '$filter', '$injector', function($scope, $filter, $injector){
 
     const tableView = $injector.get(this.tableView);
@@ -19,6 +17,10 @@ module.exports = ['$scope', '$filter', '$injector', function($scope, $filter, $i
 
     $scope.$watchCollection('items', () => {
         $scope.selected.splice();
+    });
+
+    $scope.$watch(() => this.items, () => {
+        $scope.items = this.items;
     });
 
     $scope.resolveValue = function(item, p){

@@ -6,7 +6,7 @@
 
 const name = 'recipeManager'
 
-const recipeManager = require('angular').module(name, [
+const recipeManager = angular.module(name, [
     require('../server'),
     require('../util'),
     require('../data-forge'),

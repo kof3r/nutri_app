@@ -4,7 +4,7 @@
 
 const name = 'nutrition';
 
-const nutrition = require('angular').module(name, [
+const nutrition = angular.module(name, [
     require('../settings')  //TODO
 ]);
 

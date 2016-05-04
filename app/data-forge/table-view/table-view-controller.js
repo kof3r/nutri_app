@@ -2,8 +2,6 @@
  * Created by gordan on 10.04.16..
  */
 
-var angular = require('angular');
-
 module.exports = ['$injector', '$scope', 'dataForge_util_resolveComparator', 'cache', 'selection', '$filter', function ($injector, $scope, resolveComparator, Cache, Selection, $filter){
     var ctrl = this;
 

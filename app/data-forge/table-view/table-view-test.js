@@ -5,6 +5,7 @@
 module.exports = {
     templateUrl: 'templates/table-view-test.html',
     bindings: {
+        title:'@',
         items:'<',
         tableView:'@',
         selectedItemsChanged:'&onSelectedItemsChanged'

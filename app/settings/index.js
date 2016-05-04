@@ -4,7 +4,7 @@
 
 const name = 'settings';
 
-const settings = require('angular').module(name, []);
+const settings = angular.module(name, []);
 
 settings.factory('settingConstructor', function () {
     function Setting(defaultValue, possibleValues){
