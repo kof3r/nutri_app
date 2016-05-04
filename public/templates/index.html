@@ -22,24 +22,24 @@
     <script src="bundle.js"></script>
 
 </head>
-<body ng-controller="Controller" ng-keydown="handleKeyDown($event)" layout="row">
+<body ng-controller="Controller" ng-keydown="handleKeyDown($event)" layout="column" layout-padding>
 
-    <md-sidenav flex="15" md-whiteframe="4" layout="column" class="sidenav1" md-is-locked-open='true'>
-        <md-list>
-            <md-list-item layout="row"><md-button style="width: 100%">Recipes</md-button></md-list-item>
-            <md-list-item layout="row"><md-button style="width: 100%">Options</md-button></md-list-item>
-        </md-list>
-    </md-sidenav>
+    <md-toolbar md-whiteframe="3" layout="row">
+        <div class="md-toolbar-tools">
+            <div class="md-title">NutriApp</div>
+        </div>
+    </md-toolbar>
 
-    <div flex layout="column">
+    <div flex layout="row">
 
-        <md-toolbar class="md-whiteframe-1dp" layout="row">
-            <div class="md-toolbar-tools">
-                <div class="md-title">NutriApp</div>
-            </div>
-        </md-toolbar>
+        <md-sidenav flex="15" md-whiteframe="3" layout="column" class="sidenav1" md-is-locked-open='true'>
+            <md-list>
+                <md-list-item><md-button style="width: 100%">Recipes</md-button></md-list-item>
+                <md-list-item><md-button style="width: 100%">Options</md-button></md-list-item>
+            </md-list>
+        </md-sidenav>
 
-        <ng-view></ng-view>
+        <md-content flex ng-view layout-padding></md-content>
 
     </div>
 

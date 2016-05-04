@@ -3,6 +3,7 @@
  */
 
 angular.module('NutriApp', [
+    require('dfInputForm'),
     require('./recipe-manager'),
     require('angular-route'),
     'ngMaterial',

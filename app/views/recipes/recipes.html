@@ -1,22 +1,13 @@
 
-<md-tabs md-dynamic-height md-border-bottom>
-    <md-tab>
-        <md-tab-label class="md-warn">Recipes</md-tab-label>
-        <md-tab-body>
-            <md-content layout="row" layout-padding>
-                <md-card flex="15" layout="column">
-                    <md-button>New</md-button>
-                    <md-button>Delete</md-button>
-                </md-card>
-                <md-card flex>
-                    <table-view-test title="Recipes" items="items" table-view="recipeTableView" on-selected-items-changed="onSelectedItemsChanged(items)"></table-view-test>
-                </md-card>
-            </md-content>
-        </md-tab-body>
-    </md-tab>
-    <md-tab label="Ingredients">
-        <md-card>
-            Ingredients
-        </md-card>
-    </md-tab>
-</md-tabs>
+<md-content layout="row">
+    <md-card flex="15" layout="column">
+        <md-button>New</md-button>
+        <md-button>Delete</md-button>
+    </md-card>
+    <md-card flex>
+        <table-view-test title="Recipes" items="items" table-view="recipeTableView" on-selected-items-changed="onSelectedItemsChanged(items)"></table-view-test>
+    </md-card>
+    <md-card flex>
+        <df-input-form validator="recipeValidator" item="item"></df-input-form>
+    </md-card>
+</md-content>
