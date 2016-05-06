@@ -4,10 +4,13 @@
         <md-button ng-click="newClicked()">New</md-button>
         <md-button ng-disabled="!selected.length">Delete</md-button>
     </md-card>
-    <md-card flex ng-hide="inputting">
-        <table-view-test title="Recipes" items="items" table-view="recipeTableView" on-selected-items-changed="onSelectedItemsChanged(items)"></table-view-test>
+    <md-card flex="45" ng-hide="inputting">
+        <table-view-test title="Recipes"
+                         items="items"
+                         table-view="recipeTableView"
+                         on-selected-items-changed="onSelectedItemsChanged(items)"></table-view-test>
     </md-card>
-    <md-card flex ng-show="inputting">
+    <md-card flex="60" ng-show="inputting">
         <df-input-form definition="recipeDetailView"
                        item="item"
                        validator="recipeValidator"
