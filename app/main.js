@@ -3,7 +3,7 @@
  */
 
 angular.module('NutriApp', [
-    require('dfInputForm'),
+    require('./df-input-form'),
     require('./recipe-manager'),
     require('angular-route'),
     'ngMaterial',
@@ -14,10 +14,7 @@ angular.module('NutriApp', [
 
         $route.when('/', {
             templateUrl:'templates/recipes.html',
-            controller: 'recipeViewController',
-            resolve:{
-                service: 'serverRecipeService'
-            }
+            controller: 'recipeViewController'
         });
 
         $mdThemingProvider.theme('default')

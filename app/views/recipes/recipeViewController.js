@@ -2,41 +2,39 @@
  * Created by gordan on 17.04.16..
  */
 
-module.exports = ['$scope', 'service', function($scope, service){
+module.exports = ['$scope', 'serverRecipeService', function($scope, service){
 
     $scope.items = [];
-    var selected = [];
+    $scope.selected = [];
     $scope.item = null;
+    $scope.inputting = false;
 
     service.get().then((items) => $scope.items = items);
     
     $scope.$watchCollection('selected', function handleSelectedItemChanged(){
-        if(selected.length === 1){
+        if($scope.selected.length === 1){
             $scope.item = $scope.selected[0];
+        } else {
+            $scope.item = null;
         }
     });
-    
-    $scope.save = function(item){
-        return service.save(item).then((item) => addItem(item));
+
+    $scope.cancelInput = function() {
+        $scope.inputting = false;
     };
-    
-    $scope.delete = function(item){
-        return service.delete(item).then(() => removeItem(item));
+
+    $scope.newClicked = function() {
+        $scope.inputting = true;
     };
     
     $scope.onSelectedItemsChanged = function(items){
-        selected = items;
-    }
+        $scope.selected.splice();
+        angular.copy(items, $scope.selected);
+    };
 
-    function addItem(item){
-        $scope.items.push(item);
-    }
-
-    function removeItem(item){
-        const i = $scope.items.indexOf(item);
-        if(i != -1) {
-            $scope.splice(i, 1);
-        }
-    }
+    $scope.saveRecipe = function(recipe) {
+        $scope.inputting = false;
+        
+    };
 
 }]

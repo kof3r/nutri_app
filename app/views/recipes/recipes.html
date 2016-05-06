@@ -1,13 +1,17 @@
 
 <md-content layout="row">
-    <md-card flex="15" layout="column">
-        <md-button>New</md-button>
-        <md-button>Delete</md-button>
+    <md-card flex="15" layout="column" ng-hide="inputting">
+        <md-button ng-click="newClicked()">New</md-button>
+        <md-button ng-disabled="!selected.length">Delete</md-button>
     </md-card>
-    <md-card flex>
+    <md-card flex ng-hide="inputting">
         <table-view-test title="Recipes" items="items" table-view="recipeTableView" on-selected-items-changed="onSelectedItemsChanged(items)"></table-view-test>
     </md-card>
-    <md-card flex>
-        <df-input-form validator="recipeValidator" item="item"></df-input-form>
+    <md-card flex ng-show="inputting">
+        <df-input-form definition="recipeDetailView"
+                       item="item"
+                       validator="recipeValidator"
+                       on-save-clicked="saveRecipe(item)"
+                       on-cancel-clicked="cancelInput()"></df-input-form>
     </md-card>
 </md-content>

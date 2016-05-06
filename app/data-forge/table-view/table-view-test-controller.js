@@ -12,7 +12,7 @@ module.exports = ['$scope', '$filter', '$injector', function($scope, $filter, $i
     $scope.selected = [];
 
     $scope.$watchCollection('selected', () => {
-        this.selectedItemsChanged({items: $scope.items.slice()});
+        this.selectedItemsChanged({items: $scope.selected.slice()});
     });
 
     $scope.$watchCollection('items', () => {

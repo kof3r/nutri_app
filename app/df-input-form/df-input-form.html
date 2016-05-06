@@ -1,6 +1,25 @@
 
-<form name="form" layout="column">
+<form name="form" layout="column" ng-cloak layout-padding layout-align="start start">
 
+    <div ng-repeat="(k, v) in fields" ng-include="resolveFieldTemplate(v)"></div>
 
+    <div layout="row">
+        <md-button ng-click="handleSaveClick()">Save</md-button>
+        <md-button ng-click="handleCancelClick()">Cancel</md-button>
+    </div>
 
 </form>
+
+<script type="text/ng-template" id="text-input.html">
+    <md-input-container>
+        <label ng-bind="v.field"></label>
+        <input ng-model="item[k]" type="v.type" step="v.step">
+    </md-input-container>
+</script>
+
+<script type="text/ng-template" id="read-only.html">
+    <div layout="row">
+        <label ng-bind="v.field"></label>
+        <label ng-bind="item[k]"></label>
+    </div>
+</script>
