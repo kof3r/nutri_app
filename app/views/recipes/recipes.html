@@ -1,10 +1,15 @@
 
 <md-content layout="row">
-    <md-card flex="15" layout="column" ng-hide="inputting">
-        <md-button ng-click="newClicked()">New</md-button>
-        <md-button ng-disabled="!selected.length">Delete</md-button>
-    </md-card>
-    <md-card flex="45" ng-hide="inputting">
+    <div flex="15" layout="column" ng-hide="inputting">
+        <md-button class="md-raised md-primary"
+                   ng-click="newClicked()" ng-show="selected.length !== 1">New</md-button>
+        <md-button class="md-raised md-accent"
+                   ng-click="editClicked()" ng-show="selected.length === 1">Edit</md-button>
+        <md-button class="md-raised md-primary"
+                   ng-click="deleteRecipes()"
+                   ng-disabled="!selected.length">Delete</md-button>
+    </div>
+    <md-card flex="45" ng-hide="inputting" class="md-primary">
         <table-view-test title="Recipes"
                          items="items"
                          table-view="recipeTableView"

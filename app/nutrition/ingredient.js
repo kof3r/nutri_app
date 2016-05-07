@@ -3,15 +3,14 @@
  */
 
 module.exports = ['modelBase', 'calorieConstant', function(Base, calConst){
-        function Ingredient(){
 
-            this.dirty = false;
+    class Ingredient extends Base{
 
+        constructor(dto) {
+            super(dto);
         }
 
-        Ingredient.prototype = new Base();
-
-        function nominalAmount(){
+        nominalAmount(){
             if(this.measure !== 'quantity'){
                 return 100;
             } else {
@@ -19,33 +18,32 @@ module.exports = ['modelBase', 'calorieConstant', function(Base, calConst){
             }
         }
 
-        function nutrientAmount(nutrient){
-            return this[nutrient] * this.amount / nominalAmount.call(this);
+        nutrientAmount(nutrient){
+            return this[nutrient] * this.amount / this.nominalAmount();
         }
 
-        Ingredient.prototype.totalCarbs = function(){
-            return nutrientAmount.call(this, 'carbs');
+        totalCarbs(){
+            return this.nutrientAmount('carbs');
         }
 
-        Ingredient.prototype.totalFats = function(){
-            return nutrientAmount.call(this, 'fats');
+        totalFats(){
+            return this.nutrientAmount('fats');
         }
 
-        Ingredient.prototype.totalProtein = function(){
-            return nutrientAmount.call(this, 'protein');
+        totalProtein(){
+            return this.nutrientAmount('protein');
         }
 
-        function caloriesNominal(){
-            return this.carbs * calConst.perCarb
-                + this.fats* calConst.perFat
-                + this.protein * calConst.perProtein;
+        caloriesNominal(){
+            return this.carbs * calConst.perCarb + this.fats* calConst.perFat + this.protein * calConst.perProtein;
         }
 
-        Ingredient.prototype.caloriesNominal = caloriesNominal;
-
-        Ingredient.prototype.totalCalories = function(){
-            return caloriesNominal.call(this) * this.amount / nominalAmount.call(this);
+        totalCalories() {
+            return this.caloriesNominal() * this.amount / this.nominalAmount();
         }
 
-        return Ingredient;
-}]
+    }
+
+    return Ingredient;
+
+}];

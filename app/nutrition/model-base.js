@@ -4,16 +4,20 @@
 
 module.exports = function(){
 
-        function Base(){ }
+    class Base{
 
-        Base.prototype.isNew = function(){
+        constructor(dto) {
+            for(let property in dto){
+                this[property] = dto[property];
+            }
+        }
+
+        isNew(){
             return typeof this.id === 'undefined';
         }
 
-        Base.prototype.isDirty = function(){
-            return !this.isNew() && this.dirty;
-        };
+    }
 
-        return Base;
+    return Base;
 
 }

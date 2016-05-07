@@ -6,14 +6,14 @@
     </div>
 
     <div layout="row">
-        <md-button ng-click="handleSaveClick()">Save</md-button>
-        <md-button ng-click="handleCancelClick()">Cancel</md-button>
+        <md-button class="md-raised md-primary" ng-click="handleSaveClick()">Save</md-button>
+        <md-button class="md-raised md-primary" ng-click="handleCancelClick()">Cancel</md-button>
     </div>
 
 </form>
 
 <script type="text/ng-template" id="text-input.html">
-    <md-input-container class="md-block">
+    <md-input-container class="md-block md-accent">
         <label ng-bind="v.field"></label>
         <input ng-model="item[k]" type="v.type" step="v.step">
     </md-input-container>

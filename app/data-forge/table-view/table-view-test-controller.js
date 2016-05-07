@@ -8,19 +8,15 @@ module.exports = ['$scope', '$filter', '$injector', function($scope, $filter, $i
     const options = tableView.options;
     const columns = $scope.columns = tableView.columns;
 
-    $scope.items = this.items;
     $scope.selected = [];
 
     $scope.$watchCollection('selected', () => {
         this.selectedItemsChanged({items: $scope.selected.slice()});
     });
 
-    $scope.$watchCollection('items', () => {
+    $scope.$watchCollection(() => this.items, () => {
         $scope.selected.splice();
-    });
-
-    $scope.$watch(() => this.items, () => {
-        $scope.items = this.items;
+        this.selectedItemsChanged({items: $scope.selected.slice()});
     });
 
     $scope.resolveValue = function(item, p){
@@ -33,9 +29,8 @@ module.exports = ['$scope', '$filter', '$injector', function($scope, $filter, $i
 
         function resolveValue(){
             if(columns[p].reflect){
-                console.log(columns[p].reflect)
                 return columns[p].reflect.call(item);
-            } else if(item[p].constructor === Function){
+            } else if(isFunction(item[p])){
                 return item[p]();
             }
             return item[p];

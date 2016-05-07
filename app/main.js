@@ -5,6 +5,7 @@
 angular.module('NutriApp', [
     require('./df-input-form'),
     require('./recipe-manager'),
+    require('./nutrition'),
     require('angular-route'),
     'ngMaterial',
     'md.data.table'
@@ -42,4 +43,6 @@ angular.module('NutriApp', [
         };
     }])
     
-    .controller('recipeViewController', require('./views/recipes/recipeViewController'));
+    .controller('recipeViewController', require('./views/recipes/recipeViewController'))
+
+    .factory('recipeService', require('./server-services/recipe-service'));

@@ -27,6 +27,7 @@ router.get('/', function(req, res){
 
 router.put('/', function(req, res){
     var body = req.body;
+    console.log(body);
 
     Recipe.create(body, {
         include: body.ingredients ? [ Ingredient ] : []

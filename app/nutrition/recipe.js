@@ -2,27 +2,23 @@
  * Created by ggrab on 27.2.2016..
  */
 
-module.exports = ['modelBase', function(Base){
+module.exports = ['modelBase', 'Ingredient', function(Base, Ingredient){
 
-        function Recipe(){
+    class Recipe extends Base{
 
-            this.dirty = false;
-            this.ingredients = [];
-
+        constructor(dto){
+            super(dto);
+            if(this.ingredients){
+                this.ingredients = this.ingredients.map((ingredient) => new Ingredient(ingredient))
+            } else {
+                this.ingredients = [];
+            }
         }
 
-        Recipe.prototype = new Base();
-
-        Recipe.prototype.addIngredient = function(ingredient){
-            this.removeIngredient(ingredient);
-            ingredient.recipe_id = this.id;
-            this.ingredients.push(ingredient);
-        }
-
-        Recipe.prototype.removeIngredient = function(ingredient){
+        removeIngredient(ingredient){
             var i;
             if(ingredient.id){
-                i = this.ingredients.findIndex(function (e) { return e.id === ingredient.id; });
+                i = this.ingredients.findIndex((e) => e.id === ingredient.id);
             } else {
                 i = this.ingredients.indexOf(ingredient);
             }
@@ -31,28 +27,34 @@ module.exports = ['modelBase', function(Base){
             }
         }
 
-        function sumIngredientsNutritionalAspect(nutritionalAspect){
-            return this.ingredients.reduce(function (prev, curr) {
-                return prev + (curr[nutritionalAspect] ? curr[nutritionalAspect]() : 0);
-            }, 0);
-        };
-
-        Recipe.prototype.totalCalories = function(){
-            return sumIngredientsNutritionalAspect.call(this, 'totalCalories');
+        addIngredient(ingredient){
+            this.removeIngredient(ingredient);
+            ingredient.recipe_id = this.id;
+            this.ingredients.push(ingredient);
         }
 
-        Recipe.prototype.totalCarbs = function(){
-            return sumIngredientsNutritionalAspect.call(this, 'totalCarbs');
+        sumNutritionalAspect(aspect){
+            return this.ingredients.reduce((prev, curr) =>  prev + (curr[aspect] ? curr[aspect]() : 0), 0);
         }
 
-        Recipe.prototype.totalFats = function(){
-            return sumIngredientsNutritionalAspect.call(this, 'totalFats');
+        totalCalories(){
+            return this.sumNutritionalAspect('totalCalories');
         }
 
-        Recipe.prototype.totalProtein = function(){
-            return sumIngredientsNutritionalAspect.call(this, 'totalProtein');
+        totalCarbs(){
+            return this.sumNutritionalAspect('totalCarbs');
         }
 
-        return Recipe;
+        totalFats(){
+            return this.sumNutritionalAspect('totalFats');
+        }
+
+        totalProtein(){
+            return this.sumNutritionalAspect('totalProtein');
+        }
+
+    }
+
+    return Recipe;
 
 }]
