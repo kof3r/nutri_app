@@ -3,12 +3,12 @@
  */
 
 module.exports = {
-    templateUrl: 'templates/table-view-test.html',
+    templateUrl: 'templates/df-table-view.html',
     bindings: {
         title:'@',
         items:'<',
         tableView:'@',
         selectedItemsChanged:'&onSelectedItemsChanged'
     },
-    controller: require('./table-view-test-controller')
+    controller: 'dfTableViewController'
 };

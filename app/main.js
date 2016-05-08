@@ -4,6 +4,8 @@
 
 angular.module('NutriApp', [
     require('./data-forge'),
+    require('./df-input-form'),
+    require('./df-table-view'),
     require('./nutrition'),
     'ui.router',
     'ngMaterial',
@@ -23,7 +25,7 @@ angular.module('NutriApp', [
                 cache: false
             })
             .state('inputRecipe', {
-                url: '/newRecipe/:redirect?id',
+                url: '/newRecipe/:id',
                 templateUrl: 'templates/df-input-form.html',
                 controller: 'dfInputFormController',
                 resolve: {
