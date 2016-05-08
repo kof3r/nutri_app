@@ -45,6 +45,16 @@ angular.module('NutriApp', [
                     recipes: (recipeService) => recipeService.get(),
                     tableView: (ingredientTableView) => ingredientTableView
                 }
+            })
+            .state('inputIngredient', {
+                url: '/inputIngredient/:recipe_id?id',
+                component: 'dfInputForm',
+                resolve: {
+                    service: (ingredientService) => ingredientService,
+                    definition: (ingredientDetailView) => ingredientDetailView,
+                    item: ($stateParams, ingredientService) => ($stateParams.id ? ingredientService.get($stateParams.id) : {recipe_id: $stateParams.recipe_id}),
+                    redirect: () => 'ingredients'
+                }
             });
 
         $mdThemingProvider.theme('default')
@@ -55,6 +65,8 @@ angular.module('NutriApp', [
     .component('recipesView', require('./components/recipes'))
     .component('ingredientsView', require('./components/ingredientsView'))
     .factory('recipeService', require('./server-services/recipe-service'))
+    .factory('ingredientService', require('./server-services/ingredientService'))
     .factory('recipeDetailView', require('./meta/recipe-detail-view'))
     .factory('recipeTableView', require('./meta/recipe-table-view'))
+    .factory('ingredientDetailView', require('./meta/ingredient-detail-view'))
     .factory('ingredientTableView', require('./meta/ingredient-table-view'));

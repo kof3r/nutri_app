@@ -10,6 +10,19 @@ var Response = require('../util/response');
 
 var router = require('express').Router();
 
+router.get('/', function(req, res) {
+    const id = req.query.id;
+
+    Ingredient.findOne({ where: { id: id }}).then(function(ingredient) {
+        if(!ingredient) {
+            res.json(new Response(null, 'Failed to retrieve ingredient.'));
+        } else {
+            res.json(new Response(ingredient));
+        }
+    }).catch(function(error) {
+        res.json(new Response(null, 'Failed to retrieve ingredient.'));
+    })
+});
 
 router.put('/', function(req, res){
     var body = req.body;

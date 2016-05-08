@@ -8,7 +8,8 @@ module.exports = [
     '$state', function($scope, $params, $state) {
     
     $scope.fields = this.definition.fields;
-        
+
+    console.log(this.item);
     $scope.item = this.item;
     
     $scope.handleSaveClick = () => {
@@ -31,6 +32,9 @@ module.exports = [
         switch(field.type){
             case 'text':
                 return 'text-input.html';
+                break;
+            case 'number':
+                return 'number-input.html'
                 break;
         }
     };

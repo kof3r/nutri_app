@@ -17,6 +17,13 @@
 <script type="text/ng-template" id="text-input.html">
     <md-input-container class="md-block md-accent">
         <label ng-bind="v.field"></label>
+        <input ng-model="item[k]" type="v.type">
+    </md-input-container>
+</script>
+
+<script type="text/ng-template" id="number-input.html">
+    <md-input-container class="md-block md-accent">
+        <label ng-bind="v.field"></label>
         <input ng-model="item[k]" type="v.type" step="v.step">
     </md-input-container>
 </script>

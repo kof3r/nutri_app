@@ -12,7 +12,7 @@
     </md-list>
     <div flex="75" layout="column">
         <div layout="row">
-            <md-button class="md-raised md-primary" ng-click="newClicked()">New</md-button>
+            <md-button class="md-raised md-primary" ng-show="selected" ui-sref="inputIngredient({ recipe_id: selected.id})">New</md-button>
             <md-button class="md-raised md-accent" ng-click="editClicked()">Edit</md-button>
             <md-button class="md-raised md-warn" ng-click="deleteClicked()">Delete</md-button>
         </div>
