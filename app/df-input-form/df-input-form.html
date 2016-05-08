@@ -1,16 +1,18 @@
 
-<form flex="50" name="form" layout="column" ng-cloak layout-padding class="md-inline-form">
+<md-content layout="row" layout-align="center">
+    <form flex="50" name="form" layout="column" ng-cloak layout-padding class="md-inline-form">
 
-    <div layout="column">
-        <div ng-repeat="(k, v) in fields" ng-include="resolveFieldTemplate(v)"></div>
-    </div>
+        <div layout="column">
+            <div ng-repeat="(k, v) in fields" ng-include="resolveFieldTemplate(v)"></div>
+        </div>
 
-    <div layout="row">
-        <md-button class="md-raised md-primary" ng-click="handleSaveClick()">Save</md-button>
-        <md-button class="md-raised md-primary" ng-click="handleCancelClick()">Cancel</md-button>
-    </div>
+        <div layout="row">
+            <md-button class="md-raised md-primary" ng-click="handleSaveClick()">Save</md-button>
+            <md-button class="md-raised md-primary" ng-click="handleCancelClick()">Cancel</md-button>
+        </div>
 
-</form>
+    </form>
+</md-content>
 
 <script type="text/ng-template" id="text-input.html">
     <md-input-container class="md-block md-accent">

@@ -20,35 +20,39 @@ angular.module('NutriApp', [
         $stateProvider
             .state('recipes', {
                 url: '/recipes',
-                templateUrl:'templates/recipes.html',
-                controller: 'recipeViewController',
-                cache: false
+                component: 'recipesView',
+                cache: false,
+                resolve: {
+                    tableView: (recipeTableView) => recipeTableView
+                }
             })
             .state('inputRecipe', {
-                url: '/newRecipe/:id',
-                templateUrl: 'templates/df-input-form.html',
-                controller: 'dfInputFormController',
+                url: '/inputRecipe/?id',
+                component: 'dfInputForm',
                 resolve: {
-                    _service: 'recipeService',
-                    _definition: 'recipeDetailView',
-                    _redirect: () => 'recipes'
+                    service: (recipeService) => recipeService,
+                    definition: (recipeDetailView) => recipeDetailView,
+                    item: ($stateParams, recipeService) => ($stateParams.id ? recipeService.get($stateParams.id) : {}),
+                    redirect: () => 'recipes'
                 },
                 cache: false
+            })
+            .state('ingredients', {
+                url:'/ingredients',
+                component:'ingredientsView',
+                cache: false,
+                resolve: {
+                    recipes: (recipeService) => recipeService.get()
+                }
             });
 
         $mdThemingProvider.theme('default')
             .primaryPalette('amber')
             .accentPalette('deep-purple');
     }])
-
-    .controller('Controller', ['$scope', function($scope){
-        
-        
-
-    }])
     
-    .controller('recipeViewController', require('./views/recipes/recipeViewController'))
-    .controller('dfInputFormController', require('./df-input-form/controller'))
+    .component('recipesView', require('./views/recipes'))
+    .component('ingredientsView', require('./views/ingredientsView'))
     .factory('recipeService', require('./server-services/recipe-service'))
     .factory('recipeDetailView', require('./meta/recipe-detail-view'))
     .factory('recipeTableView', require('./meta/recipe-table-view'));

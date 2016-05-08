@@ -2,23 +2,20 @@
  * Created by gordan on 17.04.16..
  */
 
-module.exports = ['$scope', '$filter', '$injector', function($scope, $filter, $injector){
+module.exports = ['$scope', '$filter', function($scope, $filter){
 
-    const tableView = $injector.get(this.tableView);
-    const options = tableView.options;
-    const columns = $scope.columns = tableView.columns;
+    console.log(this.tableView)
+    const columns = $scope.columns = this.tableView.columns;
 
     $scope.items = this.items;
     $scope.selected = [];
 
     $scope.$watchCollection('selected', () => {
-        this.selectedItemsChanged({items: $scope.selected.slice()});
+        this.selectedItemsChanged({items: $scope.selected});
     });
 
     $scope.$watchCollection('items', () => {
-        console.log('saw');
-        $scope.selected.splice();
-        this.selectedItemsChanged({items: $scope.selected.slice()});
+        $scope.selected.splice(0);
     });
 
     $scope.resolveValue = function(item, p){

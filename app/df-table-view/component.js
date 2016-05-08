@@ -7,7 +7,7 @@ module.exports = {
     bindings: {
         title:'@',
         items:'<',
-        tableView:'@',
+        tableView:'<',
         selectedItemsChanged:'&onSelectedItemsChanged'
     },
     controller: 'dfTableViewController'

@@ -5,35 +5,26 @@
 module.exports = [
     '$scope',
     '$stateParams',
-    '$state',
-    '_service',
-    '_definition',
-    '_redirect', function($scope, $params, $state, _service, _definition, _redirect) {
+    '$state', function($scope, $params, $state) {
     
-    $scope.fields = _definition.fields;
+    $scope.fields = this.definition.fields;
         
-    if($params.id){
-        _service.get($params.id).then((recipe) => {
-            $scope.item = recipe;
-        })
-    } else {
-        $scope.item = {};
-    }
+    $scope.item = this.item;
     
     $scope.handleSaveClick = () => {
         let save;
         if($scope.item.id) {
-            save = _service.post($scope.item);
+            save = this.service.post($scope.item);
         } else {
-            save = _service.put($scope.item);
+            save = this.service.put($scope.item);
         }
         save.then(() => {
-            $state.go(_redirect);
+            $state.go(this.redirect);
         })
     };
     
     $scope.handleCancelClick = () => {
-        $state.go(_redirect);
+        $state.go(this.redirect);
     };
 
     $scope.resolveFieldTemplate = (field) => {

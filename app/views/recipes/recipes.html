@@ -1,24 +1,18 @@
 
-<md-content layout="row">
-    <div flex="15" layout="column" ng-hide="inputting">
+<md-content flex layout="row" layout-align="center">
+    <div flex="15" layout="column">
         <md-button class="md-raised md-primary"
-                   ui-sref="inputRecipe" ng-show="!item">New</md-button>
+                   ui-sref="inputRecipe" ng-show="!item">Add</md-button>
         <md-button class="md-raised md-accent"
                    ui-sref="inputRecipe({ id: item.id})" ng-show="item">Edit</md-button>
         <md-button class="md-raised md-primary"
                    ng-click="deleteRecipes()"
                    ng-disabled="!selected.length">Delete</md-button>
     </div>
-    <md-card flex="45" ng-hide="inputting" class="md-primary">
-        <table-view-test title="Recipes"
-                         items="items"
-                         table-view="recipeTableView"
-                         on-selected-items-changed="onSelectedItemsChanged(items)"></table-view-test>
+    <md-card flex="65" class="md-primary">
+        <df-table-view title="Recipes"
+                       items="items"
+                       table-view="$ctrl.tableView"
+                       on-selected-items-changed="onSelectedItemsChanged(items)"></df-table-view>
     </md-card>
-    <div layout="column" flex ng-show="pending.length">
-        <div ng-repeat="p in pending" layout="column">
-            <md-progress-circular class="md-block" md-mode="indeterminate"></md-progress-circular>
-            <div class="md-block" ng-bind="p.message"></div>
-        </div>
-    </div>
 </md-content>

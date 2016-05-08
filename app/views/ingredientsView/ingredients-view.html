@@ -1,0 +1,9 @@
+
+<md-content flex layout="row" layout-align="center">
+    <md-list flex="15">
+        <md-list-item style="cursor: pointer" md-ink-ripple ng-repeat="recipe in recipes" ng-bind="recipe.name"></md-list-item>
+    </md-list>
+    <div flex="65">
+        <df-table-view></df-table-view>
+    </div>
+</md-content>

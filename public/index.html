@@ -9,12 +9,13 @@
     <script src="components/sprintf/dist/sprintf.min.js"></script>
 
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+    <link rel="stylesheet" href="styles/stylesheet.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="components/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css"/>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0-alpha.4/angular-ui-router.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
@@ -23,21 +24,20 @@
     <script src="bundle.js"></script>
 
 </head>
-<body ng-controller="Controller" ng-keydown="handleKeyDown($event)" layout="column" layout-padding>
+<body layout="column" layout-padding>
 
-    <md-toolbar md-whiteframe="3" layout="row" layout-align="space-between">
-        <div flex class="md-toolbar-tools">
-            <div class="md-title">NutriApp</div>
-        </div>
-        <div layout="row">
-            <md-button class="md-raised">Overview</md-button>
-            <md-button class="md-raised">Recipes</md-button>
+    <md-toolbar md-whiteframe="3" layout="row">
+        <div class="md-toolbar-tools">
+            <md-list flex layout="row">
+                <md-list-item class="nav-item" ui-sref="recipes"><span>NutriApp</span></md-list-item>
+                <md-list-item flex></md-list-item>
+                <md-list-item class="nav-item" ui-sref="recipes"><span>Recipes</span></md-list-item>
+                <md-list-item class="nav-item" ui-sref="ingredients"><span>Ingredients</span></md-list-item>
+            </md-list>
         </div>
     </md-toolbar>
 
-    <div flex layout="row">
-        <md-content ui-view flex layout-padding></md-content>
-    </div>
+    <md-content flex ui-view></md-content>
 
 </body>
 </html>
