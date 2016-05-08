@@ -35,6 +35,7 @@ module.exports = function(grunt){
                     'public/bundle.js': appSrcFiles
                 },
                 options:{
+                    browserifyOptions:{ debug: true },
                     transform: [
                         ['babelify', {
                             presets: 'es2015'

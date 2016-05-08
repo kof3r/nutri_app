@@ -4,8 +4,8 @@
 
 angular.module('NutriApp', [
     require('./data-forge'),
-    require('./df-input-form'),
-    require('./df-table-view'),
+    require('./components/df-input-form'),
+    require('./components/df-table-view'),
     require('./nutrition'),
     'ui.router',
     'ngMaterial',
@@ -51,8 +51,8 @@ angular.module('NutriApp', [
             .accentPalette('deep-purple');
     }])
     
-    .component('recipesView', require('./views/recipes'))
-    .component('ingredientsView', require('./views/ingredientsView'))
+    .component('recipesView', require('./components/recipes'))
+    .component('ingredientsView', require('./components/ingredientsView'))
     .factory('recipeService', require('./server-services/recipe-service'))
     .factory('recipeDetailView', require('./meta/recipe-detail-view'))
     .factory('recipeTableView', require('./meta/recipe-table-view'));

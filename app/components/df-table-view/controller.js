@@ -4,7 +4,6 @@
 
 module.exports = ['$scope', '$filter', function($scope, $filter){
 
-    console.log(this.tableView)
     const columns = $scope.columns = this.tableView.columns;
 
     $scope.items = this.items;
