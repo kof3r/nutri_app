@@ -1,18 +1,26 @@
 
-<md-content flex layout="row" layout-align="center">
-    <md-list flex="15" flex-offset="5">
+<md-content flex layout="row">
+    <md-list flex="15">
         <md-list-item class="nav-item-vert"
                       layout="row"
                       layout-align="center"
                       ng-repeat="recipe in recipes"
-                      ng-click="setIngredients(recipe.ingredients)">
-            <span ng-bind="recipe.name"></span>
+                      ng-click="selectRecipe(recipe)">
+            <i class="material-icons" ng-show="selected === recipe">keyboard_arrow_right</i>
+            <span flex-offset="10" ng-bind="recipe.name"></span>
         </md-list-item>
     </md-list>
-    <div flex>
-        <df-table-view title="Ingredients"
-                       items="ingredients"
-                       table-view="$ctrl.tableView"
-                       on-selected-items-changed="selectedItemsChanged(items)"></df-table-view>
+    <div flex="75" layout="column">
+        <div layout="row">
+            <md-button class="md-raised md-primary" ng-click="newClicked()">New</md-button>
+            <md-button class="md-raised md-accent" ng-click="editClicked()">Edit</md-button>
+            <md-button class="md-raised md-warn" ng-click="deleteClicked()">Delete</md-button>
+        </div>
+        <md-card flex ng-show="ingredients.length">
+            <df-table-view title="Ingredients"
+                           items="ingredients"
+                           table-view="$ctrl.tableView"
+                           on-selected-items-changed="selectedItemsChanged(items)"></df-table-view>
+        </md-card>
     </div>
 </md-content>
