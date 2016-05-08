@@ -5,21 +5,28 @@
 module.exports = ['$scope', function($scope) {
     
     $scope.recipes = this.recipes;
-    $scope.selected = null;
+    $scope.selectedRecipe = null;
+    
     $scope.ingredients = [];
+    $scope.selectedIngredients = [];
 
-    $scope.$watch('selected', (value) => {
+    $scope.$watch('selectedRecipe', (value) => {
         $scope.ingredients.splice(0);
         if(value) {
             angular.copy(value.ingredients, $scope.ingredients);
         }
     });
 
+    $scope.selectedItemsChanged = function(items) {
+        $scope.selectedIngredients.splice(0);
+        angular.copy(items, $scope.selectedIngredients);
+    };
+
     $scope.selectRecipe = function(recipe) {
-        if($scope.selected === recipe){
-            $scope.selected = null;
+        if($scope.selectedRecipe === recipe){
+            $scope.selectedRecipe = null;
         } else {
-            $scope.selected = recipe;
+            $scope.selectedRecipe = recipe;
         }
     }
     
