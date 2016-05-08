@@ -4,9 +4,7 @@
 
 const name = 'nutrition';
 
-const nutrition = angular.module(name, [
-    require('../settings')  //TODO
-]);
+const nutrition = angular.module(name, []);
 
 nutrition.factory('modelBase', require('./model-base'));
 nutrition.factory('Ingredient', require('./ingredient'));
@@ -16,30 +14,12 @@ nutrition.value('calorieConstant', {
     perCarb: 4,
     perFat: 9,
     perProtein: 4
-})
-
-nutrition.filter('energy', ['settingsUnitsEnergy', function(setting) {
-    return function(value){
-        return value.toFixed(0) + ' ' + setting.value();
-    }
-}])
-
-nutrition.filter('mass', ['settingsUnitsMass', function(setting){
-    return function(value){
-        return value.toFixed(1) + ' ' + setting.value();
-    }
-}])
-
-nutrition.filter('volume', ['settingsUnitsVolume', function(setting){
-    return function(value){
-        return value.toFixed(1) + ' ' + setting.value();
-    }
-}])
-
-nutrition.filter('quantity', function(){
-    return function(value){
-        return value.toFixed(0);
-    }
 });
+
+const filters = require('./filters');
+nutrition.filter('energy', filters.energy);
+nutrition.filter('mass', filters.mass);
+nutrition.filter('volume', filters.volume);
+nutrition.filter('quantity', filters.quantity);
 
 module.exports = name;

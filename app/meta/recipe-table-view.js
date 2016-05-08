@@ -11,4 +11,4 @@ module.exports = ['tableViewConstructor', 'tableColumnConstructor', function(Tab
             totalCalories: new TableColumn().withHeader('Calories').displayAs('energy').alignTo('right')
         });
 
-}]
+}];

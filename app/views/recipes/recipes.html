@@ -15,13 +15,6 @@
                          table-view="recipeTableView"
                          on-selected-items-changed="onSelectedItemsChanged(items)"></table-view-test>
     </md-card>
-    <md-card flex="60" ng-show="inputting">
-        <df-input-form definition="recipeDetailView"
-                       item="item"
-                       validator="recipeValidator"
-                       on-save-clicked="saveRecipe(item)"
-                       on-cancel-clicked="cancelInput()"></df-input-form>
-    </md-card>
     <div layout="column" flex ng-show="pending.length">
         <div ng-repeat="p in pending" layout="column">
             <md-progress-circular class="md-block" md-mode="indeterminate"></md-progress-circular>

@@ -3,7 +3,7 @@
  */
 
 angular.module('NutriApp', [
-    require('./recipe-manager'),
+    require('./data-forge'),
     require('./nutrition'),
     'ui.router',
     'ngMaterial',
@@ -19,7 +19,8 @@ angular.module('NutriApp', [
             .state('recipes', {
                 url: '/recipes',
                 templateUrl:'templates/recipes.html',
-                controller: 'recipeViewController'
+                controller: 'recipeViewController',
+                cache: false
             })
             .state('inputRecipe', {
                 url: '/newRecipe/:redirect?id',
@@ -29,7 +30,8 @@ angular.module('NutriApp', [
                     _service: 'recipeService',
                     _definition: 'recipeDetailView',
                     _redirect: () => 'recipes'
-                }
+                },
+                cache: false
             });
 
         $mdThemingProvider.theme('default')
@@ -44,6 +46,7 @@ angular.module('NutriApp', [
     }])
     
     .controller('recipeViewController', require('./views/recipes/recipeViewController'))
-    .controller('loadingController', require('./views/loading/loading'))
     .controller('dfInputFormController', require('./df-input-form/controller'))
-    .factory('recipeService', require('./server-services/recipe-service'));
+    .factory('recipeService', require('./server-services/recipe-service'))
+    .factory('recipeDetailView', require('./meta/recipe-detail-view'))
+    .factory('recipeTableView', require('./meta/recipe-table-view'));
