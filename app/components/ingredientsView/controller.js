@@ -3,7 +3,9 @@
  */
 
 module.exports = ['$scope', function($scope) {
-    
+
+    const ingredientService = this.service;
+
     $scope.recipes = this.recipes;
     $scope.selectedRecipe = null;
     
@@ -17,6 +19,15 @@ module.exports = ['$scope', function($scope) {
         }
     });
 
+    $scope.deleteClicked = function() {
+        const currentlySelectedRecipe = $scope.selectedRecipe;
+        Promise.all($scope.selectedIngredients.map((ingredient) => ingredientService.delete(ingredient.id).then((deleted) => {
+            if(deleted && currentlySelectedRecipe) {
+                currentlySelectedRecipe.removeIngredient(ingredient);
+            }
+        })))
+    };
+
     $scope.selectedItemsChanged = function(items) {
         $scope.selectedIngredients.splice(0);
         angular.copy(items, $scope.selectedIngredients);
@@ -28,6 +39,6 @@ module.exports = ['$scope', function($scope) {
         } else {
             $scope.selectedRecipe = recipe;
         }
-    }
+    };
     
 }];

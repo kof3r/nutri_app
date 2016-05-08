@@ -43,12 +43,14 @@ angular.module('NutriApp', [
                 cache: false,
                 resolve: {
                     recipes: (recipeService) => recipeService.get(),
+                    service: (ingredientService) => ingredientService,
                     tableView: (ingredientTableView) => ingredientTableView
                 }
             })
             .state('inputIngredient', {
                 url: '/inputIngredient/:recipe_id?id',
                 component: 'dfInputForm',
+                cache: false,
                 resolve: {
                     service: (ingredientService) => ingredientService,
                     definition: (ingredientDetailView) => ingredientDetailView,
@@ -64,8 +66,10 @@ angular.module('NutriApp', [
     
     .component('recipesView', require('./components/recipes'))
     .component('ingredientsView', require('./components/ingredientsView'))
+    
     .factory('recipeService', require('./server-services/recipe-service'))
-    .factory('ingredientService', require('./server-services/ingredientService'))
+    .factory('ingredientService', require('./server-services/ingredient-service'))
+    
     .factory('recipeDetailView', require('./meta/recipe-detail-view'))
     .factory('recipeTableView', require('./meta/recipe-table-view'))
     .factory('ingredientDetailView', require('./meta/ingredient-detail-view'))
