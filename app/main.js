@@ -42,7 +42,8 @@ angular.module('NutriApp', [
                 component:'ingredientsView',
                 cache: false,
                 resolve: {
-                    recipes: (recipeService) => recipeService.get()
+                    recipes: (recipeService) => recipeService.get(),
+                    tableView: (ingredientTableView) => ingredientTableView
                 }
             });
 
@@ -55,4 +56,5 @@ angular.module('NutriApp', [
     .component('ingredientsView', require('./components/ingredientsView'))
     .factory('recipeService', require('./server-services/recipe-service'))
     .factory('recipeDetailView', require('./meta/recipe-detail-view'))
-    .factory('recipeTableView', require('./meta/recipe-table-view'));
+    .factory('recipeTableView', require('./meta/recipe-table-view'))
+    .factory('ingredientTableView', require('./meta/ingredient-table-view'));

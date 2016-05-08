@@ -6,6 +6,7 @@ module.exports = {
     templateUrl: 'templates/ingredients-view.html',
     controller: require('./controller'),
     bindings: {
-        recipes: '<'
+        recipes: '<',
+        tableView: '<'
     }
 };

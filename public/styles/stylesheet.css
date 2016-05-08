@@ -1,4 +1,12 @@
 
-.nav-item:hover {
+*[class^='nav-item-'] {
+    cursor: pointer;
+}
+
+.nav-item-horiz:hover {
     border-bottom: solid;
+}
+
+.nav-item-vert:hover {
+    border-left: solid;
 }
