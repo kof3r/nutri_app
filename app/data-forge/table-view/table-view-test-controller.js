@@ -8,13 +8,15 @@ module.exports = ['$scope', '$filter', '$injector', function($scope, $filter, $i
     const options = tableView.options;
     const columns = $scope.columns = tableView.columns;
 
+    $scope.items = this.items;
     $scope.selected = [];
 
     $scope.$watchCollection('selected', () => {
         this.selectedItemsChanged({items: $scope.selected.slice()});
     });
 
-    $scope.$watchCollection(() => this.items, () => {
+    $scope.$watchCollection('items', () => {
+        console.log('saw');
         $scope.selected.splice();
         this.selectedItemsChanged({items: $scope.selected.slice()});
     });

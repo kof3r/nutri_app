@@ -11,7 +11,7 @@ var Response = require('../util/response');
 
 var router = require('express').Router();
 
-router.get('/', function(req, res){
+router.get('/all', function(req, res){
     Recipe.findAll({
         include:{model: Ingredient, required:false}
     }).then(function(recipes){
@@ -22,6 +22,18 @@ router.get('/', function(req, res){
         }
     }).catch(function(error){
         res.json(new Response(null, 'Failed to retrieve recipes.'));
+    });
+});
+
+router.get('/', function(req, res) {
+    Recipe.findOne({ where: {id: req.query.id} }).then((recipe) => {
+        if(!recipe) {
+            res.json(new Response(null, 'Failed to retrieve recipe.'));
+        } else {
+            res.json(new Response(recipe));
+        }
+    }).catch(function(error){
+        res.json(new Response(null, 'Failed to retrieve recipe.'));
     });
 });
 

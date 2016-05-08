@@ -2,32 +2,45 @@
  * Created by gordan on 05.05.16..
  */
 
-module.exports = ['$scope', '$injector', function($scope, $injector) {
+module.exports = [
+    '$scope',
+    '$stateParams',
+    '$state',
+    '_service',
+    '_definition',
+    '_redirect', function($scope, $params, $state, _service, _definition, _redirect) {
     
-    $scope.fields = $injector.get(this.definition).fields;
-    $scope.item = {};
-
-    $scope.$watch(() => this.item, () => {
-        if(this.item){
-            angular.copy(this.item, $scope.item);
-        } else {
-            $scope.item = {};
-        }
-    });
+    $scope.fields = _definition.fields;
+        
+    if($params.id){
+        _service.get($params.id).then((recipe) => {
+            $scope.item = recipe;
+        })
+    } else {
+        $scope.item = {};
+    }
     
     $scope.handleSaveClick = () => {
-        this.onSaveClicked({ item: $scope.item });
+        let save;
+        if($scope.item.id) {
+            save = _service.post($scope.item);
+        } else {
+            save = _service.put($scope.item);
+        }
+        save.then(() => {
+            $state.go(_redirect);
+        })
     };
     
     $scope.handleCancelClick = () => {
-        this.onCancelClicked();
+        $state.go(_redirect);
     };
 
     $scope.resolveFieldTemplate = (field) => {
         switch(field.type){
             case 'text':
                 return 'text-input.html';
-            break;
+                break;
         }
     };
     

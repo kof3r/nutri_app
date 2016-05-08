@@ -2,9 +2,9 @@
 <md-content layout="row">
     <div flex="15" layout="column" ng-hide="inputting">
         <md-button class="md-raised md-primary"
-                   ng-click="newClicked()" ng-show="selected.length !== 1">New</md-button>
+                   ui-sref="inputRecipe" ng-show="!item">New</md-button>
         <md-button class="md-raised md-accent"
-                   ng-click="editClicked()" ng-show="selected.length === 1">Edit</md-button>
+                   ui-sref="inputRecipe({ id: item.id})" ng-show="item">Edit</md-button>
         <md-button class="md-raised md-primary"
                    ng-click="deleteRecipes()"
                    ng-disabled="!selected.length">Delete</md-button>
@@ -22,4 +22,10 @@
                        on-save-clicked="saveRecipe(item)"
                        on-cancel-clicked="cancelInput()"></df-input-form>
     </md-card>
+    <div layout="column" flex ng-show="pending.length">
+        <div ng-repeat="p in pending" layout="column">
+            <md-progress-circular class="md-block" md-mode="indeterminate"></md-progress-circular>
+            <div class="md-block" ng-bind="p.message"></div>
+        </div>
+    </div>
 </md-content>

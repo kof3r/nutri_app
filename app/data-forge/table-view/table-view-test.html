@@ -14,7 +14,7 @@
             </tr>
             </thead>
             <tbody md-body>
-            <tr md-row md-select="i" md-select-id="id" md-auto-select ng-repeat="i in $ctrl.items">
+            <tr md-row md-select="i" md-select-id="id" md-auto-select ng-repeat="i in items">
                 <td md-cell ng-repeat="(p, c) in columns">{{resolveValue(i, p)}}</td>
             </tr>
             </tbody>

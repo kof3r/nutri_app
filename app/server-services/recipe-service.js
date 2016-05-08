@@ -6,9 +6,13 @@ module.exports = ['$http', 'Recipe', function($http, Recipe) {
     
     const url = 'api/recipe';
     
-    function get() {
-        return $http.get(url).then((res) => {
-            return res.data.response.map((recipe) => new Recipe(recipe));
+    function get(id) {
+        return $http.get(`${url}${id ? '' : '/all'}`, { params: { id: id } }).then((res) => {
+            if(angular.isArray(res.data.response)){
+                return res.data.response.map((recipe) => new Recipe(recipe));
+            } else {
+                return new Recipe(res.data.response);
+            }
         });
     }
 

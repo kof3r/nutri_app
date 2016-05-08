@@ -3,46 +3,47 @@
  */
 
 angular.module('NutriApp', [
-    require('./df-input-form'),
     require('./recipe-manager'),
     require('./nutrition'),
-    require('angular-route'),
+    'ui.router',
     'ngMaterial',
     'md.data.table'
 ])
 
-    .config(['$routeProvider', '$mdThemingProvider', function($route, $mdThemingProvider){
+    .config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', function($stateProvider, $urlRouterProvider, $mdThemingProvider){
 
-        $route.when('/', {
-            templateUrl:'templates/recipes.html',
-            controller: 'recipeViewController'
-        });
+        $urlRouterProvider
+            .otherwise('/recipes');
+
+        $stateProvider
+            .state('recipes', {
+                url: '/recipes',
+                templateUrl:'templates/recipes.html',
+                controller: 'recipeViewController'
+            })
+            .state('inputRecipe', {
+                url: '/newRecipe/:redirect?id',
+                templateUrl: 'templates/df-input-form.html',
+                controller: 'dfInputFormController',
+                resolve: {
+                    _service: 'recipeService',
+                    _definition: 'recipeDetailView',
+                    _redirect: () => 'recipes'
+                }
+            });
 
         $mdThemingProvider.theme('default')
             .primaryPalette('amber')
             .accentPalette('deep-purple');
     }])
 
-    .controller('Controller', ['$rootScope', '$scope', '$mdSidenav', function($rootScope, $scope, $mdSidenav){
+    .controller('Controller', ['$scope', function($scope){
+        
+        
 
-        this.$onInit = () => {
-
-            $scope.openMenu = () => {
-                $mdSidenav('menu').toggle();
-            };
-
-            $scope.handleKeyDown = function($event){
-                switch($event.which){
-                    case 27:{
-                        $rootScope.$broadcast('escKeyDown');
-                        break;
-                    }
-                }
-            }
-
-        };
     }])
     
     .controller('recipeViewController', require('./views/recipes/recipeViewController'))
-
+    .controller('loadingController', require('./views/loading/loading'))
+    .controller('dfInputFormController', require('./df-input-form/controller'))
     .factory('recipeService', require('./server-services/recipe-service'));

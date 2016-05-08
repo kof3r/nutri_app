@@ -14,6 +14,7 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
@@ -24,23 +25,18 @@
 </head>
 <body ng-controller="Controller" ng-keydown="handleKeyDown($event)" layout="column" layout-padding>
 
-    <md-toolbar md-whiteframe="3" layout="row">
-        <div class="md-toolbar-tools">
+    <md-toolbar md-whiteframe="3" layout="row" layout-align="space-between">
+        <div flex class="md-toolbar-tools">
             <div class="md-title">NutriApp</div>
+        </div>
+        <div layout="row">
+            <md-button class="md-raised">Overview</md-button>
+            <md-button class="md-raised">Recipes</md-button>
         </div>
     </md-toolbar>
 
     <div flex layout="row">
-
-        <md-sidenav flex="15" md-whiteframe="3" layout="column" class="sidenav1" md-is-locked-open='true'>
-            <md-list>
-                <md-list-item><md-button style="width: 100%">Recipes</md-button></md-list-item>
-                <md-list-item><md-button style="width: 100%">Options</md-button></md-list-item>
-            </md-list>
-        </md-sidenav>
-
-        <md-content flex ng-view layout-padding></md-content>
-
+        <md-content ui-view flex layout-padding></md-content>
     </div>
 
 </body>

@@ -2,25 +2,15 @@
  * Created by gordan on 17.04.16..
  */
 
-module.exports = ['$scope', 'recipeService', function($scope, service){
+module.exports = ['$scope', '$state', 'recipeService', function($scope, $state, service){
 
     $scope.items = [];
     $scope.selected = [];
     $scope.item = null;
     disableInput();
 
-    service.get().then((items) => $scope.items = items);
-
-    $scope.$watchCollection('items', () => {
-        $scope.selected.splice();
-    });
-    
-    $scope.$watchCollection('selected', function handleSelectedItemChanged(){
-        if($scope.selected.length === 1){
-            $scope.item = $scope.selected[0];
-        } else {
-            $scope.item = null;
-        }
+    service.get().then((recipes) => {
+        angular.copy(recipes, $scope.items);
     });
 
     $scope.cancelInput = function() {
@@ -38,14 +28,17 @@ module.exports = ['$scope', 'recipeService', function($scope, service){
     $scope.editClicked = function() {
         enableInput();
     };
-
-    $scope.newClicked = function() {
-        enableInput();
-    };
     
     $scope.onSelectedItemsChanged = function(items){
+        console.log('echi')
         $scope.selected.splice();
         angular.copy(items, $scope.selected);
+        console.log($scope.selected);
+        if($scope.selected.length === 1){
+            $scope.item = $scope.selected[0];
+        } else {
+            $scope.item = null;
+        }
     };
 
     $scope.saveRecipe = function(recipe) {
@@ -72,7 +65,7 @@ module.exports = ['$scope', 'recipeService', function($scope, service){
     }
 
     function removeFromRecipes(recipe){
-        let i = $scope.items.findIndex((r) => r.id === recipe.id);
+        const i = $scope.items.findIndex((r) => r.id === recipe.id);
         if(i !== -1) {
             $scope.items.splice(i, 1);
         }
