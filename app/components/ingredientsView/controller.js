@@ -13,6 +13,7 @@ module.exports = ['$scope', function($scope) {
     $scope.selectedIngredients = [];
 
     $scope.$watch('selectedRecipe', (value) => {
+        $scope.ingredients.splice(0);
         if(value){
             setIngredients(value);
         }
@@ -23,6 +24,7 @@ module.exports = ['$scope', function($scope) {
         Promise.all($scope.selectedIngredients.map((ingredient) => ingredientService.delete(ingredient.id).then((deleted) => {
             if(deleted && currentlySelectedRecipe) {
                 currentlySelectedRecipe.removeIngredient(ingredient);
+                $scope.ingredients.splice(0);
                 setIngredients(currentlySelectedRecipe);
             }
         })))
@@ -42,7 +44,6 @@ module.exports = ['$scope', function($scope) {
     };
 
     function setIngredients(recipe) {
-        $scope.ingredients.splice(0);
         angular.copy(recipe.ingredients, $scope.ingredients);
     }
 
