@@ -1,9 +1,9 @@
 
 <md-content layout="row" layout-align="center">
-    <form flex="50" name="form" layout="column" ng-cloak layout-padding class="md-inline-form">
+    <form flex="30" name="form" layout="column" ng-cloak layout-padding class="md-inline-form">
 
-        <div layout="column">
-            <div ng-repeat="(k, v) in fields" ng-include="resolveFieldTemplate(v)"></div>
+        <div layout="column" layout-align="center">
+            <div ng-repeat="(k, v) in fields" ng-include="v.template"></div>
         </div>
 
         <div layout="row">
@@ -26,6 +26,15 @@
         <label ng-bind="v.field"></label>
         <input ng-model="item[k]" type="v.type" step="v.step">
     </md-input-container>
+</script>
+
+<script type="text/ng-template" id="select.html">
+    <div layout="row" layout-align="center">
+        <md-progress-circular ng-hide="v.enum" md-diameter="24" md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <md-select ng-show="v.enum" ng-model="item[k]">
+        <md-option ng-repeat="option in v.enum" ng-bind="option"></md-option>
+    </md-select>
 </script>
 
 <script type="text/ng-template" id="read-only.html">

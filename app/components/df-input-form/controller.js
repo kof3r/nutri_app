@@ -6,12 +6,12 @@ module.exports = [
     '$scope',
     '$stateParams',
     '$state', function($scope, $params, $state) {
-    
-    $scope.fields = this.definition.fields;
 
-    console.log(this.item);
+    $scope.fields = angular.copy(this.definition.fields);
+    resolvePromises();
+
     $scope.item = this.item;
-    
+
     $scope.handleSaveClick = () => {
         let save;
         if($scope.item.id) {
@@ -23,20 +23,18 @@ module.exports = [
             $state.go(this.redirect);
         })
     };
-    
+
     $scope.handleCancelClick = () => {
         $state.go(this.redirect);
     };
 
-    $scope.resolveFieldTemplate = (field) => {
-        switch(field.type){
-            case 'text':
-                return 'text-input.html';
-                break;
-            case 'number':
-                return 'number-input.html'
-                break;
+    function resolvePromises() {
+        for(let prop in $scope.fields) {
+            let field = $scope.fields[prop];
+            if(field.resolve) {
+                field.resolve();
+            }
         }
-    };
+    }
     
 }];

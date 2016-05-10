@@ -13,32 +13,40 @@ module.exports = function(){
     FormField.prototype.labelAs = function(label){
         this.field = label;
         return this;
-    }
-
-    FormField.prototype.ofType = function(type){
-        this.type = type;
+    };
+    
+    FormField.prototype.asText = function() {
+        this.type = 'text';
+        this.template = 'text-input.html';
         return this;
-    }
+    };
 
-    FormField.prototype.withStep = function(step){
+    FormField.prototype.asNumber = function(step) {
+        this.type = 'number';
         this.step = step;
+        this.template = 'number-input.html';
         return this;
-    }
+    };
+
+    FormField.prototype.asEnum = function(values) {
+        this.type = 'enum';
+        this.template = 'select.html';
+        if(angular.isArray(values)){
+            this.enum = values;
+        } else {
+            this.resolve = function() {
+                values().then((resolved) => {
+                    this.enum = resolved;
+                });
+            }
+        }
+        return this;
+    };
 
     FormField.prototype.displayAs = function(filter){
         this.filter = filter;
         return this;
-    }
-
-    FormField.prototype.Self = function(reflect){
-        this.reflect = reflect;
-        return this;
-    }
-
-    FormField.prototype.validate = function(validator, message){
-        this.validators.push({validator: validator, message: message});
-        return this;
-    }
+    };
 
     return FormField;
 
