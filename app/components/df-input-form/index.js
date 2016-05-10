@@ -5,7 +5,6 @@
 const name = 'dfInputForm';
 
 angular.module(name, [])
-    .component('dfInputForm', require('./component'))
-    .controller('dfInputFormController', require('./controller'));
+    .component('dfInputForm', require('./component'));
 
 module.exports = name;

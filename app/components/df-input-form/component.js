@@ -5,11 +5,10 @@
 module.exports = {
 
     template: require('./df-input-form.html'),
-    controller: 'dfInputFormController',
+    controller: require('./controller'),
     bindings: {
         definition: '<',
-        redirect: '<',
-        service: '<',
+        saveClicked: '&onSaveClicked',
         item: '<'
     }
 

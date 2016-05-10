@@ -10,3 +10,7 @@
 .nav-item-vert:hover {
     border-left: solid;
 }
+
+md-input-container > * {
+    font-size: 14px;
+}

@@ -8,6 +8,7 @@ angular.module('NutriApp', [
     require('./components/df-table-view'),
     require('./nutrition'),
     'ui.router',
+    'ngAnimate',
     'ngMaterial',
     'md.data.table'
 ])
@@ -15,9 +16,21 @@ angular.module('NutriApp', [
     .config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', function($stateProvider, $urlRouterProvider, $mdThemingProvider){
 
         $urlRouterProvider
-            .otherwise('/recipes');
+            .otherwise('/demo');
 
         $stateProvider
+            .state('demo', {
+                url:'/demo',
+                component: 'demoView',
+                cache: false,
+                resolve: {
+                    recipes: (recipeService) => recipeService.get(),
+                    recipeTable: (recipeTableView) => recipeTableView,
+                    recipeForm: (recipeDetailView) => recipeDetailView,
+                    ingredientTable: (ingredientTableView) => ingredientTableView,
+                    ingredientForm: (ingredientDetailView) => ingredientDetailView
+                }
+            })
             .state('recipes', {
                 url: '/recipes',
                 component: 'recipesView',
@@ -66,6 +79,7 @@ angular.module('NutriApp', [
     
     .component('recipesView', require('./components/recipes'))
     .component('ingredientsView', require('./components/ingredientsView'))
+    .component('demoView', require('./components/demoView'))
     
     .factory('recipeService', require('./server-services/recipe-service'))
     .factory('ingredientService', require('./server-services/ingredient-service'))

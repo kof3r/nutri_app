@@ -3,30 +3,30 @@
  */
 
 module.exports = [
-    '$scope',
-    '$stateParams',
-    '$state', function($scope, $params, $state) {
+    '$scope', function($scope) {
 
-    $scope.fields = angular.copy(this.definition.fields);
+    const self = this;
+
+    $scope.fields = angular.copy(self.definition.fields);
     resolvePromises();
 
-    $scope.item = this.item;
-
-    $scope.handleSaveClick = () => {
-        let save;
-        if($scope.item.id) {
-            save = this.service.post($scope.item);
+    $scope.$watch(() => self.item, copyItem);
+        
+    $scope.handleSaveClick = function() {
+        this.saveClicked($scope.item);
+    };
+        
+    $scope.handleRevertClick = function() {
+        copyItem();
+    };
+        
+    function copyItem() {
+        if(self.item){
+            $scope.item = angular.copy(self.item);
         } else {
-            save = this.service.put($scope.item);
+            $scope.item = {};
         }
-        save.then(() => {
-            $state.go(this.redirect);
-        })
-    };
-
-    $scope.handleCancelClick = () => {
-        $state.go(this.redirect);
-    };
+    }
 
     function resolvePromises() {
         for(let prop in $scope.fields) {
