@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-    templateUrl: 'templates/recipes.html',
+    template: require('./recipes.html'),
     controller: require('./controller'),
     bindings: {
         tableView: '<'

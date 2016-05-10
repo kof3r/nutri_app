@@ -4,7 +4,7 @@
 
 module.exports = {
 
-    templateUrl: 'templates/df-input-form.html',
+    template: require('./df-input-form.html'),
     controller: 'dfInputFormController',
     bindings: {
         definition: '<',

@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-    templateUrl: 'templates/df-table-view.html',
+    template: require('./df-table-view.html'),
     bindings: {
         title:'@',
         items:'<',

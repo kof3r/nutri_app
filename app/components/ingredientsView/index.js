@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-    templateUrl: 'templates/ingredients-view.html',
+    template: require('./ingredients-view.html'),
     controller: require('./controller'),
     bindings: {
         recipes: '<',
