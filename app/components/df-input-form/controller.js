@@ -13,7 +13,7 @@ module.exports = [
     $scope.$watch(() => self.item, copyItem);
         
     $scope.handleSaveClick = function() {
-        this.saveClicked($scope.item);
+        self.saveClicked({ item: $scope.item });
     };
         
     $scope.handleRevertClick = function() {
