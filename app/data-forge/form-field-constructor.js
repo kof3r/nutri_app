@@ -42,6 +42,12 @@ module.exports = function(){
         }
         return this;
     };
+    
+    FormField.prototype.asSlider = function(type) {
+        this.type = type;
+        this.template = 'df-form-slider.html';
+        return this;
+    };
 
     FormField.prototype.displayAs = function(filter){
         this.filter = filter;

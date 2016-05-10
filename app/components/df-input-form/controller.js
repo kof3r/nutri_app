@@ -31,6 +31,7 @@ module.exports = [
     function resolvePromises() {
         for(let prop in $scope.fields) {
             let field = $scope.fields[prop];
+            console.log(field)
             if(field.resolve) {
                 field.resolve();
             }
