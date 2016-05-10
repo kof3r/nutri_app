@@ -2,12 +2,12 @@
 <md-content layout="row">
 
     <md-content flex layout="column">
-        <md-card md-whiteframe="6" layout-padding>
+        <md-card layout-padding>
             <df-input-form definition="$ctrl.recipeForm"
                            item="selectedRecipe"
                            on-save-clicked="saveRecipe(item)"></df-input-form>
         </md-card>
-        <md-card md-whiteframe="6" flex>
+        <md-card flex>
             <df-table-view title="Recipes"
                            items="recipes"
                            table-view="$ctrl.recipeTable"
@@ -15,7 +15,7 @@
         </md-card>
     </md-content>
     <md-content flex="60" layout="column">
-        <md-card md-whiteframe="6" flex ng-show="selectedRecipe">
+        <md-card flex ng-show="selectedRecipe">
             <df-table-view title="Ingredients"
                            items="ingredients"
                            table-view="$ctrl.ingredientTable"
@@ -24,7 +24,7 @@
     </md-content>
 
     <md-content layout="column">
-        <md-card md-whiteframe="6" layout-padding>
+        <md-card layout-padding>
             <df-input-form definition="$ctrl.ingredientForm"
                            item="selectedIngredient"
                            on-save-clicked="saveIngredient(item)"></df-input-form>
