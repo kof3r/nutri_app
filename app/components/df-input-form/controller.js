@@ -19,6 +19,10 @@ module.exports = [
     $scope.handleRevertClick = function() {
         copyItem();
     };
+
+    $scope.isRevertDisabled = function() {
+        return !self.item || angular.equals(self.item, $scope.item);
+    };
         
     function copyItem() {
         if(self.item){

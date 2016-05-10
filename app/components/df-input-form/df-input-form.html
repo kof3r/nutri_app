@@ -7,7 +7,7 @@
 
     <div layout="row" layout-align="center">
         <md-button class="md-raised md-primary" ng-click="handleSaveClick()">Save</md-button>
-        <md-button class="md-raised md-primary" ng-click="handleRevertClick()">Cancel</md-button>
+        <md-button ng-disabled="isRevertDisabled()" class="md-raised md-warn" ng-click="handleRevertClick()">Revert</md-button>
     </div>
 
 </form>
