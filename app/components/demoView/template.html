@@ -1,7 +1,7 @@
 
 <md-content layout="row">
 
-    <md-content flex layout="column">
+    <md-content flex="25" layout="column">
         <md-card layout-padding>
             <df-input-form definition="$ctrl.recipeForm"
                            item="selectedRecipe"
@@ -14,7 +14,7 @@
                            on-selected-items-changed="selectedRecipesChanged(items)"></df-table-view>
         </md-card>
     </md-content>
-    <md-content flex="60" layout="column">
+    <md-content flex="50" layout="column">
         <md-card flex ng-show="selectedRecipe">
             <df-table-view title="Ingredients"
                            items="ingredients"
@@ -23,7 +23,7 @@
         </md-card>
     </md-content>
 
-    <md-content flex="25">
+    <md-content flex="25" ng-show="selectedRecipe">
         <md-card layout-padding>
             <df-input-form definition="$ctrl.ingredientForm"
                            item="selectedIngredient"

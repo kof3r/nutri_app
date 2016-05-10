@@ -41,7 +41,7 @@
 <script type="text/ng-template" id="df-form-slider.html">
     <md-input-container class="md-block md-accent">
         <label style="margin-bottom: 12px">{{v.field + ': ' + item[k]}}</label>
-        <md-slider flex min="{{v.type.min}}" max="{{v.type.max}}" ng-model="item[k]">
+        <md-slider flex min="{{v.type.min}}" max="{{v.type.max}}" ng-model="item[k]" aria-label="{{k}}">
     </md-input-container>
 </script>
 

@@ -7,6 +7,8 @@ module.exports = {
     controller: require('./controller'),
     bindings: {
         recipes: '<',
+        recipeSvc: '<',
+        ingredientSvc: '<',
         recipeTable: '<',
         recipeForm: '<',
         ingredientTable: '<',
