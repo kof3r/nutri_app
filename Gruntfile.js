@@ -4,7 +4,7 @@
 
 module.exports = function(grunt){
 
-    const appSrcFiles = ['app/*.js', 'app/**/*.js'];
+    const appSrcFiles = ['app/*.js', 'app/**/*.js', 'app/*.html', 'app/**/*.html'];
     const serverSrcFiles = ['server/*.js', 'server/**/*.js'];
     const srcFiles = appSrcFiles.concat(serverSrcFiles);
 
