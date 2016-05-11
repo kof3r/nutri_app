@@ -6,9 +6,9 @@ module.exports = ['$http', 'Ingredient', function($http, Ingredient) {
 
     const url = 'api/ingredient';
 
-    function get(id) {
-        return $http.get(`${url}`, { params: { id: id } }).then((res) => {
-            return new Ingredient(res.data.response);
+    function get(query) {
+        return $http.get(`${url}`, { params: { query: JSON.stringify(query) } }).then((res) => {
+            return res.data.response.map(i => new Ingredient(i));
         });
     }
 

@@ -9,7 +9,7 @@ module.exports = [function() {
 
         restrict: 'A',
         scope: {},
-        controller: function($scope, $element, $attrs) {
+        controller: function() {
 
             const subscribers = new Map();
             const controllers = new Map();
@@ -31,9 +31,9 @@ module.exports = [function() {
 
             //  called by a table-view when the selected items change
             this.onSelectedItemsChanged = function(id, items) {
-                console.log(subscribers);
+                items = items.slice(0);
                 subscribers.get(id).forEach((sub) => {
-                    controllers.get(sub).headItemsChanged(items.slice(0));
+                    controllers.get(sub).headItemsChanged(items);
                 });
             };
 
@@ -49,3 +49,4 @@ module.exports = [function() {
 
     };
 }];
+

@@ -11,13 +11,13 @@ var Response = require('../util/response');
 var router = require('express').Router();
 
 router.get('/', function(req, res) {
-    const id = req.query.id;
+    const query = JSON.parse(req.query.query);
 
-    Ingredient.findOne({ where: { id: id }}).then(function(ingredient) {
-        if(!ingredient) {
-            res.json(new Response(null, 'Failed to retrieve ingredient.'));
+    Ingredient.findAll({ where: query }).then(function(ingredients) {
+        if(!ingredients) {
+            res.json(new Response(null, 'Failed to retrieve ingredients.'));
         } else {
-            res.json(new Response(ingredient));
+            res.json(new Response(ingredients));
         }
     }).catch(function(error) {
         res.json(new Response(null, 'Failed to retrieve ingredient.'));
