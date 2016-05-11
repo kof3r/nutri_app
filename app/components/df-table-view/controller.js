@@ -1,52 +1,26 @@
 /**
- * Created by gordan on 17.04.16..
+ * Created by gordan on 11-May-16.
  */
 
-module.exports = ['$scope', '$filter', function($scope, $filter){
+module.exports = ['$scope', function($scope) {
+    
+    const self = this;
 
-    const columns = $scope.columns = this.tableView.columns;
+    $scope.items = [];
 
-    $scope.items = this.items;
-    $scope.selected = [];
-
-    $scope.$watchCollection('selected', () => {
-        this.selectedItemsChanged({items: $scope.selected});
-    });
-
-    $scope.$watchCollection('items', () => {
-        $scope.selected.splice(0);
-    });
-
-    $scope.resolveValue = function(item, p){
-        if(!item[p]) return null;
-        var value = resolveValue();
-        if(value !== value) return null;
-        var filter = resolveFilter();
-        value = filter ? filter(value) : value;
-        return value;
-
-        function resolveValue(){
-            if(columns[p].reflect){
-                return columns[p].reflect.call(item);
-            } else if(isFunction(item[p])){
-                return item[p]();
-            }
-            return item[p];
-        }
-
-        function resolveFilter(){
-            var filter = columns[p].filter;
-            if(filter){
-                if(isFunction(filter)){
-                    filter = filter.call(item);
-                }
-                return $filter(filter);
-            }
-            return null;
-        }
-    }
-
-    function isFunction(object) {
-        return angular.isFunction(object);
-    }
+    self.headItemsChanged = function(items) {
+        
+    };
+    
+    $scope.selectedItemsChanged = function(items) {
+        self.linker.onSelectedItemsChanged(self.id, items);
+    };
+    
+    self.$onInit = function() {
+        self.linker.register(self.id, self, self.head);
+        self.service.get().then(items => {
+            angular.copy(items, $scope.items);
+        });
+    };
+    
 }];

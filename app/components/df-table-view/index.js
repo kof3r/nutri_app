@@ -1,11 +1,10 @@
 /**
- * Created by gordan on 08.05.16..
+ * Created by gordan on 11-May-16.
  */
 
 const name = 'dfTableView';
 
-angular.module(name, [])
-    .component('dfTableView', require('./component'))
-    .controller('dfTableViewController', require('./controller'));
+angular.module(name, ['dataForge'])
+    .component('dfTableView', require('./component'));
 
 module.exports = name;

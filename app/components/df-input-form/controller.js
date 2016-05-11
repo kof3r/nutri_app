@@ -1,45 +1,23 @@
 /**
- * Created by gordan on 05.05.16..
+ * Created by gordan on 11-May-16.
  */
 
-module.exports = [
-    '$scope', function($scope) {
+module.exports = ['$scope', function($scope) {
 
     const self = this;
+    
+    $scope.item = {};
 
-    $scope.fields = angular.copy(self.definition.fields);
-    resolvePromises();
-
-    $scope.$watch(() => self.item, copyItem);
-        
-    $scope.handleSaveClick = function() {
-        self.saveClicked({ item: $scope.item });
-    };
-        
-    $scope.handleRevertClick = function() {
-        copyItem();
-    };
-
-    $scope.isRevertDisabled = function() {
-        return !self.item || angular.equals(self.item, $scope.item);
-    };
-        
-    function copyItem() {
-        console.log(self.item)
-        if(self.item){
-            $scope.item = angular.copy(self.item);
+    self.headItemsChanged = function(items) {
+        if(items.length === 1) {
+            $scope.item = angular.copy(items[0]);
         } else {
             $scope.item = {};
         }
+    };
+
+    self.$onInit = function () {
+        self.linker.register(self.id, self, self.head);
     }
 
-    function resolvePromises() {
-        for(let prop in $scope.fields) {
-            let field = $scope.fields[prop];
-            if(field.resolve) {
-                field.resolve();
-            }
-        }
-    }
-    
 }];

@@ -1,14 +1,17 @@
 /**
- * Created by gordan on 17.04.16..
+ * Created by gordan on 11-May-16.
  */
 
 module.exports = {
-    template: require('./df-table-view.html'),
+    template: require('./template.html'),
+    controller: require('./controller'),
     bindings: {
-        title:'@',
-        items:'<',
-        tableView:'<',
-        selectedItemsChanged:'&onSelectedItemsChanged'
+        columns: '<',
+        id: '@',
+        key: '@',
+        service: '<'
     },
-    controller: 'dfTableViewController'
+    require: {
+        linker: '^^dfLinker'
+    }
 };

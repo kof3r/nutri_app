@@ -32,46 +32,6 @@ angular.module('NutriApp', [
                     ingredientTable: (ingredientTableView) => ingredientTableView,
                     ingredientForm: (ingredientDetailView) => ingredientDetailView
                 }
-            })
-            .state('recipes', {
-                url: '/recipes',
-                component: 'recipesView',
-                cache: false,
-                resolve: {
-                    tableView: (recipeTableView) => recipeTableView
-                }
-            })
-            .state('inputRecipe', {
-                url: '/inputRecipe/?id',
-                component: 'dfInputForm',
-                resolve: {
-                    service: (recipeService) => recipeService,
-                    definition: (recipeDetailView) => recipeDetailView,
-                    item: ($stateParams, recipeService) => ($stateParams.id ? recipeService.get($stateParams.id) : {}),
-                    redirect: () => 'recipes'
-                },
-                cache: false
-            })
-            .state('ingredients', {
-                url:'/ingredients',
-                component:'ingredientsView',
-                cache: false,
-                resolve: {
-                    recipes: (recipeService) => recipeService.get(),
-                    service: (ingredientService) => ingredientService,
-                    tableView: (ingredientTableView) => ingredientTableView
-                }
-            })
-            .state('inputIngredient', {
-                url: '/inputIngredient/:recipe_id?id',
-                component: 'dfInputForm',
-                cache: false,
-                resolve: {
-                    service: (ingredientService) => ingredientService,
-                    definition: (ingredientDetailView) => ingredientDetailView,
-                    item: ($stateParams, ingredientService) => ($stateParams.id ? ingredientService.get($stateParams.id) : {recipe_id: $stateParams.recipe_id}),
-                    redirect: () => 'ingredients'
-                }
             });
 
         $mdThemingProvider.theme('default')

@@ -1,33 +1,38 @@
 
-<md-content layout="row">
+<md-content layout="row" df-linker>
 
     <md-content flex="25" layout="column">
         <md-card layout-padding>
-            <df-input-form definition="$ctrl.recipeForm"
-                           item="selectedRecipe"
-                           on-save-clicked="saveRecipe(item)"></df-input-form>
+            <df-input-form fields="$ctrl.recipeForm"
+                           head="recipeTable"
+                           id="recipeForm"
+                           key="id"
+                           service="$ctrl.recipeSvc"></df-input-form>
         </md-card>
         <md-card flex>
-            <df-table-view title="Recipes"
-                           items="recipes"
-                           table-view="$ctrl.recipeTable"
-                           on-selected-items-changed="selectedRecipesChanged(items)"></df-table-view>
+            <df-table-view columns="$ctrl.recipeTable"
+                           id="recipeTable"
+                           key="id"
+                           service="$ctrl.recipeSvc"></df-table-view>
         </md-card>
     </md-content>
     <md-content flex="50" layout="column">
-        <md-card flex ng-show="selectedRecipe">
-            <df-table-view title="Ingredients"
-                           items="ingredients"
-                           table-view="$ctrl.ingredientTable"
-                           on-selected-items-changed="selectedIngredientsChanged(items)"></df-table-view>
+        <md-card flex>
+            <df-table-view fields="$ctrl.ingredientTable"
+                           head="recipeTable"
+                           id="ingredientTable"
+                           key="id"
+                           service="$ctrl.ingredientSvc"></df-table-view>
         </md-card>
     </md-content>
 
-    <md-content flex="25" ng-show="selectedRecipe">
+    <md-content flex="25">
         <md-card layout-padding>
-            <df-input-form definition="$ctrl.ingredientForm"
-                           item="selectedIngredient"
-                           on-save-clicked="saveIngredient(item)"></df-input-form>
+            <df-input-form fields="$ctrl.ingredientForm"
+                           head="ingredientTable"
+                           id="ingredientForm"
+                           key="id"
+                           service="$ctrl.ingredientSvc"></df-input-form>
         </md-card>
     </md-content>
 

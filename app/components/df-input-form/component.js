@@ -1,15 +1,18 @@
 /**
- * Created by gordan on 05.05.16..
+ * Created by gordan on 11-May-16.
  */
 
 module.exports = {
-
-    template: require('./df-input-form.html'),
+    template: require('./template.html'),
     controller: require('./controller'),
     bindings: {
-        definition: '<',
-        saveClicked: '&onSaveClicked',
-        item: '<'
+        fields: '<',
+        head: '@',
+        id: '@',
+        key: '@',
+        service: '<'
+    },
+    require: {
+        linker: '^^dfLinker'
     }
-
 };
