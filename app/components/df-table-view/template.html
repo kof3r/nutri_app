@@ -1,6 +1,8 @@
 <md-content layout="column">
-    <md-content>
+    <md-content layout="row" layout-align="space-between">
         <md-button class="md-raised md-warn" ng-disabled="deleteDisabled"><span>Delete</span></md-button>
+        <md-progress-circular style="margin-top: 12px" ng-show="pending" md-mode="indeterminate" md-diameter="24px"></md-progress-circular>
+        <span></span>
     </md-content>
     <table-view-base title="Recipes"
                      items="items"

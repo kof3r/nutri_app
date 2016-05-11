@@ -11,10 +11,10 @@ module.exports = ['$scope', function($scope) {
 
     self.headItemsChanged = function(items) {
         if(items.length === 1) {
-            self.service.get(compileQuery(items[0])).then((items) => {
+            pend(self.service.get(compileQuery(items[0])).then((items) => {
                 $scope.items.splice(0);
                 angular.copy(items, $scope.items);
-            })
+            }));
         } else {
             $scope.items.splice(0);
         }
@@ -28,9 +28,9 @@ module.exports = ['$scope', function($scope) {
     self.$onInit = function() {
         self.linker.register(self.id, self, self.head);
         if(!self.head) {
-            self.service.get().then(items => {
+            pend(self.service.get().then(items => {
                 angular.copy(items, $scope.items);
-            });
+            }));
         }
     };
 
@@ -40,6 +40,11 @@ module.exports = ['$scope', function($scope) {
             query[self.foreignKey[relatedKey]] = related[relatedKey];
         }
         return query;
+    }
+
+    function pend(promise) {
+        $scope.pending = true;
+        promise.then(() => $scope.pending = false);
     }
     
 }];
