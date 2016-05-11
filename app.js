@@ -22,6 +22,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+    setTimeout(next, 2000 * Math.random());
+});
 app.use('/api', require('./server/routes/index'));
 
 app.get('*', function(req, res){
