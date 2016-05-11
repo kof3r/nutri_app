@@ -4,7 +4,6 @@
 
 module.exports = {
     template: require('./template.html'),
-    controller: require('./controller'),
     bindings: {
         recipes: '<',
         recipeSvc: '<',
