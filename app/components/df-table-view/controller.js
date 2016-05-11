@@ -7,6 +7,7 @@ module.exports = ['$scope', function($scope) {
     const self = this;
 
     $scope.items = [];
+    $scope.deleteDisabled = true;
 
     self.headItemsChanged = function(items) {
         if(items.length === 1) {
@@ -20,6 +21,7 @@ module.exports = ['$scope', function($scope) {
     };
     
     $scope.selectedItemsChanged = function(items) {
+        $scope.deleteDisabled = items.length === 0;
         self.linker.onSelectedItemsChanged(self.id, items);
     };
     

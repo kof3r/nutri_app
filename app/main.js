@@ -24,7 +24,6 @@ angular.module('NutriApp', [
                 component: 'demoView',
                 cache: false,
                 resolve: {
-                    recipes: (recipeService) => recipeService.get(),
                     recipeSvc: (recipeService) => recipeService,
                     ingredientSvc: (ingredientService) => ingredientService,
                     recipeTable: (recipeTableView) => recipeTableView,
