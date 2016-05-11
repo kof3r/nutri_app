@@ -2,7 +2,7 @@
  * Created by gordan on 10.05.16..
  */
 
-module.exports = ['$scope', function($scope) {
+module.exports = ['$scope', '$timeout', function($scope, $timeout) {
 
     const self = this;
 
@@ -16,6 +16,7 @@ module.exports = ['$scope', function($scope) {
     $scope.$watchCollection('selectedRecipes', () => {
         if($scope.selectedRecipes.length === 1) {
             $scope.selectedRecipe = $scope.selectedRecipes[0];
+            $scope.selectedIngredient = { recipe_id: $scope.selectedRecipe.id };
         } else {
             $scope.selectedRecipe = null;
         }
@@ -31,8 +32,6 @@ module.exports = ['$scope', function($scope) {
     $scope.$watchCollection('selectedIngredients', () => {
         if($scope.selectedIngredients.length === 1) {
             $scope.selectedIngredient = $scope.selectedIngredients[0];
-        } else if($scope.selectedRecipe){
-            $scope.selectedIngredient = { recipe_id: $scope.selectedRecipe.id }
         } else {
             $scope.selectedIngredient = null;
         }
@@ -75,19 +74,15 @@ module.exports = ['$scope', function($scope) {
             if(ingredient.id) {
                 self.ingredientSvc.post(ingredient).then(saved => {
                     selectedRecipe.addIngredient(saved);
+                    $timeout(() => { $scope.selecetedRecipe = selectedRecipe; })
                 });
             } else {
                 self.ingredientSvc.put(ingredient).then(saved => {
                     selectedRecipe.addIngredient(saved);
+                    $timeout(() => { $scope.selecetedRecipe = selectedRecipe; })
                 });
             }
-            copyIngredients(selectedRecipe);
         }
     };
-
-    function copyIngredients(recipe) {
-        $scope.ingredients.splice(0);
-        angular.copy(recipe.ingredients, $scope.ingredients);
-    }
 
 }];

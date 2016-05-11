@@ -25,6 +25,7 @@ module.exports = [
     };
         
     function copyItem() {
+        console.log(self.item)
         if(self.item){
             $scope.item = angular.copy(self.item);
         } else {
