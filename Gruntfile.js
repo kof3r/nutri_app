@@ -11,11 +11,6 @@ module.exports = function(grunt){
     grunt.initConfig({
 
         watch:{
-            hint:{
-                files: srcFiles,
-                tasks:['jshint']
-            },
-
             transpile:{
                 files: appSrcFiles,
                 tasks: ['browserify']
