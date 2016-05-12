@@ -10,7 +10,7 @@ module.exports = {
         head: '@',
         id: '@',
         key: '@',
-        foreignKey: '<',
+        foreignKeys: '<',
         service: '<'
     },
     require: {

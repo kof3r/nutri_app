@@ -19,10 +19,9 @@
     <md-content flex="50" layout="column">
         <md-card flex>
             <df-table-view columns="$ctrl.ingredientTable"
-                           head="recipeTable"
                            id="ingredientTable"
                            key="id"
-                           foreign-key="{ id: 'recipe_id' }"
+                           foreign-keys="{ recipeTable: { recipe_id: 'id' } }"
                            service="$ctrl.ingredientSvc"></df-table-view>
         </md-card>
     </md-content>
@@ -33,7 +32,7 @@
                            head="ingredientTable"
                            id="ingredientForm"
                            key="id"
-                           foreign-key="{ id: 'recipe_id' }"
+                           foreign-keys="{ recipeTable: { recipe_id: 'id' } }"
                            service="$ctrl.ingredientSvc"></df-input-form>
         </md-card>
     </md-content>

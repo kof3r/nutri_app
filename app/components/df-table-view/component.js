@@ -7,10 +7,9 @@ module.exports = {
     controller: require('./controller'),
     bindings: {
         columns: '<',
-        head:'@',
         id: '@',
         key: '@',
-        foreignKey: '<',
+        foreignKeys: '<',
         service: '<'
     },
     require: {

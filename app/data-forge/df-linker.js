@@ -14,18 +14,20 @@ module.exports = ['$timeout', '$q', function($timeout, $q) {
             const subscribers = new Map();
             const controllers = new Map();
             
-            this.register = function(id, controller, head) {
+            this.register = function(id, controller, heads) {
                 if(controllers.get(id)) {
                     throw new Error('dfLinker#register: Registered component id\'s must be unique!');
                 }
                 controllers.set(id, controller);
-                if(head) {
-                    let subs = subscribers.get(head);
-                    if(!subs) {
-                        subs = [];
-                        subscribers.set(head, subs);
-                    }
-                    subs.push(id);
+                if(heads) {
+                    heads.forEach((head) => {
+                        let subs = subscribers.get(head);
+                        if(!subs) {
+                            subs = [];
+                            subscribers.set(head, subs);
+                        }
+                        subs.push(id);
+                    });
                 }
             };
 
@@ -34,9 +36,9 @@ module.exports = ['$timeout', '$q', function($timeout, $q) {
                 items = items.slice(0);
                 const subs = subscribers.get(id);
                 if(subs){
-                    $q.all(subs.map((sub) => {
-                        controllers.get(sub).headItemsChanged(items);
-                    }));
+                    subs.forEach((sub) => {
+                        controllers.get(sub).headItemsChanged(id, items);
+                    });
                 }
             };
 

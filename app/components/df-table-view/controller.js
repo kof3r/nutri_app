@@ -5,14 +5,15 @@
 module.exports = ['$scope', '$timeout', function($scope, $timeout) {
     
     const self = this;
+    const keys = self.foreignKeys;
 
     $scope.items = [];
     $scope.deleteDisabled = true;
     let query = {};
 
-    self.headItemsChanged = function(items) {
+    self.headItemsChanged = function(head, items) {
         if(items.length === 1) {
-            compileQuery(items[0]);
+            compileQuery(head, items[0]);
             getAndSetItems();
         } else {
             $scope.items.splice(0);
@@ -29,17 +30,19 @@ module.exports = ['$scope', '$timeout', function($scope, $timeout) {
     };
     
     self.$onInit = function() {
-        self.linker.register(self.id, self, self.head);
-        if(!self.head) {
+        self.linker.register(self.id, self, !self.foreignKeys ? null : Object.keys(self.foreignKeys));
+        if(!self.foreignKeys) {
             self.loadItems();
         }
     };
 
-    function compileQuery(related) {
-        query = {};
-        for(let relatedKey in self.foreignKey) {
-            query[self.foreignKey[relatedKey]] = related[relatedKey];
-        };
+    function compileQuery(head, related) {
+        if(self.foreignKeys) {
+            let keys = self.foreignKeys[head];
+            for(let relatedKey in keys) {
+                query[relatedKey] = related[keys[relatedKey]];
+            };
+        }
     }
 
     function getAndSetItems() {

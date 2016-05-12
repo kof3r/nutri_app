@@ -5,6 +5,7 @@
 module.exports = ['$scope', function($scope) {
 
     const self = this;
+    const keys = self.foreignKeys;
     const createStrategy = function(item) {
         self.service.put(item).then(onItemSaved);
     };
@@ -22,16 +23,24 @@ module.exports = ['$scope', function($scope) {
         }
     };
 
-    self.headItemsChanged = function(items) {
+    self.headItemsChanged = function(head, items) {
+        $scope.item = {};
         if(items.length === 1) {
-            $scope.item = angular.copy(items[0]);
-        } else {
-            $scope.item = {};
+            if(head === self.head) {
+                angular.copy(items[0], $scope.item);
+            } else if(Object.keys(keys).indexOf(head) !== -1){
+                let keys = self.foreignKeys[head];
+                for(let foreignKey in keys) {
+                    $scope.item[foreignKey] = items[0][keys[foreignKey]];
+                }
+            }
         }
     };
 
     self.$onInit = function () {
-        self.linker.register(self.id, self, self.head);
+        let heads = self.foreignKeys ? Object.keys(self.foreignKeys) : [];
+        heads = heads.concat(self.head);
+        self.linker.register(self.id, self, heads);
     };
 
     function onItemSaved(item) {
