@@ -6,21 +6,11 @@ module.exports = ['$scope', function($scope) {
 
     const self = this;
     const keys = self.foreignKeys;
-    const createStrategy = function(item) {
-        self.service.put(item).then(onItemSaved);
-    };
-    const updateStrategy = function(item) {
-        self.service.post(item).then(onItemSaved);
-    };
     
     $scope.item = {};
     
     $scope.saveClicked = function(item) {
-        if(item[self.key]) {
-            updateStrategy(item);
-        } else {
-            createStrategy(item);
-        }
+        self.saveStrategy(item).then(onItemSaved);
     };
 
     self.headItemsChanged = function(head, items) {

@@ -9,9 +9,8 @@ module.exports = {
         fields: '<',
         head: '@',
         id: '@',
-        key: '@',
         foreignKeys: '<',
-        service: '<'
+        saveStrategy: '<'
     },
     require: {
         linker: '^^dfLinker'

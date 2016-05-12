@@ -7,7 +7,7 @@
                            head="recipeTable"
                            id="recipeForm"
                            key="id"
-                           service="$ctrl.recipeSvc"></df-input-form>
+                           save-strategy="saveRecipe"></df-input-form>
         </md-card>
         <md-card flex>
             <df-table-view columns="$ctrl.recipeTable"
@@ -33,7 +33,7 @@
                            id="ingredientForm"
                            key="id"
                            foreign-keys="{ recipeTable: { recipe_id: 'id' } }"
-                           service="$ctrl.ingredientSvc"></df-input-form>
+                           save-strategy="saveIngredient"></df-input-form>
         </md-card>
     </md-content>
 
