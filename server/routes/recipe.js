@@ -11,8 +11,10 @@ var Response = require('../util/response');
 
 var router = require('express').Router();
 
-router.get('/all', function(req, res){
+router.get('/', function(req, res){
+    const query = JSON.parse(req.query.query);
     Recipe.findAll({
+        where: query,
         include:{model: Ingredient, required:false}
     }).then(function(recipes){
         if(recipes){
@@ -25,6 +27,7 @@ router.get('/all', function(req, res){
     });
 });
 
+/**
 router.get('/', function(req, res) {
     Recipe.findOne({ where: {id: req.query.id} }).then((recipe) => {
         if(!recipe) {
@@ -36,6 +39,7 @@ router.get('/', function(req, res) {
         res.json(new Response(null, 'Failed to retrieve recipe.'));
     });
 });
+ */
 
 router.put('/', function(req, res){
     var body = req.body;

@@ -2,7 +2,7 @@
  * Created by gordan on 11-May-16.
  */
 
-module.exports = [function() {
+module.exports = ['$timeout', '$q', function($timeout, $q) {
     return {
 
         // TODO: Dodaj unregister - kad rikne komponenta donja
@@ -32,9 +32,12 @@ module.exports = [function() {
             //  called by a table-view when the selected items change
             this.onSelectedItemsChanged = function(id, items) {
                 items = items.slice(0);
-                subscribers.get(id).forEach((sub) => {
-                    controllers.get(sub).headItemsChanged(items);
-                });
+                const subs = subscribers.get(id);
+                if(subs){
+                    $q.all(subs.map((sub) => {
+                        controllers.get(sub).headItemsChanged(items);
+                    }));
+                }
             };
 
             // called by a table-view when an item is deleted
@@ -43,6 +46,14 @@ module.exports = [function() {
                     sub.headItemDeleted(id, item);
                 });
             };
+
+            this.onItemSaved = function onItemSaved(head) {
+                const ctrl = controllers.get(head);
+                if(!ctrl) {
+                    throw new Error('Specified controller was not found.');
+                }
+                ctrl.loadItems();
+            }
             
             
         }

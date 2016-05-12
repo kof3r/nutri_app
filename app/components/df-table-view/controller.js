@@ -2,22 +2,25 @@
  * Created by gordan on 11-May-16.
  */
 
-module.exports = ['$scope', function($scope) {
+module.exports = ['$scope', '$timeout', function($scope, $timeout) {
     
     const self = this;
 
     $scope.items = [];
     $scope.deleteDisabled = true;
+    let query = {};
 
     self.headItemsChanged = function(items) {
         if(items.length === 1) {
-            pend(self.service.get(compileQuery(items[0])).then((items) => {
-                $scope.items.splice(0);
-                angular.copy(items, $scope.items);
-            }));
+            compileQuery(items[0]);
+            getAndSetItems();
         } else {
             $scope.items.splice(0);
         }
+    };
+    
+    self.loadItems = function loadItems() {
+        getAndSetItems();
     };
     
     $scope.selectedItemsChanged = function(items) {
@@ -28,23 +31,27 @@ module.exports = ['$scope', function($scope) {
     self.$onInit = function() {
         self.linker.register(self.id, self, self.head);
         if(!self.head) {
-            pend(self.service.get().then(items => {
-                angular.copy(items, $scope.items);
-            }));
+            self.loadItems();
         }
     };
 
     function compileQuery(related) {
-        const query = {};
+        query = {};
         for(let relatedKey in self.foreignKey) {
             query[self.foreignKey[relatedKey]] = related[relatedKey];
-        }
-        return query;
+        };
+    }
+
+    function getAndSetItems() {
+        pend(self.service.get(query).then((items) => {
+            angular.copy(items, $scope.items);
+        }));
     }
 
     function pend(promise) {
         $scope.pending = true;
-        promise.then(() => $scope.pending = false);
+        promise.finally(() => $scope.pending = false);
+        return promise;
     }
     
 }];

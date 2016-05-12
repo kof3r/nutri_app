@@ -7,7 +7,7 @@ module.exports = ['$http', 'Ingredient', function($http, Ingredient) {
     const url = 'api/ingredient';
 
     function get(query) {
-        return $http.get(`${url}`, { params: { query: JSON.stringify(query) } }).then((res) => {
+        return $http.get(`${url}`, { params: { query: query } }).then((res) => {
             return res.data.response.map(i => new Ingredient(i));
         });
     }
