@@ -43,10 +43,13 @@ module.exports = ['$timeout', '$q', function($timeout, $q) {
             };
 
             // called by a table-view when an item is deleted
-            this.onItemDeleted = function(id, item) {
-                subscribers.get(id).forEach((sub) => {
-                    sub.headItemDeleted(id, item);
-                });
+            this.onItemsDeleted = function(id) {
+                const subs = subscribers.get(id);
+                if(subs){
+                    subscribers.get(id).forEach((sub) => {
+                        sub.loadItems();
+                    });
+                }
             };
 
             this.onItemSaved = function onItemSaved(head) {

@@ -13,7 +13,8 @@
             <df-table-view columns="$ctrl.recipeTable"
                            id="recipeTable"
                            key="id"
-                           service="$ctrl.recipeSvc"></df-table-view>
+                           fetch-strategy="getRecipes"
+                           delete-strategy="deleteRecipe"></df-table-view>
         </md-card>
     </md-content>
     <md-content flex="50" layout="column">
@@ -22,7 +23,8 @@
                            id="ingredientTable"
                            key="id"
                            foreign-keys="{ recipeTable: { recipe_id: 'id' } }"
-                           service="$ctrl.ingredientSvc"></df-table-view>
+                           fetch-strategy="getIngredients"
+                           delete-strategy="deleteIngredient"></df-table-view>
         </md-card>
     </md-content>
 

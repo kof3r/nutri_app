@@ -10,7 +10,8 @@ module.exports = {
         id: '@',
         key: '@',
         foreignKeys: '<',
-        service: '<'
+        fetchStrategy: '<',
+        deleteStrategy: '<'
     },
     require: {
         linker: '^^dfLinker'

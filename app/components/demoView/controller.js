@@ -22,4 +22,20 @@ module.exports = ['$scope', function($scope) {
         }
     };
 
+    $scope.getRecipes = function(query) {
+        return self.recipeSvc.get(query);
+    };
+
+    $scope.getIngredients = function(query) {
+        return self.ingredientSvc.get(query);
+    };
+
+    $scope.deleteRecipe = function(recipe) {
+        return self.recipeSvc.delete(recipe.id);
+    };
+
+    $scope.deleteIngredient = function(ingredient) {
+        return self.ingredientSvc.delete(ingredient.id);
+    };
+
 }];
