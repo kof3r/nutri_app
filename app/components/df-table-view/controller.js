@@ -5,7 +5,6 @@
 module.exports = ['$scope', '$timeout', function($scope, $timeout) {
     
     const self = this;
-    const keys = self.foreignKeys;
 
     $scope.items = [];
     $scope.deleteDisabled = true;
@@ -41,7 +40,7 @@ module.exports = ['$scope', '$timeout', function($scope, $timeout) {
             let keys = self.foreignKeys[head];
             for(let relatedKey in keys) {
                 query[relatedKey] = related[keys[relatedKey]];
-            };
+            }
         }
     }
 
