@@ -2,7 +2,7 @@
  * Created by gordan on 13.05.16..
  */
 
-module.exports = ['$scope', function($scope) {
+module.exports = ['$scope', '$timeout', function($scope, $timeout) {
 
     const self = this;
 
@@ -23,26 +23,26 @@ module.exports = ['$scope', function($scope) {
     };
 
     $scope.getRecipes = function(query) {
-        console.log(query);
         query = sequelizeQuery(query);
-        console.log(query);
         return self.recipeSvc.get(query);
     };
 
     $scope.getIngredients = function(query) {
-        console.log(query);
         query = sequelizeQuery(query);
-        console.log(query);
         return self.ingredientSvc.get(query);
     };
 
     $scope.deleteRecipe = function(recipe) {
-        return self.recipeSvc.delete(recipe.id);
+        return delay(self.recipeSvc.delete(recipe.id));
     };
 
     $scope.deleteIngredient = function(ingredient) {
-        return self.ingredientSvc.delete(ingredient.id);
+        return delay(self.ingredientSvc.delete(ingredient.id));
     };
+
+    function delay(promise) {
+        return $timeout(() => promise, Math.random() * 5000);
+    }
 
     function sequelizeQuery(query) {
         const sequelQuery = {};
