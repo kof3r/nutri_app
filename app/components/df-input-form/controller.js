@@ -8,9 +8,21 @@ module.exports = ['$scope', function($scope) {
     const keys = self.foreignKeys;
     
     $scope.item = {};
+
+    $scope.saveDisabled = function() {
+        for(let head in self.foreignKeys) {
+            for(let foreignKey in self.foreignKeys[head]) {
+                if(!$scope.item.hasOwnProperty(foreignKey)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
     
     $scope.saveClicked = function(item) {
         self.saveStrategy(item).then(onItemSaved);
+        $scope.item = {};
     };
 
     self.headItemsChanged = function(head, items) {

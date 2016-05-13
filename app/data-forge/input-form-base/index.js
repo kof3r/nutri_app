@@ -9,7 +9,8 @@ module.exports = {
     bindings: {
         fields: '<',
         item: '<',
-        saveClicked: '&onSaveClicked'
+        saveClicked: '&onSaveClicked',
+        saveButtonDisabled: '<'
     }
 
 };
