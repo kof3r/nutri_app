@@ -13,5 +13,7 @@ dataForge.directive('dfLinker', require('./df-linker'));
 
 dataForge.component('inputFormBase', require('./input-form-base'));
 dataForge.component('tableViewBase', require('./table-view-base'));
+dataForge.component('dfTableView', require('./df-table-view'));
+dataForge.component('dfInputForm', require('./df-input-form'));
 
 module.exports = name;

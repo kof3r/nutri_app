@@ -4,8 +4,6 @@
 
 angular.module('NutriApp', [
     require('./data-forge'),
-    require('./components/df-input-form'),
-    require('./components/df-table-view'),
     require('./nutrition'),
     'ui.router',
     'ngAnimate',
