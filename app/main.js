@@ -25,9 +25,7 @@ angular.module('NutriApp', [
                 cache: false,
                 resolve: {
                     recipeSvc: (recipeService) => recipeService,
-                    ingredientSvc: (ingredientService) => ingredientService,
-                    recipeTable: (recipeTableView) => recipeTableView,
-                    ingredientTable: (ingredientTableView) => ingredientTableView
+                    ingredientSvc: (ingredientService) => ingredientService
                 }
             })
             .state('students', {
@@ -47,7 +45,4 @@ angular.module('NutriApp', [
     .component('studentApp', require('./components/studentApp'))
     
     .factory('recipeService', require('./server-services/recipe-service'))
-    .factory('ingredientService', require('./server-services/ingredient-service'))
-    
-    .factory('recipeTableView', require('./meta/recipe-table-view'))
-    .factory('ingredientTableView', require('./meta/ingredient-table-view'));
+    .factory('ingredientService', require('./server-services/ingredient-service'));

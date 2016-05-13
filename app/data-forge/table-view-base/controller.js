@@ -4,7 +4,7 @@
 
 module.exports = ['$scope', '$filter', function($scope, $filter){
 
-    const columns = $scope.columns = this.columns.columns;
+    const columns = $scope.columns = this.columns;
 
     $scope.items = this.items;
     $scope.selected = [];

@@ -10,7 +10,7 @@
                            save-strategy="saveRecipe"></df-input-form>
         </md-card>
         <md-card flex>
-            <df-table-view columns="$ctrl.recipeTable"
+            <df-table-view columns="recipeTable"
                            id="recipeTable"
                            key="id"
                            fetch-strategy="getRecipes"
@@ -19,7 +19,7 @@
     </md-content>
     <md-content flex="50" layout="column">
         <md-card flex>
-            <df-table-view columns="$ctrl.ingredientTable"
+            <df-table-view columns="ingredientTable"
                            id="ingredientTable"
                            key="id"
                            foreign-keys="{ recipeTable: { recipe_id: 'id' } }"

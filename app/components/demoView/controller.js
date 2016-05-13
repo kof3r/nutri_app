@@ -2,12 +2,18 @@
  * Created by gordan on 13.05.16..
  */
 
-module.exports = ['$scope', '$timeout', 'formFields', function($scope, $timeout, formField) {
+module.exports = ['$scope', '$timeout', 'formFields', 'tableColumn', function($scope, $timeout, formField, TableColumn) {
 
     const self = this;
 
     $scope.recipeForm = {
         name: new formField.TextInput('Name')
+    };
+
+    $scope.recipeTable = {
+        id: new TableColumn('id'),
+        name: new TableColumn('Name'),
+        totalCalories: new TableColumn('Calories', 'energy', 'right')
     };
     
     $scope.ingredientForm = {
@@ -17,6 +23,16 @@ module.exports = ['$scope', '$timeout', 'formFields', function($scope, $timeout,
         carbs: new formField.Slider('Carbohydrates', { min: 0, max: 100 }),
         fats: new formField.Slider('Fats', { min: 0, max: 100 }),
         protein: new formField.Slider('Protein', { min: 0, max: 100 })
+    };
+    
+    $scope.ingredientTable = {
+        id: new TableColumn('id'),
+        name: new TableColumn('Name'),
+        amount: new TableColumn('Amount', function() { return this.measure; }),
+        totalCalories: new TableColumn('Total calories', 'energy'),
+        totalCarbs: new TableColumn('Total carbs', 'mass'),
+        totalFats: new TableColumn('Total fats', 'mass'),
+        totalProtein: new TableColumn('Total protein', 'mass')
     };
 
     $scope.saveRecipe = function(recipe) {

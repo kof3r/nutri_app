@@ -2,7 +2,7 @@
  * Created by gordan on 13.05.16..
  */
 
-module.exports = ['$scope', '$http', 'formFields', 'tableViewConstructor', 'tableColumnConstructor', function($scope, $http, ff, TableView, TableColumn) {
+module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scope, $http, ff, TableColumn) {
 
     $scope.studentForm = {
         firstName: new ff.TextInput('First name'),
@@ -16,10 +16,9 @@ module.exports = ['$scope', '$http', 'formFields', 'tableViewConstructor', 'tabl
     };
 
     $scope.studentTable = {
-        columns: {
-            firstName: new TableColumn().withHeader('First name'),
-            lastName: new TableColumn().withHeader('Last name')
-        }
+        id: new TableColumn('id'),
+        firstName: new TableColumn('Frist name'),
+        lastName: new TableColumn('Last name')
     };
 
     $scope.getStudents = function(query) {
