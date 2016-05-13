@@ -22,7 +22,7 @@ module.exports = ['$scope', function($scope) {
     
     $scope.saveClicked = function(item) {
         self.saveStrategy(item).then(onItemSaved);
-        $scope.item = {};
+        $scope.item = {};  // TODO: bug vezan uz gubljenje fk-eva nakon spremanja, ovdje pregaziš sve fk-eve
     };
 
     self.headItemsChanged = function(head, items) {
