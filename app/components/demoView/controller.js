@@ -23,10 +23,16 @@ module.exports = ['$scope', function($scope) {
     };
 
     $scope.getRecipes = function(query) {
+        console.log(query);
+        query = sequelizeQuery(query);
+        console.log(query);
         return self.recipeSvc.get(query);
     };
 
     $scope.getIngredients = function(query) {
+        console.log(query);
+        query = sequelizeQuery(query);
+        console.log(query);
         return self.ingredientSvc.get(query);
     };
 
@@ -37,5 +43,13 @@ module.exports = ['$scope', function($scope) {
     $scope.deleteIngredient = function(ingredient) {
         return self.ingredientSvc.delete(ingredient.id);
     };
+
+    function sequelizeQuery(query) {
+        const sequelQuery = {};
+        for(let foreignKey in query) {
+            sequelQuery[foreignKey] = { $in: query[foreignKey] };
+        }
+        return sequelQuery;
+    }
 
 }];

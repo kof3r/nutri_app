@@ -12,13 +12,18 @@ module.exports = ['$scope', '$q', function($scope, $q) {
     $scope.pending = [];
     let query = {};
 
+    if(self.foreignKeys) {
+        for(let head in self.foreignKeys) {
+            let keys = self.foreignKeys[head];
+            for(let relatedKey in keys) {
+                query[relatedKey] = [];
+            }
+        }
+    }
+
     self.headItemsChanged = function(head, items) {
         compileQuery(head, items);
-        if(items.length === 1) {
-            getAndSetItems();
-        } else {
-            $scope.items.splice(0);
-        }
+        getAndSetItems();
     };
     
     self.loadItems = function loadItems() {
@@ -26,7 +31,6 @@ module.exports = ['$scope', '$q', function($scope, $q) {
     };
 
     $scope.deleteSelectedItems = function() {
-        console.log($scope.selectedItems);
         $q.all($scope.selectedItems.map(i => pend(self.deleteStrategy(i)))).finally(() => {
             getAndSetItems();
             self.linker.onItemsDeleted(self.id);
@@ -47,16 +51,11 @@ module.exports = ['$scope', '$q', function($scope, $q) {
     };
 
     function compileQuery(head, items) {
-        if(items.length === 1 && self.foreignKeys) {
-            let related = items[0];
+        if(self.foreignKeys) {
+            clearQueryForHead(head);
             let keys = self.foreignKeys[head];
             for(let relatedKey in keys) {
-                query[relatedKey] = related[keys[relatedKey]];
-            }
-        } else {
-            let keys = self.foreignKeys[head];
-            for(let relatedKey in keys) {
-                delete query[relatedKey];
+                items.forEach((i) => query[relatedKey].push(i[keys[relatedKey]]));
             }
         }
     }
@@ -65,6 +64,12 @@ module.exports = ['$scope', '$q', function($scope, $q) {
         pend(self.fetchStrategy(query).then((items) => {
             angular.copy(items, $scope.items);
         }));
+    }
+
+    function clearQueryForHead(head) {
+        for(let relatedKey in self.foreignKeys[head]) {
+            query[relatedKey].splice(0);
+        }
     }
 
     function pend(promise) {
