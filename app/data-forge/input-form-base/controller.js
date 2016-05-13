@@ -7,7 +7,7 @@ module.exports = [
 
     const self = this;
 
-    $scope.fields = angular.copy(self.fields.fields);
+    $scope.fields = angular.copy(self.fields);
     resolvePromises();
 
     $scope.$watch(() => self.item, copyItem);

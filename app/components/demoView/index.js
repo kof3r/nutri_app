@@ -10,8 +10,6 @@ module.exports = {
         recipeSvc: '<',
         ingredientSvc: '<',
         recipeTable: '<',
-        recipeForm: '<',
-        ingredientTable: '<',
-        ingredientForm: '<'
+        ingredientTable: '<'
     }
 };

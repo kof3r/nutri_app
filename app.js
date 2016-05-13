@@ -23,6 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', require('./server/routes/index'));
+app.use('/studentApp', require('./server/student-app'));
 
 app.get('*', function(req, res){
     res.sendFile('./public/index.html');

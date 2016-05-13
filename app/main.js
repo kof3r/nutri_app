@@ -27,10 +27,13 @@ angular.module('NutriApp', [
                     recipeSvc: (recipeService) => recipeService,
                     ingredientSvc: (ingredientService) => ingredientService,
                     recipeTable: (recipeTableView) => recipeTableView,
-                    recipeForm: (recipeDetailView) => recipeDetailView,
-                    ingredientTable: (ingredientTableView) => ingredientTableView,
-                    ingredientForm: (ingredientDetailView) => ingredientDetailView
+                    ingredientTable: (ingredientTableView) => ingredientTableView
                 }
+            })
+            .state('students', {
+                url:'/students',
+                component: 'studentApp',
+                cache: false
             });
 
         $mdThemingProvider.theme('default')
@@ -41,11 +44,10 @@ angular.module('NutriApp', [
     .component('recipesView', require('./components/recipes'))
     .component('ingredientsView', require('./components/ingredientsView'))
     .component('demoView', require('./components/demoView'))
+    .component('studentApp', require('./components/studentApp'))
     
     .factory('recipeService', require('./server-services/recipe-service'))
     .factory('ingredientService', require('./server-services/ingredient-service'))
     
-    .factory('recipeDetailView', require('./meta/recipe-detail-view'))
     .factory('recipeTableView', require('./meta/recipe-table-view'))
-    .factory('ingredientDetailView', require('./meta/ingredient-detail-view'))
     .factory('ingredientTableView', require('./meta/ingredient-table-view'));

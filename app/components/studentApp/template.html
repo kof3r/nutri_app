@@ -1,0 +1,16 @@
+
+<md-content layout="row" df-linker>
+
+    <md-card layout-padding>
+        <df-input-form fields="studentForm"
+                       head="studentTable"
+                       id="recipeForm"
+                       save-strategy="saveStudent"></df-input-form>
+    </md-card>
+    <md-card layout-padding>
+        <df-table-view columns="studentTable"
+                       id="studentTable"
+                       fetch-strategy="getStudents"></df-table-view>
+    </md-card>
+
+</md-content>

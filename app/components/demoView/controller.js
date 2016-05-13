@@ -2,9 +2,22 @@
  * Created by gordan on 13.05.16..
  */
 
-module.exports = ['$scope', '$timeout', function($scope, $timeout) {
+module.exports = ['$scope', '$timeout', 'formFields', function($scope, $timeout, formField) {
 
     const self = this;
+
+    $scope.recipeForm = {
+        name: new formField.TextInput('Name')
+    };
+    
+    $scope.ingredientForm = {
+        name: new formField.TextInput('Name'),
+        amount: new formField.NumberInput('Amount', 0.1),
+        measure: new formField.Enum('Measure', () => ($timeout(() => ['mass', 'volume', 'quantity'], 2000))),
+        carbs: new formField.Slider('Carbohydrates', { min: 0, max: 100 }),
+        fats: new formField.Slider('Fats', { min: 0, max: 100 }),
+        protein: new formField.Slider('Protein', { min: 0, max: 100 })
+    };
 
     $scope.saveRecipe = function(recipe) {
         if(recipe.id) {
