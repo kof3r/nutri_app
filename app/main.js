@@ -37,8 +37,6 @@ angular.module('NutriApp', [
             .accentPalette('deep-purple');
     }])
     
-    .component('recipesView', require('./components/recipes'))
-    .component('ingredientsView', require('./components/ingredientsView'))
     .component('demoView', require('./components/demoView'))
     .component('studentApp', require('./components/studentApp'))
     
