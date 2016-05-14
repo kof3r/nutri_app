@@ -5,7 +5,14 @@
 module.exports = ['$scope', function($scope) {
 
     const self = this;
-    const keys = self.foreignKeys;
+    const foreignKeySet = new Set();
+    for(let head in self.foreignKeys){
+        let keys = self.foreignKeys[head];
+        for(let key in keys) {
+            foreignKeySet.add(key);
+        }
+    }
+    console.log(foreignKeySet);
     
     $scope.item = {};
 
@@ -22,21 +29,24 @@ module.exports = ['$scope', function($scope) {
     
     $scope.saveClicked = function(item) {
         self.saveStrategy(item).then(onItemSaved);
-        $scope.item = {};  // TODO: bug vezan uz gubljenje fk-eva nakon spremanja, ovdje pregaziš sve fk-eve
+        constructItem();  // TODO: bug vezan uz gubljenje fk-eva nakon spremanja, ovdje pregaziš sve fk-eve
     };
 
     self.headItemsChanged = function(head, items) {
-        $scope.item = {};
+        constructItem();
         if(items.length === 1) {
             if(head === self.head) {
                 angular.copy(items[0], $scope.item);
-            } else if(Object.keys(keys).indexOf(head) !== -1){
+            } else if(self.foreignKeys && Object.keys(self.foreignKeys).indexOf(head) !== -1){
                 let keys = self.foreignKeys[head];
                 for(let foreignKey in keys) {
                     $scope.item[foreignKey] = items[0][keys[foreignKey]];
                 }
             }
+        } else {
+            removeForeignKeys(head);
         }
+        console.log('item', $scope.item)
     };
 
     self.$onInit = function () {
@@ -47,6 +57,22 @@ module.exports = ['$scope', function($scope) {
 
     function onItemSaved(item) {
         self.linker.onItemSaved(self.head, item);
+    }
+
+    function constructItem() {
+        for(let prop in $scope.item) {
+            if(!foreignKeySet.has(prop)) {
+                delete $scope.item[prop];
+            }
+        }
+    }
+
+    function removeForeignKeys(head) {
+        if(self.foreignKeys){
+            for(let foreignKey in self.foreignKeys[head]) {
+                delete $scope.item[foreignKey];
+            }
+        }
     }
 
 }];

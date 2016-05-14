@@ -10,7 +10,7 @@ module.exports = [
     $scope.fields = angular.copy(self.fields);
     resolvePromises();
 
-    $scope.$watch(() => self.item, copyItem);
+    $scope.$watch(() => self.item, copyItem, true);
         
     $scope.handleSaveClick = function() {
         console.log($scope.item)

@@ -1,16 +1,51 @@
 
 <md-content layout="row" df-linker>
 
-    <md-card layout-padding>
-        <df-input-form fields="studentForm"
-                       head="studentTable"
-                       id="recipeForm"
-                       save-strategy="saveStudent"></df-input-form>
-    </md-card>
-    <md-card layout-padding>
-        <df-table-view columns="studentTable"
-                       id="studentTable"
-                       fetch-strategy="getStudents"></df-table-view>
-    </md-card>
+    <md-content layout="column">
+        <md-card layout-padding>
+            <df-input-form fields="studentForm"
+                           head="studentTable"
+                           id="recipeForm"
+                           save-strategy="saveStudent"></df-input-form>
+        </md-card>
+        <md-card>
+            <df-table-view columns="studentTable"
+                           id="studentTable"
+                           fetch-strategy="getStudents"
+                           delete-strategy="deleteStudent"></df-table-view>
+        </md-card>
+    </md-content>
+
+    <md-content layout="column">
+        <md-card layout-padding>
+            <df-input-form fields="courseForm"
+                           head="courseTable"
+                           id="courseForm"
+                           save-strategy="saveCourse"></df-input-form>
+        </md-card>
+        <md-card>
+            <df-table-view columns="courseTable"
+                           id="courseTable"
+                           fetch-strategy="getCourses"
+                           delete-strategy="deleteCourse"></df-table-view>
+        </md-card>
+    </md-content>
+
+    <md-content layout="column">
+        <md-card layout-padding>
+            <df-input-form fields="examForm"
+                           head="examTable"
+                           id="examForm"
+                           foreign-keys="{ courseTable: { CourseId: 'id' }, studentTable: { StudentId: 'id' } }"
+                           save-strategy="saveExam"></df-input-form>
+        </md-card>
+        <md-card>
+            <df-table-view columns="examTable"
+                           id="examTable"
+                           foreign-keys="{ courseTable: { CourseId: 'id' }, studentTable: { StudentId: 'id' } }"
+                           fetch-strategy="getExams"
+                           delete-strategy="deleteExam"></df-table-view>
+        </md-card>
+    </md-content>
 
 </md-content>
