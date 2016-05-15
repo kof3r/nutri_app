@@ -25,7 +25,9 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
         id: new TableColumn('id'),
         StudentId: new TableColumn('StudentId'),
         CourseId: new TableColumn('CourseId'),
-        grade: new TableColumn('Grade')
+        grade: new TableColumn('Grade'),
+        firstName: new TableColumn('First name'),
+        lastName: new TableColumn('Last name')
     };
 
     
@@ -60,24 +62,35 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
         })
     };
 
-    $scope.getCourses = function(query) {
-        query = sequelizeQuery(query);
-        return $http.get(courseUrl, query).then(res => {
+    $scope.getCourses = function() {
+        return $http.get(courseUrl).then(res => {
             return res.data;
         });
     };
 
-    $scope.getExams = function(query) {
-        console.log(query);
-        query = sequelizeQuery(query);
-        return $http.get(examUrl, query).then(res => {
+    $scope.getExams = function(headItems) {
+        console.log(headItems);
+        const query = { where: {} };
+        if(headItems['studentTable'].length){
+            query.where.StudentId = { $in: headItems['studentTable'].map(s => s.id) };
+        }
+        if(headItems['courseTable'].length) {
+            query.where.CourseId = { $in: headItems['courseTable'].map(c => c.id) };
+        }
+        query.include = [{ model: 'Student' }];
+        return $http({
+            method: 'GET',
+            url: examUrl,
+            params: {
+                query: query
+            }
+        }).then(res => {
             return res.data;
         });
     };
 
-    $scope.getStudents = function(query) {
-        query = sequelizeQuery(query);
-        return $http.get(studentUrl, query).then(res => {
+    $scope.getStudents = function() {
+        return $http.get(studentUrl).then(res => {
             return res.data;
         });
     };

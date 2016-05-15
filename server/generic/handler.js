@@ -8,6 +8,8 @@ module.exports = function(Model, getStrategy, postStrategy, deleteStrategy) {
 
     router.get('/', function(req, res, next) {
 
+        console.log(getStrategy(req));
+
         Model.findAll(getStrategy(req)).then((instances) => {
             if(instances) {
                 return res.json(instances);

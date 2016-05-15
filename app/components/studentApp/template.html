@@ -42,7 +42,7 @@
         <md-card>
             <df-table-view columns="examTable"
                            id="examTable"
-                           foreign-keys="{ courseTable: { CourseId: 'id' }, studentTable: { StudentId: 'id' } }"
+                           heads="['courseTable', 'studentTable']"
                            fetch-strategy="getExams"
                            delete-strategy="deleteExam"></df-table-view>
         </md-card>

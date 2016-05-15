@@ -8,8 +8,7 @@ module.exports = {
     bindings: {
         columns: '<',
         id: '@',
-        key: '@',
-        foreignKeys: '<',
+        heads: '<',
         fetchStrategy: '<',
         deleteStrategy: '<'
     },

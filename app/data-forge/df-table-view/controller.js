@@ -10,19 +10,14 @@ module.exports = ['$scope', '$q', function($scope, $q) {
     $scope.selectedItems = [];
     $scope.deleteDisabled = true;
     $scope.pending = [];
-    let query = {};
+    const headItems = {};
 
-    if(self.foreignKeys) {
-        for(let head in self.foreignKeys) {
-            let keys = self.foreignKeys[head];
-            for(let relatedKey in keys) {
-                query[relatedKey] = [];
-            }
-        }
+    if(self.heads){
+        self.heads.forEach(h => headItems[h] = []);
     }
 
     self.headItemsChanged = function(head, items) {
-        compileQuery(head, items);
+        headItems[head] = items;
         getAndSetItems();
     };
     
@@ -30,6 +25,7 @@ module.exports = ['$scope', '$q', function($scope, $q) {
         getAndSetItems();
     };
 
+    // TODO: ukloni obrisane iz odabranih, neka deleteStrategy vrati proslijeđeni item
     $scope.deleteSelectedItems = function() {
         $q.all($scope.selectedItems.map(i => pend(self.deleteStrategy(i)))).finally(() => {
             getAndSetItems();
@@ -44,32 +40,16 @@ module.exports = ['$scope', '$q', function($scope, $q) {
     };
     
     self.$onInit = function() {
-        self.linker.register(self.id, self, !self.foreignKeys ? null : Object.keys(self.foreignKeys));
-        if(!self.foreignKeys) {
+        self.linker.register(self.id, self, self.heads ? self.heads : null);
+        if(!self.heads) {
             getAndSetItems();
         }
     };
 
-    function compileQuery(head, items) {
-        if(self.foreignKeys) {
-            clearQueryForHead(head);
-            let keys = self.foreignKeys[head];
-            for(let relatedKey in keys) {
-                items.forEach((i) => query[relatedKey].push(i[keys[relatedKey]]));
-            }
-        }
-    }
-
     function getAndSetItems() {
-        pend(self.fetchStrategy(query).then((items) => {
+        pend(self.fetchStrategy(headItems).then((items) => {
             angular.copy(items, $scope.items);
         }));
-    }
-
-    function clearQueryForHead(head) {
-        for(let relatedKey in self.foreignKeys[head]) {
-            query[relatedKey].splice(0);
-        }
     }
 
     function pend(promise) {

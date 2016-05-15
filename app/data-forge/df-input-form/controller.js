@@ -12,7 +12,6 @@ module.exports = ['$scope', function($scope) {
             foreignKeySet.add(key);
         }
     }
-    console.log(foreignKeySet);
     
     $scope.item = {};
 
@@ -46,7 +45,6 @@ module.exports = ['$scope', function($scope) {
         } else {
             removeForeignKeys(head);
         }
-        console.log('item', $scope.item)
     };
 
     self.$onInit = function () {
