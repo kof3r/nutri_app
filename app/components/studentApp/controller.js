@@ -67,20 +67,15 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     };
 
     $scope.getExams = function(headItems) {
-        console.log(headItems);
-        const query = { where: {}, include: [{ model: 'Student', through: { attributes: ['firstName', 'lastName'] } }] };
-        if(headItems['studentTable'].length === 1){
-            query.where.StudentId = headItems['studentTable'][0].id;
-        }
-        if(headItems['courseTable'].length === 1) {
-            query.where.CourseId = headItems['courseTable'][0].id;
-        }
-        console.log(query);
+        const StudentId = headItems['studentTable'].length === 1 ? headItems['studentTable'][0].id : null;
+        const CourseId = headItems['courseTable'].length === 1 ? headItems['courseTable'][0].id : null;
+
         return $http({
             method: 'GET',
-            url: examUrl,
+            url: `${examUrl}/withStudents`,
             params: {
-                query: query
+                StudentId: StudentId,
+                CourseId: CourseId
             }
         }).then(res => {
             return res.data;
