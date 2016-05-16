@@ -78,7 +78,15 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
                 CourseId: CourseId
             }
         }).then(res => {
-            return res.data;
+            console.log(res.data);
+            return res.data.map(e => {
+                if(e.Student) {
+                    e.firstName = e.Student.firstName;
+                    e.lastName = e.Student.lastName;
+                    delete e.Student;
+                }
+                return e;
+            });
         });
     };
 

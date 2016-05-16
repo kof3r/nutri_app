@@ -4,6 +4,7 @@
 
 const Exam = require('../services/students-db').model('Exam');
 const Student = require('../services/students-db').model('Student');
+const Course = require('../services/students-db').model('Course');
 
 const router = require('../generic/handler')(
     Exam,
@@ -13,12 +14,12 @@ const router = require('../generic/handler')(
 );
 
 router.get('/withStudents', function(req, res, next) {
-    const query = { where: {} };
+    const query = { include: [ { model: Student }, { model: Course } ] };
     if(req.query.StudentId) {
-        query.where.StudentId = req.query.StudentId;
+        query.include[0].where = { id: req.query.StudentId };
     }
     if(req.query.CourseId) {
-        query.where.CourseId = req.query.CourseId;
+        query.include[1].where = { id: req.query.CourseId };
     }
 
     console.log(query);
@@ -29,7 +30,7 @@ router.get('/withStudents', function(req, res, next) {
             next({ status: 404, message: 'Specified exams were not found.'});
         }
     }).catch(error => {
-        next({ message: 'Server error.' });
+        next({ message: error });
     });
 });
 

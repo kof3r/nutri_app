@@ -12,9 +12,13 @@ const Course = studentDb.define('Course', require('./course'), {});
 
 const Exam = studentDb.define('Exam', require('./exam'), {});
 
-Student.belongsToMany(Course, { through: Exam });
+Student.hasMany(Exam);
 
-Course.belongsToMany(Student, { through: Exam });
+Course.hasMany(Exam);
+
+Exam.belongsTo(Course);
+
+Exam.belongsTo(Student);
 
 studentDb.sync();
 
