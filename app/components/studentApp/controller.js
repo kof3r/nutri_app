@@ -67,8 +67,8 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     };
 
     $scope.getExams = function(headItems) {
-        const StudentId = headItems['studentTable'].length === 1 ? headItems['studentTable'][0].id : null;
-        const CourseId = headItems['courseTable'].length === 1 ? headItems['courseTable'][0].id : null;
+        const StudentId = headItems['studentTable'].map(s => s.id);
+        const CourseId = headItems['courseTable'].map(c => c.id);
 
         return $http({
             method: 'GET',
