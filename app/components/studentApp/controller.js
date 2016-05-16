@@ -8,18 +8,19 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     const studentUrl = 'studentApp/student';
     const examUrl = 'studentApp/exam';
     
-    $scope.courseForm = {
-        name: new ff.TextInput('Course')
-    };
+    $scope.courseForm = [
+        [ { name: new ff.TextInput('Course') } ],
+        [  ]
+    ];
 
     $scope.courseTable = {
         id: new TableColumn('id'),
         name: new TableColumn('Course')
     };
     
-    $scope.examForm = {
-        grade: new ff.Slider('Grade', { min: 1, max: 5 })
-    };
+    $scope.examForm = [
+        [ { grade: new ff.Slider('Grade', { min: 1, max: 5 }) } ]
+    ];
 
     $scope.examTable = {
         id: new TableColumn('id'),
@@ -132,26 +133,14 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
         });
     };
 
-    $scope.studentForm = {
-        firstName: new ff.TextInput('First name'),
-        lastName: new ff.TextInput('Last name')
-    };
+    $scope.studentForm = [
+        [ { firstName: new ff.TextInput('First name') }, { lastName: new ff.TextInput('Last name') } ]
+    ];
 
     $scope.studentTable = {
         id: new TableColumn('id'),
         firstName: new TableColumn('Frist name'),
         lastName: new TableColumn('Last name')
     };
-    
-    
-
-
-    function sequelizeQuery(query) {
-        const sequelQuery = {};
-        for(let foreignKey in query) {
-            sequelQuery[foreignKey] = { $in: query[foreignKey] };
-        }
-        return sequelQuery;
-    }
 
 }];
