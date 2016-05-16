@@ -4,7 +4,7 @@
 
 module.exports = [function() {
     
-    class TextInput{
+    class String{
         constructor(label) {
             this.field = label;
             this.type = 'text';
@@ -12,7 +12,7 @@ module.exports = [function() {
         }
     }
 
-    class NumberInput{
+    class Number{
         constructor(label, step) {
             this.field = label;
             this.type = 'number';
@@ -52,8 +52,8 @@ module.exports = [function() {
     
     return {
         Date: Date,
-        TextInput: TextInput,
-        NumberInput: NumberInput,
+        String: String,
+        Number: Number,
         Enum: Enum,
         Slider: Slider
     };

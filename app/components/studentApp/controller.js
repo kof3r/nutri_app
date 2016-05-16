@@ -9,8 +9,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     const examUrl = 'studentApp/exam';
     
     $scope.courseForm = [
-        [ { name: new ff.TextInput('Course') } ],
-        [  ]
+        [ { name: new ff.String('Course') } ]
     ];
 
     $scope.courseTable = {
@@ -92,7 +91,6 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
 
     $scope.getStudents = function() {
         return $http.get(studentUrl).then(res => {
-            console.log(res.data);
             return res.data;
         });
     };
@@ -134,11 +132,11 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     };
 
     $scope.studentForm = [
-        [ { firstName: new ff.TextInput('First name') }, { middleName: new ff.TextInput('Middle name') } ],
-        [ { lastName: new ff.TextInput('Last name') } ],
+        [ { firstName: new ff.String('First name') }, { middleName: new ff.String('Middle name') } ],
+        [ { lastName: new ff.String('Last name') } ],
         [ { sex: new ff.Enum('Gender', ['male', 'female']) }, { birthday: new ff.Date('Birthday') } ],
-        [ { country: new ff.Enum('Country', countries) }, { city: new ff.TextInput('City') } ],
-        [ { address: new ff.TextInput('Address') } ]
+        [ { country: new ff.Enum('Country', countries) }, { city: new ff.String('City') } ],
+        [ { address: new ff.String('Address') } ]
     ];
 
     $scope.studentTable = {
@@ -148,10 +146,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     };
 
     function countries() {
-        return $http.get('https://restcountries.eu/rest/v1/all').then(res => {
-            console.log(res);
-            return res.data.map(c => c.name);
-        });
+        return $http.get('https://restcountries.eu/rest/v1/all').then(res => res.data.map(c => c.name));
     }
 
 }];
