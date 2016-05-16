@@ -59,11 +59,13 @@ module.exports = ['$scope', function($scope) {
     }
 
     function constructItem() {
+        const item = {};
         for(let prop in $scope.item) {
-            if(!foreignKeySet.has(prop)) {
-                delete $scope.item[prop];
+            if(foreignKeySet.has(prop)) {
+                item[prop] = $scope.item[prop];
             }
         }
+        $scope.item = item;
     }
 
     function removeForeignKeys(head) {

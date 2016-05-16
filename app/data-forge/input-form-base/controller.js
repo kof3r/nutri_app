@@ -11,7 +11,7 @@ module.exports = [
     $scope.resolves = {};
     resolvePromises();
 
-    $scope.$watch(() => self.item, copyItem, true);
+    $scope.$watch(() => self.item, copyItem);
         
     $scope.handleSaveClick = function() {
         self.saveClicked({ item: $scope.item });
@@ -26,10 +26,9 @@ module.exports = [
     };
         
     function copyItem() {
+        $scope.item = {};
         if(self.item){
-            $scope.item = angular.copy(self.item);
-        } else {
-            $scope.item = {};
+            angular.copy(self.item, $scope.item);
         }
     }
 
