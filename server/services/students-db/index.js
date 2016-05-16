@@ -20,6 +20,6 @@ Exam.belongsTo(Course);
 
 Exam.belongsTo(Student);
 
-studentDb.sync({ force: true });
+studentDb.sync();
 
 module.exports = studentDb;

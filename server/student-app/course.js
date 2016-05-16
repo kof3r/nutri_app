@@ -4,11 +4,20 @@
 
 const Course = require('../services/students-db').model('Course');
 
-console.log(Course);
-
-module.exports = require('../generic/handler')(
+const router = require('../generic/handler')(
     Course,
-    (req) => { return { where: req.query.query } },
     (req) => { return { where: { id: req.body.id } } },
     (req) => { return { where: { id: req.query.id } } }
 );
+
+router.get('/', function(req, res, next) {
+    Course.findAll().then(courses => {
+        if(courses) {
+            res.json(courses);
+        } else {
+            next({ status: 404, message: 'No courses found.'});
+        }
+    });
+});
+
+module.exports = router;

@@ -24,7 +24,6 @@ module.exports = [function() {
     class Enum{
         constructor(label, values) {
             this.field = label;
-            this.type = 'enum';
             this.template = 'select.html';
             if(angular.isArray(values)){
                 this.enum = values;
