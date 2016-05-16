@@ -1,13 +1,13 @@
 
 <form name="form" layout="column" ng-cloak>
 
-    <div class="md-inline-form" layout="row" ng-repeat="r in fields">
+    <div style="margin-bottom: -15px" class="md-inline-form" layout="row" ng-repeat="r in fields">
         <div flex="{{100.0 / r.length}}" ng-repeat="f in r">
             <div ng-repeat="(k, v) in f" ng-include="v.template"></div>
         </div>
     </div>
 
-    <div layout="row" layout-align="center">
+    <div style="margin-top: 10px" layout="row" layout-align="center">
         <md-button ng-disabled="$ctrl.saveButtonDisabled" class="md-raised md-primary" ng-click="handleSaveClick()">Save</md-button>
         <md-button ng-disabled="isRevertDisabled()" class="md-raised md-warn" ng-click="handleRevertClick()">Revert</md-button>
     </div>
@@ -34,12 +34,12 @@
 
 <script type="text/ng-template" id="select.html">
     <div layout="row" layout-align="center">
-        <md-progress-circular ng-hide="v.enum" md-diameter="24" md-mode="indeterminate"></md-progress-circular>
+        <md-progress-circular ng-hide="resolves[k]" md-diameter="24" md-mode="indeterminate"></md-progress-circular>
     </div>
-    <md-input-container class="md-block md-accent" ng-show="v.enum">
+    <md-input-container class="md-block md-accent" ng-show="resolves[k]">
         <label ng-bind="v.field"></label>
         <md-select ng-model="item[k]">
-            <md-option ng-repeat="option in v.enum" ng-bind="option"></md-option>
+            <md-option ng-repeat="option in resolves[k]" ng-bind="option"></md-option>
         </md-select>
     </md-input-container>
 </script>

@@ -136,8 +136,9 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     $scope.studentForm = [
         [ { firstName: new ff.TextInput('First name') }, { middleName: new ff.TextInput('Middle name') } ],
         [ { lastName: new ff.TextInput('Last name') } ],
-        [ { birthday: new ff.Date('Birthday') }, { sex: new ff.Enum('Gender', ['male', 'female']) } ],
-        [ { address: new ff.TextInput('Address') }, { city: new ff.TextInput('City') } ]
+        [ { sex: new ff.Enum('Gender', ['male', 'female']) }, { birthday: new ff.Date('Birthday') } ],
+        [ { country: new ff.Enum('Country', countries) }, { city: new ff.TextInput('City') } ],
+        [ { address: new ff.TextInput('Address') } ]
     ];
 
     $scope.studentTable = {
@@ -145,5 +146,12 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
         firstName: new TableColumn('First name'),
         lastName: new TableColumn('Last name')
     };
+
+    function countries() {
+        return $http.get('https://restcountries.eu/rest/v1/all').then(res => {
+            console.log(res);
+            return res.data.map(c => c.name);
+        });
+    }
 
 }];

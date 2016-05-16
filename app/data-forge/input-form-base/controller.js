@@ -8,6 +8,7 @@ module.exports = [
     const self = this;
 
     $scope.fields = angular.copy(self.fields);
+    $scope.resolves = {};
     resolvePromises();
 
     $scope.$watch(() => self.item, copyItem, true);
@@ -33,12 +34,17 @@ module.exports = [
     }
 
     function resolvePromises() {
-        for(let prop in $scope.fields) {
-            let field = $scope.fields[prop];
-            if(field.resolve) {
-                field.resolve();
-            }
-        }
+        self.fields.forEach(r => {
+            r.forEach(f => {
+                for(let prop in f) {
+                    if(f[prop].resolve) {
+                        f[prop].resolve().then((value) => {
+                            $scope.resolves[prop] = value;
+                        });
+                    }
+                }
+            })
+        })
     }
     
 }];

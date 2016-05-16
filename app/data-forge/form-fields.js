@@ -25,15 +25,13 @@ module.exports = [function() {
         constructor(label, values) {
             this.field = label;
             this.template = 'select.html';
-            if(angular.isArray(values)){
-                this.enum = values;
-            } else {
-                this.resolve = function() {
-                    values().then((resolved) => {
-                        this.enum = resolved;
-                    });
+            this.resolve = function () {
+                if(angular.isArray(values)) {
+                    return Promise.resolve(values);
+                } else {
+                    return values();
                 }
-            }
+            };
         }
     }
     
