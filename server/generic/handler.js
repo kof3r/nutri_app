@@ -2,15 +2,23 @@
  * Created by gordan on 14.05.16..
  */
 
+const sequelize = require('../services/students-db');
+
 module.exports = function(Model, getStrategy, postStrategy, deleteStrategy) {
 
     const router = require('express').Router();
 
     router.get('/', function(req, res, next) {
 
-        console.log(getStrategy(req));
+        const query = getStrategy(req);
+        if(query.include) {
+            query.include.forEach((i) => {
+                i.model = sequelize.model(i.model);
+            });
+        }
+        console.log(query);
 
-        Model.findAll(getStrategy(req)).then((instances) => {
+        Model.findAll(query).then((instances) => {
             if(instances) {
                 return res.json(instances);
             } else {

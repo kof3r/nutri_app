@@ -18,7 +18,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     };
     
     $scope.examForm = {
-        grade: new ff.NumberInput('Grade')
+        grade: new ff.Slider('Grade', { min: 1, max: 5 })
     };
 
     $scope.examTable = {
@@ -29,8 +29,6 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
         firstName: new TableColumn('First name'),
         lastName: new TableColumn('Last name')
     };
-
-    
 
     $scope.deleteCourse = function(student) {
         return $http.delete(courseUrl, { params: { id: student.id } }).then(res => {
@@ -70,14 +68,14 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
 
     $scope.getExams = function(headItems) {
         console.log(headItems);
-        const query = { where: {} };
-        if(headItems['studentTable'].length){
-            query.where.StudentId = { $in: headItems['studentTable'].map(s => s.id) };
+        const query = { where: {}, include: [{ model: 'Student', through: { attributes: ['firstName', 'lastName'] } }] };
+        if(headItems['studentTable'].length === 1){
+            query.where.StudentId = headItems['studentTable'][0].id;
         }
-        if(headItems['courseTable'].length) {
-            query.where.CourseId = { $in: headItems['courseTable'].map(c => c.id) };
+        if(headItems['courseTable'].length === 1) {
+            query.where.CourseId = headItems['courseTable'][0].id;
         }
-        query.include = [{ model: 'Student' }];
+        console.log(query);
         return $http({
             method: 'GET',
             url: examUrl,
