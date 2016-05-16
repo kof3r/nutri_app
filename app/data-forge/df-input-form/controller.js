@@ -15,6 +15,7 @@ module.exports = ['$scope', function($scope) {
     
     $scope.item = {};
 
+    // TODO: uvedi opcionalni FK, ? sintaksa
     $scope.saveDisabled = function() {
         for(let head in self.foreignKeys) {
             for(let foreignKey in self.foreignKeys[head]) {
@@ -63,6 +64,7 @@ module.exports = ['$scope', function($scope) {
                 delete $scope.item[prop];
             }
         }
+        console.log($scope.item);
     }
 
     function removeForeignKeys(head) {
