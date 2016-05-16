@@ -29,7 +29,7 @@ module.exports = ['$scope', '$q', function($scope, $q) {
     $scope.deleteSelectedItems = function() {
         $q.all($scope.selectedItems.map(i => pend(self.deleteStrategy(i)))).finally(() => {
             getAndSetItems();
-            self.linker.onItemsDeleted(self.id);
+            self.linker.onSelectedItemsChanged(self.id, []);
         });
     };
     

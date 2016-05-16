@@ -33,26 +33,16 @@ module.exports = ['$timeout', '$q', function($timeout, $q) {
 
             //  called by a table-view when the selected items change
             this.onSelectedItemsChanged = function(id, items) {
-                items = items.slice(0);
                 const subs = subscribers.get(id);
                 if(subs){
+                    items = items.slice(0);
                     subs.forEach((sub) => {
                         controllers.get(sub).headItemsChanged(id, items);
                     });
                 }
             };
 
-            // called by a table-view when an item is deleted
-            this.onItemsDeleted = function(id) {
-                const subs = subscribers.get(id);
-                if(subs){
-                    subscribers.get(id).forEach((sub) => {
-                        sub.loadItems();
-                    });
-                }
-            };
-
-            this.onItemSaved = function onItemSaved(head) {
+            this.reloadHeadItems = function reloadHeadItems(head) {
                 const ctrl = controllers.get(head);
                 if(!ctrl) {
                     throw new Error('Specified controller was not found.');

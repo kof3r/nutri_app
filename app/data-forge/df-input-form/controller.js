@@ -54,8 +54,8 @@ module.exports = ['$scope', function($scope) {
         self.linker.register(self.id, self, heads);
     };
 
-    function onItemSaved(item) {
-        self.linker.onItemSaved(self.head, item);
+    function onItemSaved() {
+        self.linker.reloadHeadItems(self.head);
     }
 
     function constructItem() {
@@ -64,7 +64,6 @@ module.exports = ['$scope', function($scope) {
                 delete $scope.item[prop];
             }
         }
-        console.log($scope.item);
     }
 
     function removeForeignKeys(head) {

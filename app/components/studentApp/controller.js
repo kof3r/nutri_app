@@ -23,11 +23,12 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
 
     $scope.examTable = {
         id: new TableColumn('id'),
-        StudentId: new TableColumn('StudentId'),
-        CourseId: new TableColumn('CourseId'),
+        StudentId: new TableColumn('SID'),
+        CourseId: new TableColumn('CID'),
         grade: new TableColumn('Grade'),
         firstName: new TableColumn('First name'),
-        lastName: new TableColumn('Last name')
+        lastName: new TableColumn('Last name'),
+        course: new TableColumn('Course')
     };
 
     $scope.deleteCourse = function(student) {
@@ -78,13 +79,11 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
                 CourseId: CourseId
             }
         }).then(res => {
-            console.log(res.data);
             return res.data.map(e => {
-                if(e.Student) {
-                    e.firstName = e.Student.firstName;
-                    e.lastName = e.Student.lastName;
-                    delete e.Student;
-                }
+                e.firstName = e.Student.firstName;
+                e.lastName = e.Student.lastName;
+                e.course = e.Course.name;
+                delete e.Student;
                 return e;
             });
         });
