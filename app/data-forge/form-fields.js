@@ -45,8 +45,16 @@ module.exports = [function() {
             this.template = 'df-form-slider.html';
         }
     }
+
+    class Date{
+        constructor(label) {
+            this.field = label;
+            this.template = 'df-date-picker.html';
+        }
+    }
     
     return {
+        Date: Date,
         TextInput: TextInput,
         NumberInput: NumberInput,
         Enum: Enum,

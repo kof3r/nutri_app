@@ -1,7 +1,7 @@
 
 <form name="form" layout="column" ng-cloak>
 
-    <div class="md-block" layout="row" ng-repeat="r in fields">
+    <div class="md-inline-form" layout="row" ng-repeat="r in fields">
         <div flex="{{100.0 / r.length}}" ng-repeat="f in r">
             <div ng-repeat="(k, v) in f" ng-include="v.template"></div>
         </div>
@@ -26,6 +26,10 @@
         <label ng-bind="v.field"></label>
         <input ng-model="item[k]" type="{{v.type}}" step="{{v.step}}">
     </md-input-container>
+</script>
+
+<script type="text/ng-template" id="df-date-picker.html">
+    <md-datepicker ng-model="item[k]" md-placeholder="{{v.field}}">
 </script>
 
 <script type="text/ng-template" id="select.html">
