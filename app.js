@@ -22,8 +22,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api', require('./server/routes/index'));
 app.use('/studentApp', require('./server/student-app'));
+app.use('/nutriApp', require('./server/nutri-app'));
 
 app.get('*', function(req, res){
     res.sendFile('./public/index.html');

@@ -1,0 +1,50 @@
+<md-content layout="row" df-linker>
+
+    <md-content flex="25" layout="column">
+        <md-card layout-padding>
+            <df-input-form fields="recipeForm"
+                           head="recipeTable"
+                           id="recipeForm"
+                           save-strategy="saveRecipe"></df-input-form>
+        </md-card>
+        <md-card>
+            <df-table-view columns="recipeTable"
+                           id="recipeTable"
+                           fetch-strategy="getRecipes"
+                           delete-strategy="deleteRecipe"></df-table-view>
+        </md-card>
+    </md-content>
+
+    <md-content flex layout="column">
+        <md-card layout-padding>
+            <df-input-form fields="recipeIngredientForm"
+                           head="recipeIngredientTable"
+                           id="recipeIngredientForm"
+                           foreign-keys="{ recipeTable: { RecipeId: 'id' }, ingredientTable: { IngredientId: 'id' } }"
+                           save-strategy="saveRecipeIngredient"></df-input-form>
+        </md-card>
+        <md-card>
+            <df-table-view columns="recipeIngredientTable"
+                           id="recipeIngredientTable"
+                           heads="['recipeTable', 'ingredientTable']"
+                           fetch-strategy="getRecipeIngredients"
+                           delete-strategy="deleteRecipeIngredient"></df-table-view>
+        </md-card>
+    </md-content>
+
+    <md-content flex="25" layout="column">
+        <md-card layout-padding>
+            <df-input-form fields="ingredientForm"
+                           head="ingredientTable"
+                           id="ingredientForm"
+                           save-strategy="saveIngredient"></df-input-form>
+        </md-card>
+        <md-card>
+            <df-table-view columns="ingredientTable"
+                           id="ingredientTable"
+                           fetch-strategy="getRecipeIngredients"
+                           delete-strategy="deleteRecipeIngredient"></df-table-view>
+        </md-card>
+    </md-content>
+
+</md-content>

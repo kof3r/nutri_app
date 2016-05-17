@@ -17,14 +17,10 @@ angular.module('NutriApp', [
             .otherwise('/demo');
 
         $stateProvider
-            .state('demo', {
-                url:'/demo',
-                component: 'demoView',
-                cache: false,
-                resolve: {
-                    recipeSvc: (recipeService) => recipeService,
-                    ingredientSvc: (ingredientService) => ingredientService
-                }
+            .state('nutrition', {
+                url:'/nutrition',
+                component: 'nutriApp',
+                cache: false
             })
             .state('students', {
                 url:'/students',
@@ -37,7 +33,7 @@ angular.module('NutriApp', [
             .accentPalette('deep-purple');
     }])
     
-    .component('demoView', require('./components/demoView'))
+    .component('nutriApp', require('./components/nutriApp'))
     .component('studentApp', require('./components/studentApp'))
     
     .factory('recipeService', require('./server-services/recipe-service'))
