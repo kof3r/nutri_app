@@ -109,7 +109,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
 
     $scope.saveExam = function(item) {
         let req = item.id ? $http.post : $http.put;
-
+        
         return req(examUrl, item).then(res => {
             if(res.status === 200) {
                 return res.data;

@@ -8,7 +8,6 @@ const Course = require('../services/students-db').model('Course');
 
 const router = require('../generic/handler')(
     Exam,
-    (req) => { return JSON.parse(req.query.query) },
     (req) => { return { where: { StudentId: req.body.StudentId, CourseId: req.body.CourseId } } },
     (req) => { return { where: { id: req.query.id } } }
 );
