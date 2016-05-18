@@ -25,6 +25,10 @@ module.exports = [
         return !self.item || angular.equals(self.item, $scope.item);
     };
         
+    $scope.setProperty = function(item, key, relatedKey) {
+        self.onRelatedItemChanged({ item: item, key: key, relatedKey: relatedKey });
+    };
+        
     function copyItem() {
         $scope.item = {};
         if(self.item){

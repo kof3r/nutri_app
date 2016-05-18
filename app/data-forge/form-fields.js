@@ -4,6 +4,16 @@
 
 module.exports = [function() {
     
+    class Autocomplete{
+        constructor(placeholder, getStrategy, related, display) {
+            this.placeholder = placeholder;
+            this.getStrategy = getStrategy;
+            this.related = related;
+            this.display = display;
+            this.template = 'df-autocomplete.html';
+        }
+    }
+    
     class String{
         constructor(label) {
             this.field = label;
@@ -51,11 +61,12 @@ module.exports = [function() {
     }
     
     return {
+        Autocomplete: Autocomplete,
         Date: Date,
-        String: String,
-        Number: Number,
         Enum: Enum,
-        Slider: Slider
+        Number: Number,
+        Slider: Slider,
+        String: String
     };
     
 }];

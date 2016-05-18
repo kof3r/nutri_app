@@ -15,6 +15,15 @@ module.exports = ['$scope', function($scope) {
     
     $scope.item = {};
 
+    $scope.setProperty = function(item, key, relatedKey) {
+        if(item) {
+            $scope.item[key] = item[relatedKey];
+        } else {
+            delete $scope.item[key];
+        }
+        console.log($scope.item);
+    };
+
     // TODO: uvedi opcionalni FK, ? sintaksa
     $scope.saveDisabled = function() {
         for(let head in self.foreignKeys) {

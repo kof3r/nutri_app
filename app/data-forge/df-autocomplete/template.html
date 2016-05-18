@@ -1,0 +1,12 @@
+
+<md-autocomplete
+        style="margin-bottom: 18px"
+        md-search-text="query"
+        md-selected-item-change="onSelectedItemChanged(i)"
+        md-items="i in $ctrl.getStrategy(query)"
+        md-item-text="i[$ctrl.displayProperty]"
+        placeholder="{{$ctrl.placeholder}}">
+    <md-item-template md-highlight-text="query" md-highlight-flags="^i">
+            {{i[$ctrl.displayProperty]}}
+    </md-item-template>
+</md-autocomplete>

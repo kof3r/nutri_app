@@ -1,2 +1,6 @@
 
-<input-form-base fields="$ctrl.fields" item="item" on-save-clicked="saveClicked(item)" save-button-disabled="saveDisabled()"></input-form-base>
+<input-form-base fields="$ctrl.fields"
+                 item="item"
+                 on-save-clicked="saveClicked(item)"
+                 save-button-disabled="saveDisabled()"
+                 on-related-item-changed="setProperty(item, key, relatedKey)"></input-form-base>

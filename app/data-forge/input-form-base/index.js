@@ -10,7 +10,8 @@ module.exports = {
         fields: '<',
         item: '<',
         saveClicked: '&onSaveClicked',
-        saveButtonDisabled: '<'
+        saveButtonDisabled: '<',
+        onRelatedItemChanged: '&'
     }
 
 };

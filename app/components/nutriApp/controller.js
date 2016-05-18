@@ -43,7 +43,6 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
                 return Promise.reject();
             }
             return res.data.map(ri => {
-                console.log(ri);
                 const k = ri.amount / ((['mass', 'volume'].indexOf(ri.measure) !== -1) ? 100.0 : 1);
                 ri.carbs = ri.Ingredient.carbs * k;
                 ri.fats = ri.Ingredient.fats * k;
@@ -80,6 +79,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     ];
 
     $scope.recipeIngredientForm = [
+        [ { IngredientId: new form.Autocomplete('Ingredient', searchIngredients, 'id', 'name') } ],
         [ { amount: new form.Number('Amount') }, { measure: new form.Enum('Measure', ['mass', 'volume', 'quantity']) } ]
     ];
 
@@ -128,6 +128,10 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
         });
     };
 
-
+    function searchIngredients(query) {
+        return $http.get(`${ingredientUrl}/search?name=${query}`).then(res => {
+            return res.data;
+        });
+    }
 
 }];

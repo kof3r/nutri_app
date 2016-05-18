@@ -57,3 +57,11 @@
         <label ng-bind="item[k]"></label>
     </div>
 </script>
+
+<script type="text/ng-template" id="df-autocomplete.html">
+    <df-autocomplete item="item"
+                     get-strategy="v.getStrategy"
+                     display-property="{{v.display}}"
+                     on-selected-item-changed="setProperty(item, k, v.related)"
+                     placeholder="{{v.placeholder}}"></df-autocomplete>
+</script>
