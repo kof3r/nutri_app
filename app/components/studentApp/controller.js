@@ -146,7 +146,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     };
 
     function countries() {
-        return $http.get('https://restcountries.eu/rest/v1/all').then(res => res.data.map(c => c.name));
+        return $http.get('https://restcountries.eu/rest/v1/all').then(res => res.data.map(c => c.name).sort((a, b) => a.localeCompare(b)));
     }
 
 }];
