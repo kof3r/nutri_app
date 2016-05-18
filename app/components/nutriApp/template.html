@@ -14,7 +14,7 @@
                            delete-strategy="deleteRecipe"></df-table-view>
         </md-card>
     </md-content>
-
+    <!--
     <md-content flex layout="column">
         <md-card layout-padding>
             <df-input-form fields="recipeIngredientForm"
@@ -31,6 +31,7 @@
                            delete-strategy="deleteRecipeIngredient"></df-table-view>
         </md-card>
     </md-content>
+    -->
 
     <md-content flex="25" layout="column">
         <md-card layout-padding>
@@ -42,8 +43,8 @@
         <md-card>
             <df-table-view columns="ingredientTable"
                            id="ingredientTable"
-                           fetch-strategy="getRecipeIngredients"
-                           delete-strategy="deleteRecipeIngredient"></df-table-view>
+                           fetch-strategy="getIngredients"
+                           delete-strategy="deleteIngredient"></df-table-view>
         </md-card>
     </md-content>
 

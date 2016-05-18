@@ -16,6 +16,6 @@ Recipe.belongsToMany(Ingredient, { through: RecipeIngredient });
 
 Ingredient.belongsToMany(Recipe, { through: RecipeIngredient });
 
-nutrition.sync({ force: true });
+nutrition.sync();
 
 module.exports = nutrition;
