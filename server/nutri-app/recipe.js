@@ -25,21 +25,6 @@ router.get('/', function(req, res, next) {
     
 });
 
-router.get('/ingredients', function(req, res, next) {
-    
-    Recipe.findAll({ 
-        where: { id: req.query.RecipeId },
-        include: { 
-            model: Ingredient,
-            required: true
-        }
-    }).then(recipes => {
-        if(!recipes) {
-            return next(new NotFound('Could not find recipes.'));
-        }
-        res.json(recipes);
-    });
-    
-});
+router.use('/ingredients', require('./recipe-ingredient'));
 
 module.exports = router;
