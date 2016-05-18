@@ -5,9 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var orm = require('./server/orm');
-orm.setup(path.join(__dirname, 'server', 'models'));
-
 var app = express();
 
 // view engine setup
@@ -22,8 +19,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/studentApp', require('./server/student-app'));
-app.use('/nutriApp', require('./server/nutri-app'));
+app.use('/studentApp', require('./server/routes/student-app'));
+app.use('/nutriApp', require('./server/routes/nutri-app'));
 
 app.get('*', function(req, res){
     res.sendFile('./public/index.html');

@@ -14,7 +14,7 @@ angular.module('NutriApp', [
     .config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', function($stateProvider, $urlRouterProvider, $mdThemingProvider){
 
         $urlRouterProvider
-            .otherwise('/demo');
+            .otherwise('/nutrition');
 
         $stateProvider
             .state('nutrition', {
@@ -34,7 +34,4 @@ angular.module('NutriApp', [
     }])
     
     .component('nutriApp', require('./components/nutriApp'))
-    .component('studentApp', require('./components/studentApp'))
-    
-    .factory('recipeService', require('./server-services/recipe-service'))
-    .factory('ingredientService', require('./server-services/ingredient-service'));
+    .component('studentApp', require('./components/studentApp'));

@@ -2,11 +2,11 @@
  * Created by gordan on 17.05.16..
  */
 
-const NotFound = require('../errors/not-found');
+const NotFound = require('../../errors/not-found');
 
-const Ingredient = require('../services/nutriapp-db').model('Ingredient');
+const Ingredient = require('../../services/nutriapp-db').model('Ingredient');
 
-const router = require('../generic/handler')(
+const router = require('../../generic/handler')(
     Ingredient,
     (req) => { return { where: { id: req.body.id } } },
     (req) => { return { where: { id: req.query.id } } }

@@ -2,13 +2,13 @@
  * Created by gordan on 17.05.16..
  */
 
-const nutritionDb = require('../services/nutriapp-db');
-const NotFound = require('../errors/not-found');
+const nutritionDb = require('../../services/nutriapp-db');
+const NotFound = require('../../errors/not-found');
 
 const Recipe = nutritionDb.model('Recipe');
 const Ingredient = nutritionDb.model('Ingredient');
 
-const router = require('../generic/handler')(
+const router = require('../../generic/handler')(
     Recipe,
     (req) => { return { where: { id: req.body.id } } },
     (req) => { return { where: { id: req.query.id } } }

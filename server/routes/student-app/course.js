@@ -2,9 +2,9 @@
  * Created by gordan on 14.05.16..
  */
 
-const Course = require('../services/students-db').model('Course');
+const Course = require('../../services/students-db').model('Course');
 
-const router = require('../generic/handler')(
+const router = require('../../generic/handler')(
     Course,
     (req) => { return { where: { id: req.body.id } } },
     (req) => { return { where: { id: req.query.id } } }
