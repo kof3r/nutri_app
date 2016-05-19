@@ -32,4 +32,4 @@ router.get('/withStudents', function(req, res, next) {
     });
 });
 
-module.exports = router
+module.exports = router;

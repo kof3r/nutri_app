@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/search', function(req, res, next) {
     
-    Ingredient.findAll({ where: { name: { $like: `${req.query.name}%` } } }).then(ingredients => {
+    Ingredient.findAll({ where: { name: { $iLike: `${req.query.name}%` } } }).then(ingredients => {
         if(!ingredients) {
             return next(new NotFound('Failed to find ingredients.'));
         }
