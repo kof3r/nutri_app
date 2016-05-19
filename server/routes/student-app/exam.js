@@ -13,7 +13,7 @@ const router = require('../../generic/handler')(
 );
 
 router.get('/withStudents', function(req, res, next) {
-    const query = { include: [ { model: Student }, { model: Course } ] };
+    const query = { include: [ { model: Student, required: true }, { model: Course, required: true } ] };
     if(req.query.StudentId) {
         query.include[0].where = { id: req.query.StudentId };
     }

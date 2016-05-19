@@ -129,7 +129,14 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     };
 
     function searchIngredients(query) {
-        return $http.get(`${ingredientUrl}/search?name=${query}`).then(res => {
+        return $http({
+            method: 'GET',
+            url: `${ingredientUrl}/search`,
+            params: {
+                name: query
+            }
+        }).then(res => {
+            console.log(res.data);
             return res.data;
         });
     }
