@@ -85,7 +85,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
 
     $scope.recipeIngredientTable = {
         name: new Column('Ingredient'),
-        amount: new Column('Amount'),
+        amount: new Column('Amount', 'mass'),
         carbs: new Column('Carbs', 'mass'),
         fats: new Column('Fats', 'mass'),
         protein: new Column('Protein', 'mass')
