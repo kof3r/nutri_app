@@ -2,7 +2,7 @@
  * Created by gordan on 14.05.16..
  */
 
-module.exports = function(Model, postStrategy, deleteStrategy) {
+module.exports = function(Model, postQueryStrategy, deleteQueryStrategy) {
 
     const router = require('express').Router();
 
@@ -20,19 +20,18 @@ module.exports = function(Model, postStrategy, deleteStrategy) {
 
     router.post('/', function(req, res, next) {
 
-        Model.update(req.body, postStrategy(req)).then((instance) => {
+        Model.upsert(req.body, postQueryStrategy(req)).then((instance) => {
             if(instance) {
                 res.json(instance);
             } else {
-                next({ message: 'Failed to update entity.' });
+                res.json(req.body);
             }
-        }).catch((error) => next({ message: 'Failed to update entity.' }));
+        }).catch((error) => next(error));
 
     });
 
     router.delete('/', function(req, res, next) {
-        console.log(deleteStrategy(req));
-        Model.destroy(deleteStrategy(req)).then((n) => {
+        Model.destroy(deleteQueryStrategy(req)).then((n) => {
             if(n) {
                 return res.json(n);
             } else {

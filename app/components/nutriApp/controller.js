@@ -107,7 +107,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     };
     
     $scope.saveRecipeIngredient = function(recipeIngredient) {
-        const method = recipeIngredient.id ? $http.post : $http.put;
+        const method = $http.post;
         
         return method(recipeIngredientUrl, recipeIngredient).then(ingredient => {
             if(!ingredient) {
