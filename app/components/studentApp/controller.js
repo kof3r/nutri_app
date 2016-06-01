@@ -2,7 +2,7 @@
  * Created by gordan on 13.05.16..
  */
 
-module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scope, $http, ff, TableColumn) {
+module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', function($scope, $http, ff, TableColumn, interactor) {
 
     const courseUrl= 'studentApp/course';
     const studentUrl = 'studentApp/student';
@@ -120,15 +120,27 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     };
 
     $scope.saveStudent = function(item) {
-        let req = item.id ? $http.post : $http.put;
 
-        return req(studentUrl, item).then(res => {
-            if(res.status === 200) {
-                return res.data;
-            } else {
-                return Promise.reject(res.data);
-            }
-        });
+        const errors = require('../../../bridge/validate')(item, require('../../../bridge/validation-schemes/student'));
+
+        if(errors) {
+            interactor.alert({
+                title: 'Student validation error',
+                text: errors.reduce((text, error) => text += `${error}<br>`, '')
+            });
+
+            return Promise.reject();
+        } else {
+            let req = item.id ? $http.post : $http.put;
+
+            return req(studentUrl, item).then(res => {
+                if(res.status === 200) {
+                    return res.data;
+                } else {
+                    return Promise.reject(res.data);
+                }
+            });
+        }
     };
 
     $scope.studentForm = [

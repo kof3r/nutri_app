@@ -34,4 +34,6 @@ angular.module('NutriApp', [
     }])
     
     .component('nutriApp', require('./components/nutriApp'))
-    .component('studentApp', require('./components/studentApp'));
+    .component('studentApp', require('./components/studentApp'))
+
+    .factory('interactor', require('./services/interactor'));
