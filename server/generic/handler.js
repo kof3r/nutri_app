@@ -2,9 +2,7 @@
  * Created by gordan on 14.05.16..
  */
 
-module.exports = function(Model, postQueryStrategy, deleteQueryStrategy) {
-
-    const router = require('express').Router();
+module.exports = function(router, Model, postQueryStrategy, deleteQueryStrategy) {
 
     router.put('/', function(req, res, next) {
 

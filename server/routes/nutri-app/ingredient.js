@@ -6,7 +6,10 @@ const NotFound = require('../../errors/not-found');
 
 const Ingredient = require('../../services/nutriapp-db').model('Ingredient');
 
-const router = require('../../generic/handler')(
+const router = require('express').Router();
+
+require('../../generic/handler')(
+    router,
     Ingredient,
     (req) => { return { where: { id: req.body.id } } },
     (req) => { return { where: { id: req.query.id } } }

@@ -6,7 +6,10 @@ const Exam = require('../../services/students-db').model('Exam');
 const Student = require('../../services/students-db').model('Student');
 const Course = require('../../services/students-db').model('Course');
 
-const router = require('../../generic/handler')(
+const router = require('express').Router();
+
+require('../../generic/handler')(
+    router,
     Exam,
     (req) => { return { where: { StudentId: req.body.StudentId, CourseId: req.body.CourseId } } },
     (req) => { return { where: { id: req.query.id } } }

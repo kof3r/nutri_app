@@ -8,7 +8,10 @@ const NotFound = require('../../errors/not-found');
 const Recipe = nutritionDb.model('Recipe');
 const Ingredient = nutritionDb.model('Ingredient');
 
-const router = require('../../generic/handler')(
+const router = require('express').Router();
+
+require('../../generic/handler')(
+    router,
     Recipe,
     (req) => { return { where: { id: req.body.id } } },
     (req) => { return { where: { id: req.query.id } } }

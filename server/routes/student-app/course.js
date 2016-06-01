@@ -4,7 +4,10 @@
 
 const Course = require('../../services/students-db').model('Course');
 
-const router = require('../../generic/handler')(
+const router = require('express').Router();
+
+require('../../generic/handler')(
+    router,
     Course,
     (req) => { return { where: { id: req.body.id } } },
     (req) => { return { where: { id: req.query.id } } }

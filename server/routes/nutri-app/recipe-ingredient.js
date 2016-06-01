@@ -7,7 +7,10 @@ const Recipe = nutritionDb.model('Recipe');
 const Ingredient = nutritionDb.model('Ingredient');
 const RecipeIngredient = nutritionDb.model('RecipeIngredient');
 
-const router = require('../../generic/handler')(
+const router = require('express').Router();
+
+require('../../generic/handler')(
+    router,
     RecipeIngredient,
     (req) => { return { where: { id: req.query.id } } },
     (req) => { return { where: { id: req.query.id } } }

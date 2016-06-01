@@ -123,7 +123,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
 
         const errors = require('../../../bridge/validate')(item, require('../../../bridge/validation-schemes/student'));
 
-        if(errors) {
+        if(errors.length > 0) {
             interactor.alert({
                 title: 'Student validation error',
                 text: errors.reduce((text, error) => text += `${error}<br>`, '')
