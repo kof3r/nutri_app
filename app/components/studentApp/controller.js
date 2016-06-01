@@ -123,7 +123,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
 
         const errors = require('../../../bridge/validate')(item, require('../../../bridge/validation-schemes/student'));
 
-        if(errors.length > 0) {
+        if(false) {
             interactor.alert({
                 title: 'Student validation error',
                 text: errors.reduce((text, error) => text += `${error}<br>`, '')
@@ -134,11 +134,15 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
             let req = item.id ? $http.post : $http.put;
 
             return req(studentUrl, item).then(res => {
-                if(res.status === 200) {
-                    return res.data;
-                } else {
-                    return Promise.reject(res.data);
+                return res.data;
+            }).catch(res => {
+                if(res.status === 403) {
+                    interactor.alert({
+                        title: 'Student validation error',
+                        text: res.data.message.reduce((text, error) => text += `${error}<br>`, '')
+                    });
                 }
+                return Promise.reject(res.data);
             });
         }
     };

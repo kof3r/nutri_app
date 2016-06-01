@@ -6,6 +6,16 @@ const Student = require('../../services/students-db/index').model('Student');
 
 const router = require('express').Router();
 
+router.put('/', function(req, res, next) {
+
+    var errors = require('../../../bridge/validate')(req.body, require('../../../bridge/validation-schemes/student'));
+    if(errors.length > 0) {
+        process.nextTick(() => next({ status: 403, message: errors }));
+    }
+    process.nextTick(() => next());
+
+});
+
 require('../../generic/handler')(
     router,
     Student,

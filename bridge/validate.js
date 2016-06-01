@@ -2,6 +2,8 @@
  * Created by gordan on 01.06.16..
  */
 
+'use strict';
+
 module.exports = function validate(object, scheme) {
     
     var errors = [];
