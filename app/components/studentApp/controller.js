@@ -136,7 +136,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
             return req(studentUrl, item).then(res => {
                 return res.data;
             }).catch(res => {
-                if(res.status === 403) {
+                if(res.status === 400) {
                     interactor.alert({
                         title: 'Student validation error',
                         text: res.data.message.join(' ')

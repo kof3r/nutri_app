@@ -2,21 +2,15 @@
  * Created by gordan on 13.05.16..
  */
 
-const Student = require('../../services/students-db/index').model('Student');
+const Student = require('../../../services/students-db/index').model('Student');
 
 const router = require('express').Router();
 
-router.put('/', function(req, res, next) {
+router.put('/', require('./student-validate'));
 
-    var errors = require('../../../bridge/validate')(req.body, require('../../../bridge/validation-schemes/student'));
-    if(errors.length > 0) {
-        process.nextTick(() => next({ status: 403, message: errors }));
-    }
-    process.nextTick(() => next());
+router.post('/', require('./student-validate'));
 
-});
-
-require('../../generic/handler')(
+require('../../../generic/handler')(
     router,
     Student,
     (req) => { return { where: { id: req.body.id } } },
