@@ -9,6 +9,17 @@ const RecipeIngredient = nutritionDb.model('RecipeIngredient');
 
 const router = require('express').Router();
 
+router.post('/', function(req, res, next) {
+    
+    const errors = require('../../../bridge/validate')(req.body, require('../../../bridge/validation-schemes/recipeIngredient'));
+    
+    if(errors.length > 0) {
+        return next({ status: 400, message: errors });
+    }
+    next();
+    
+});
+
 require('../../generic/handler')(
     router,
     RecipeIngredient,

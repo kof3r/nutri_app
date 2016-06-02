@@ -123,10 +123,10 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
 
         const errors = validate(item, studentScheme);
 
-        if(errors.length > 0) {
+        if(false) {
             interactor.alert({
                 title: 'Student validation error',
-                text: errors.reduce((text, error) => text += `${error}\n`, '')
+                text: errors.join(' ')
             });
 
             return Promise.reject();
@@ -139,10 +139,10 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
                 if(res.status === 403) {
                     interactor.alert({
                         title: 'Student validation error',
-                        text: res.data.message.reduce((text, error) => text += `${error}`, '')
+                        text: res.data.message.join(' ')
                     });
                 }
-                return Promise.reject(res.data);
+                return Promise.reject(res.data.message);
             });
         }
     };

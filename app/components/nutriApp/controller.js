@@ -111,7 +111,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
 
         const errors = validate(recipeIngredient, recipeIngredientScheme);
 
-        if(errors.length > 0) {
+        if(false) {
             interactor.alert({
                 title: 'Recipe ingredient validation error.',
                 text: errors.join(' ')
@@ -127,6 +127,11 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
                 return Promise.reject();
             }
             return ingredient;
+        }).catch(res => {
+            interactor.alert({
+                title: 'Recipe ingredient validation error',
+                text: res.data.message.join(' ')
+            });
         });
     };
 
