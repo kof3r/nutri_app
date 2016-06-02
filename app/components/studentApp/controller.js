@@ -2,7 +2,7 @@
  * Created by gordan on 13.05.16..
  */
 
-module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', function($scope, $http, ff, TableColumn, interactor) {
+module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 'zrValidator', 'studentValidationScheme', function($scope, $http, ff, TableColumn, interactor, validate, studentScheme) {
 
     const courseUrl= 'studentApp/course';
     const studentUrl = 'studentApp/student';
@@ -121,7 +121,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
 
     $scope.saveStudent = function(item) {
 
-        const errors = require('../../../bridge/validate')(item, require('../../../bridge/validation-schemes/student'));
+        const errors = validate(item, studentScheme);
 
         if(errors.length > 0) {
             interactor.alert({

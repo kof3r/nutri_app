@@ -36,4 +36,8 @@ angular.module('NutriApp', [
     .component('nutriApp', require('./components/nutriApp'))
     .component('studentApp', require('./components/studentApp'))
 
-    .factory('interactor', require('./services/interactor'));
+    .factory('interactor', require('./services/interactor'))
+    .factory('zrValidator', [function() { return require('../bridge/validate'); }] )
+
+    .value('studentValidationScheme', require('../bridge/validation-schemes/student'))
+    .value('recipeIngredientValidationScheme', require('../bridge/validation-schemes/recipeIngredient'));

@@ -2,7 +2,7 @@
  * Created by gordan on 17.05.16..
  */
 
-module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scope, $http, form, Column) {
+module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 'zrValidator', 'recipeIngredientValidationScheme', function($scope, $http, form, Column, interactor, validate, recipeIngredientScheme) {
     
     const recipeUrl = '/nutriApp/recipe';
     const ingredientUrl = '/nutriApp/ingredient';
@@ -96,6 +96,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     };
     
     $scope.saveRecipe = function(recipe) {
+
         const method = recipe.id ? $http.post : $http.put;
 
         return method(recipeUrl, recipe).then(res => {
@@ -107,6 +108,18 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', function($scop
     };
     
     $scope.saveRecipeIngredient = function(recipeIngredient) {
+
+        const errors = validate(recipeIngredient, recipeIngredientScheme);
+
+        if(errors.length > 0) {
+            interactor.alert({
+                title: 'Recipe ingredient validation error.',
+                text: errors.join(' ')
+            });
+
+            return Promise.reject(errors);
+        }
+
         const method = $http.post;
         
         return method(recipeIngredientUrl, recipeIngredient).then(ingredient => {
