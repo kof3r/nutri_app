@@ -2,25 +2,16 @@
  * Created by gordan on 18.05.16..
  */
 
-const nutritionDb = require('../../services/nutriapp-db');
+const nutritionDb = require('../../../services/nutriapp-db/index');
 const Recipe = nutritionDb.model('Recipe');
 const Ingredient = nutritionDb.model('Ingredient');
 const RecipeIngredient = nutritionDb.model('RecipeIngredient');
 
 const router = require('express').Router();
 
-router.post('/', function(req, res, next) {
-    
-    const errors = require('../../../bridge/validate')(req.body, require('../../../bridge/validation-schemes/recipeIngredient'));
-    
-    if(errors.length > 0) {
-        return next({ status: 400, message: errors });
-    }
-    next();
-    
-});
+router.post('/', require('./recipe-ingredient-validate'));
 
-require('../../generic/handler')(
+require('../../../generic/handler')(
     router,
     RecipeIngredient,
     (req) => { return { where: { id: req.query.id } } },
