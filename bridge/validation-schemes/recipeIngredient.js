@@ -4,8 +4,10 @@
 
 module.exports = {
 
-    amount: [
-        [ amount => amount >= 0, 'Amount must be a non-negative value.' ]
-    ]
+    fields: {
+        amount: [
+            [ amount => amount >= 0, 'Amount must be a non-negative value.' ]
+        ]
+    }
 
 };

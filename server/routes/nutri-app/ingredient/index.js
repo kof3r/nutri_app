@@ -2,13 +2,17 @@
  * Created by gordan on 17.05.16..
  */
 
-const NotFound = require('../../errors/not-found');
+const NotFound = require('../../../errors/not-found');
 
-const Ingredient = require('../../services/nutriapp-db').model('Ingredient');
+const Ingredient = require('../../../services/nutriapp-db/index').model('Ingredient');
 
 const router = require('express').Router();
 
-require('../../generic/handler')(
+router.put('/', require('./ingredient-validate'));
+
+router.post('/', require('./ingredient-validate'));
+
+require('../../../generic/handler')(
     router,
     Ingredient,
     (req) => { return { where: { id: req.body.id } } },

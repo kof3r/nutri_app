@@ -2,7 +2,7 @@
  * Created by gordan on 17.05.16..
  */
 
-module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 'zrValidator', 'recipeIngredientValidationScheme', function($scope, $http, form, Column, interactor, validate, recipeIngredientScheme) {
+module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 'zrValidator', 'recipeIngredientValidationScheme', 'ingredientValidationScheme', function($scope, $http, form, Column, interactor, validate, recipeIngredientScheme, ingredientScheme) {
     
     const recipeUrl = '/nutriApp/recipe';
     const ingredientUrl = '/nutriApp/ingredient';
@@ -62,9 +62,9 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
 
     $scope.ingredientForm = [
         [ { name: new form.String('Name') } ],
-        [ { carbs: new form.Slider('Carbs', { min: 0, max: 100 })} ],
-        [ { fats: new form.Slider('Fats', { min: 0, max: 100 }) }],
-        [ { protein: new form.Slider('Protein', { min: 0, max: 100 }) } ]
+        [ { carbs: new form.String('Carbs')} ],
+        [ { fats: new form.String('Fats') }],
+        [ { protein: new form.String('Protein') } ]
     ];
 
     $scope.ingredientTable = {
@@ -128,15 +128,29 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
             }
             return ingredient;
         }).catch(res => {
-            interactor.alert({
-                title: 'Recipe ingredient validation error',
-                text: res.data.error.join(' ')
-            });
+            if(res.status === 400) {
+                interactor.alert({
+                    title: 'Recipe ingredient validation error',
+                    text: res.data.error.join(' ')
+                });
+            }
             return Promise.reject(res.data.error);
         });
     };
 
     $scope.saveIngredient = function (ingredient) {
+
+        const errors = validate(ingredient, ingredientScheme);
+
+        if(false) {
+            interactor.alert({
+                title: 'Ingredient validation error.',
+                text: errors.join(' ')
+            });
+
+            return Promise.reject(errors);
+        }
+
         const method = ingredient.id ? $http.post : $http.put;
 
         return method(ingredientUrl, ingredient).then(res => {
@@ -144,6 +158,14 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
                 return Promise.reject();
             }
             return res.data;
+        }).catch(res => {
+            if(res.status === 400) {
+                interactor.alert({
+                    title: 'Ingredient validation error.',
+                    text: res.data.error.join(' ')
+                });
+            }
+            return Promise.reject(res.data);
         });
     };
 
