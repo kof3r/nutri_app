@@ -3,9 +3,15 @@
  */
 
 module.exports = {
-
-    firstName: [/[a-zšđčćžA-ŽŠĐČĆŽ-]{2,32}/, 'First name must consist of alphanumerics.'],
-    middleName: [/[a-zšđčćžA-ŽŠĐČĆŽ-]{2,32}/, 'Middle name must consist of alphanumerics.'],
-    lastName: [/[a-zšđčćžA-ŽŠĐČĆŽ-]{2,32}/, 'Last name must consist of alphanumerics.']
-
+    firstName: [
+        [(value) => /^[a-zšđčćžA-ŽŠĐČĆŽ'-]*$/.test(value), 'First name must consist of alphanumerics.'],
+        [function(value) { return value && value.length === 0; }, 'First name is required.']
+    ],
+    middleName: [
+        [function(value) { return /^[a-zšđčćžA-ŽŠĐČĆŽ'-]*$/.test(value) }, 'Middle name must consist of alphanumerics.']
+    ],
+    lastName: [
+        [function(value) { return /^[a-zšđčćžA-ŽŠĐČĆŽ-]*$/.test(value) }, 'Last name must consist of alphanumerics.'],
+        [function(value) { return value && value.length === 0; }, 'Last name is required.']
+    ]
 };
