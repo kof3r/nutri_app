@@ -2,13 +2,15 @@
  * Created by gordan on 02.06.16..
  */
 
+const BadRequest = require('../../../errors/bad-request');
+
 module.exports = function(req, res, next) {
 
     const errors = require('../../../../bridge/validate')(req.body, require('../../../../bridge/validation-schemes/recipeIngredient'));
 
     if(errors.length > 0) {
-        return next({ status: 400, message: errors });
+        return process.nextTick(() => next(new BadRequest(errors)));
     }
-    next();
+    process.nextTick(() => next());
 
 };

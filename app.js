@@ -42,7 +42,7 @@ if (app.get('env') === 'development') {
     console.log(err);
     res.status(err.status || 500).json({
       message: err.message,
-      error: err
+      error: err.error
     });
   });
 }

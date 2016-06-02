@@ -130,8 +130,9 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
         }).catch(res => {
             interactor.alert({
                 title: 'Recipe ingredient validation error',
-                text: res.data.message.join(' ')
+                text: res.data.error.join(' ')
             });
+            return Promise.reject(res.data.error);
         });
     };
 

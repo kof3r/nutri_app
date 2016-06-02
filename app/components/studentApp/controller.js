@@ -129,7 +129,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
                 text: errors.join(' ')
             });
 
-            return Promise.reject();
+            return Promise.reject(errors);
         } else {
             let req = item.id ? $http.post : $http.put;
 
@@ -139,10 +139,10 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
                 if(res.status === 400) {
                     interactor.alert({
                         title: 'Student validation error',
-                        text: res.data.message.join(' ')
+                        text: res.data.error.join(' ')
                     });
                 }
-                return Promise.reject(res.data.message);
+                return Promise.reject(res.data.error);
             });
         }
     };

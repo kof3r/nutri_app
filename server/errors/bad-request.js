@@ -7,7 +7,9 @@
 module.exports = class BadRequest{
     
     constructor(error, message) {
-        
+        this.status = 400;
+        this.error = error;
+        this.message = message;
     }
     
 };
