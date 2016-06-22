@@ -7,6 +7,7 @@ module.exports = {
     template: require('./df-input-form.html'),
     controller: require('./controller'),
     bindings: {
+        title: '@',
         fields: '<',
         item: '<',
         saveClicked: '&onSaveClicked',

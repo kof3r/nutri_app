@@ -6,6 +6,7 @@ module.exports = {
     template: require('./template.html'),
     controller: require('./controller'),
     bindings: {
+        title: '@',
         columns: '<',
         id: '@',
         heads: '<',

@@ -1,8 +1,7 @@
 <md-content layout="column">
     <md-content layout="row" layout-align="space-between">
         <md-button class="md-raised md-warn" ng-disabled="deleteDisabled" ng-click="deleteSelectedItems()"><span>Delete</span></md-button>
-        <md-progress-circular style="margin-top: 12px" ng-repeat="p in pending" md-mode="indeterminate" md-diameter="24px"></md-progress-circular>
-        <span></span>
+        <span flex style="font-weight: bold; text-align: center" ng-bind="$ctrl.title"></span>
     </md-content>
     <table-view-base title="Recipes"
                      items="items"

@@ -2,14 +2,16 @@
 <md-content layout="row" df-linker>
 
     <md-content flex="30" layout="column">
-        <md-card layout-padding>
-            <df-input-form fields="studentForm"
+        <md-card layout-padding layout="column">
+            <df-input-form title="Student Form"
+                           fields="studentForm"
                            head="studentTable"
                            id="recipeForm"
                            save-strategy="saveStudent"></df-input-form>
         </md-card>
         <md-card>
-            <df-table-view columns="studentTable"
+            <df-table-view title="Student Table"
+                           columns="studentTable"
                            id="studentTable"
                            fetch-strategy="getStudents"
                            delete-strategy="deleteStudent"></df-table-view>
