@@ -20,13 +20,13 @@
 
     <md-content flex="20" layout="column">
         <md-card layout-padding>
-            <df-input-form fields="courseForm"
+            <df-input-form title="Course Form" fields="courseForm"
                            head="courseTable"
                            id="courseForm"
                            save-strategy="saveCourse"></df-input-form>
         </md-card>
         <md-card>
-            <df-table-view columns="courseTable"
+            <df-table-view title="Course Form" columns="courseTable"
                            id="courseTable"
                            fetch-strategy="getCourses"
                            delete-strategy="deleteCourse"></df-table-view>
@@ -35,14 +35,14 @@
 
     <md-content flex layout="column">
         <md-card layout-padding>
-            <df-input-form fields="examForm"
+            <df-input-form title="Exam Form" fields="examForm"
                            head="examTable"
                            id="examForm"
                            foreign-keys="{ courseTable: { CourseId: 'id' }, studentTable: { StudentId: 'id' } }"
                            save-strategy="saveExam"></df-input-form>
         </md-card>
         <md-card>
-            <df-table-view columns="examTable"
+            <df-table-view title="Exam Table" columns="examTable"
                            id="examTable"
                            heads="['courseTable', 'studentTable']"
                            fetch-strategy="getExams"

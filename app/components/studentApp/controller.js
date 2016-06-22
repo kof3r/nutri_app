@@ -25,10 +25,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
         id: new TableColumn('id'),
         StudentId: new TableColumn('SID'),
         CourseId: new TableColumn('CID'),
-        grade: new TableColumn('Grade'),
-        firstName: new TableColumn('First name'),
-        lastName: new TableColumn('Last name'),
-        course: new TableColumn('Course')
+        grade: new TableColumn('Grade')
     };
 
     $scope.deleteCourse = function(student) {
@@ -150,9 +147,7 @@ module.exports = ['$scope', '$http', 'formFields', 'tableColumn', 'interactor', 
     $scope.studentForm = [
         [ { firstName: new ff.String('First name') }, { middleName: new ff.String('Middle name') } ],
         [ { lastName: new ff.String('Last name') } ],
-        [ { sex: new ff.Enum('Gender', ['male', 'female']) }, { birthday: new ff.Date('Birthday') } ],
-        [ { country: new ff.Enum('Country', countries) }, { city: new ff.String('City') } ],
-        [ { address: new ff.String('Address') } ]
+        [ { sex: new ff.Enum('Gender', ['male', 'female']) }, { birthday: new ff.Date('Birthday') } ]
     ];
 
     $scope.studentTable = {
